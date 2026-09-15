@@ -2,70 +2,134 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>منصة الامتحانات والتقييم - زياد الديب</title>
+
   <style>
-    * { box-sizing: border-box; }
+    /* 
+      ده ستايل الصفحة العام
+      بنخلي الخلفية فاتحة والكارت في النص
+    */
+    * { 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 
+                   'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background-color: #f0f2f5;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
-      padding: 15px;
+      padding: 10px;
+      color: #202124;
     }
+
+    /* الكارت الابيض اللي شايل كل حاجة */
     .card {
       background: #ffffff;
-      padding: 30px;
+      padding: 20px;
       border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       width: 100%;
-      max-width: 580px;
+      max-width: 650px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    h1, h2 { color: #1a73e8; margin-bottom: 5px; font-size: 22px; }
-    p.subtitle { color: #5f6368; font-size: 14px; margin-bottom: 20px; }
+
+    h1 { 
+      color: #1a73e8; 
+      margin-bottom: 6px; 
+      font-size: 20px; 
+    }
+
+    h2 { 
+      color: #1a73e8; 
+      margin-bottom: 6px; 
+      font-size: 22px; 
+    }
+
+    p.subtitle { 
+      color: #5f6368; 
+      font-size: 13px; 
+      margin-bottom: 16px; 
+    }
     
+    /* بوكس الواتساب */
     .whatsapp-box {
       background: #e6f4ea;
       color: #137333;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      margin-bottom: 20px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
       text-align: center;
-      line-height: 1.6;
+      line-height: 1.5;
       border: 1px solid #ceead6;
     }
 
     .wa-btn {
       display: inline-block;
       margin-top: 8px;
-      padding: 8px 16px;
+      padding: 8px 14px;
       background-color: #25d366;
       color: white;
       text-decoration: none;
       font-weight: bold;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 12.5px;
     }
-    .wa-btn:hover { background-color: #1ebe57; }
 
-    .input-group { margin-bottom: 15px; text-align: right; }
-    .input-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #3c4043; font-size: 14px; }
-    .input-group input, .input-group select {
+    /* الحقول */
+    .input-group { 
+      margin-bottom: 12px; 
+      text-align: right; 
+    }
+
+    .input-group label { 
+      display: block; 
+      margin-bottom: 6px; 
+      font-weight: bold; 
+      color: #3c4043; 
+      font-size: 13px; 
+    }
+
+    .input-group input, 
+    .input-group select {
       width: 100%;
-      padding: 12px 15px;
+      padding: 12px;
       border: 2px solid #dadce0;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 14px;
       outline: none;
       background-color: #fff;
+      -webkit-appearance: none;
     }
-    .input-group input:focus, .input-group select:focus { border-color: #1a73e8; }
 
+    .input-group input:focus, 
+    .input-group select:focus { 
+      border-color: #1a73e8; 
+    }
+
+    /* 
+      دي الحركة اللي انت طلبتها
+      الكلمة نفسها هي اللي خضرا مش الحقل
+    */
+    option.available-option {
+      color: #137333 !important;
+      font-weight: bold;
+    }
+
+    option.locked-option {
+      color: #5f6368 !important;
+    }
+
+    /* زرار البداية */
     .btn {
       width: 100%;
       padding: 14px;
@@ -73,12 +137,16 @@
       color: white;
       border: none;
       border-radius: 8px;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 8px;
+      touch-action: manipulation;
     }
-    .btn:hover { background: #1557b0; }
+
+    .btn:active { 
+      background: #1557b0; 
+    }
 
     .error-msg {
       color: #d93025;
@@ -88,92 +156,267 @@
       font-weight: bold;
     }
 
-    /* الشاشات */
     .screen { display: none; }
     .active-screen { display: block; }
 
-    /* عناصر شاشة الامتحان */
+    /* البار اللي فوق اللي فيه اسم الطالب */
     .student-bar {
       background: #e8f0fe;
       color: #1967d2;
-      padding: 10px 15px;
+      padding: 10px;
       border-radius: 8px;
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 14px;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 12.5px;
     }
+
+    /* ازرار اليونتس */
+    .unit-selector-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+    }
+
+    .unit-selector-bar::-webkit-scrollbar { height: 3px; }
+    .unit-selector-bar::-webkit-scrollbar-thumb { 
+      background: #dadce0; 
+      border-radius: 10px; 
+    }
+
+    .unit-btn {
+      background: #f1f3f4;
+      border: 1px solid #dadce0;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #3c4043;
+      flex-shrink: 0;
+    }
+
+    .unit-btn.active {
+      background: #1a73e8;
+      color: #fff;
+      border-color: #1a73e8;
+    }
+
     .header-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
-    .speaker-title { font-size: 18px; font-weight: bold; color: #1a73e8; }
-    .timer { font-size: 15px; font-weight: bold; color: #d93025; }
+
+    .speaker-title { 
+      font-size: 14.5px; 
+      font-weight: bold; 
+      color: #1a73e8; 
+    }
+
+    .timer { 
+      font-size: 14px; 
+      font-weight: bold; 
+      color: #d93025; 
+    }
+
+    .settings-gear {
+      font-size: 18px;
+      cursor: pointer;
+      background: #e8f0fe;
+      padding: 4px 8px;
+      border-radius: 50%;
+      user-select: none;
+    }
     
+    /* نص السؤال */
     .question { 
-      font-size: 18px; 
+      font-size: 15.5px; 
       color: #202124; 
-      margin: 15px 0; 
+      margin: 12px 0; 
       font-weight: bold;
       direction: ltr; 
       text-align: left;
+      line-height: 1.4;
     }
+
     .options { 
       display: flex; 
       flex-direction: column; 
-      gap: 10px; 
-      margin-bottom: 20px; 
+      gap: 8px; 
+      margin-bottom: 14px; 
       direction: ltr;
     }
+
     .opt-btn {
-      padding: 12px 15px;
+      padding: 12px;
       border: 2px solid #dadce0;
       background: #fff;
       border-radius: 8px;
       text-align: left;
-      font-size: 15px;
+      font-size: 13.5px;
       cursor: pointer;
+      line-height: 1.3;
+      transition: background 0.1s;
+      touch-action: manipulation;
     }
-    .opt-btn.selected { background-color: #e8f0fe; border-color: #1a73e8; color: #1a73e8; font-weight: bold; }
-    
-    audio { display: none; }
 
-    .score-badge {
-      font-size: 48px;
-      font-weight: bold;
-      color: #1a73e8;
-      margin: 15px 0;
+    .opt-btn.selected { 
+      background-color: #e8f0fe; 
+      border-color: #1a73e8; 
+      color: #1a73e8; 
+      font-weight: bold; 
     }
-    .result-details {
-      text-align: right;
-      margin: 20px 0;
-      background: #f8f9fa;
-      padding: 15px;
+
+    .opt-btn.correct { 
+      background-color: #e6f4ea !important; 
+      border-color: #137333 !important; 
+      color: #137333 !important; 
+      font-weight: bold; 
+    }
+
+    .opt-btn.wrong { 
+      background-color: #fce8e6 !important; 
+      border-color: #c5221f !important; 
+      color: #c5221f !important; 
+      font-weight: bold; 
+    }
+
+    .opt-btn:disabled { 
+      cursor: not-allowed; 
+      opacity: 0.95; 
+    }
+
+    /* بوكس الشرح */
+    .explanation-box {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
       border-radius: 8px;
-      max-height: 220px;
+      font-size: 13px;
+      text-align: right;
+      line-height: 1.5;
+      direction: rtl;
+    }
+
+    .explanation-box.correct { 
+      background: #e6f4ea; 
+      color: #137333; 
+      border: 1px solid #ceead6; 
+    }
+
+    .explanation-box.wrong { 
+      background: #fce8e6; 
+      color: #c5221f; 
+      border: 1px solid #fad2cf; 
+    }
+
+    /* مودال التنقل السريع */
+    .nav-modal {
+      display: none;
+      position: absolute;
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: rgba(255,255,255,0.98);
+      border-radius: 16px;
+      z-index: 10;
+      padding: 16px;
       overflow-y: auto;
     }
-    .result-item {
-      margin-bottom: 8px;
-      font-size: 14px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 5px;
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: 6px;
+      margin-top: 12px;
     }
-    .correct-text { color: #1e8e3e; font-weight: bold; }
-    .wrong-text { color: #d93025; font-weight: bold; }
-    
-    .footer-credits {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #70757a;
-      border-top: 1px solid #eee;
-      padding-top: 10px;
+
+    .grid-item {
+      padding: 8px 4px;
+      background: #f1f3f4;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: bold;
+      cursor: pointer;
+      border: 1px solid #dadce0;
+    }
+
+    .grid-item.solved { 
+      background: #ceead6; 
+      border-color: #34a853; 
+      color: #137333; 
+    }
+
+    .grid-item.active-q { 
+      border: 2px solid #1a73e8; 
+      background: #e8f0fe; 
+      color: #1a73e8; 
+    }
+
+    audio { display: none; }
+
+    .score-badge { 
+      font-size: 36px; 
+      font-weight: bold; 
+      color: #1a73e8; 
+      margin: 10px 0; 
+    }
+
+    .result-details { 
+      text-align: right; 
+      margin: 14px 0; 
+      background: #f8f9fa; 
+      padding: 12px; 
+      border-radius: 8px; 
+      max-height: 280px; 
+      overflow-y: auto; 
+    }
+
+    .result-item { 
+      margin-bottom: 10px; 
+      font-size: 12.5px; 
+      border-bottom: 1px solid #e0e0e0; 
+      padding-bottom: 8px; 
+      line-height: 1.4; 
+    }
+
+    .correct-text { 
+      color: #1e8e3e; 
+      font-weight: bold; 
+    }
+
+    .wrong-text { 
+      color: #d93025; 
+      font-weight: bold; 
+    }
+
+    .answer-detail { 
+      font-size: 11.5px; 
+      color: #3c4043; 
+      margin-top: 3px; 
+      direction: ltr; 
+      text-align: left; 
+    }
+
+    .footer-credits { 
+      margin-top: 14px; 
+      font-size: 11px; 
+      color: #70757a; 
+      border-top: 1px solid #eee; 
+      padding-top: 8px; 
     }
   </style>
 </head>
@@ -181,148 +424,354 @@
 
 <div class="card">
 
-  <!-- 1. شاشة الإعدادات والتفعيل -->
+  <!-- 
+    شاشة البداية
+    هنا الطالب بيختار النوع والليفل ويدخل الكود
+  -->
   <div id="selection-screen" class="screen active-screen">
     <h1>🎧 منصة الامتحانات التعليمية</h1>
     <p class="subtitle">تم التطوير بواسطة: <strong>زياد الديب</strong></p>
     
     <div class="whatsapp-box">
-      💬 للحصول على كود التفعيل الخاص بالمستوى، تواصل مباشر مع <strong>زياد الديب</strong> عبر الواتساب:
+      💬 للحصول على كود التفعيل الخاص بالمستوى، 
+      تواصل مباشر معنا عبر الواتساب:
       <br>
-      <a href="https://wa.me/201273552486" target="_blank" class="wa-btn">💬 تواصل عبر الواتساب (01273552486)</a>
+      <a href="https://wa.me/201273552486" target="_blank" class="wa-btn">
+        💬 تواصل عبر الواتساب
+      </a>
     </div>
 
-    <!-- 1. اختيار نوع الاختبار -->
     <div class="input-group">
       <label for="type-select">اختر نوع الاختبار (Skill):</label>
-      <select id="type-select">
-        <option value="listening">Listening Test (متاح ✅)</option>
-        <option value="reading" disabled>Reading Test 🔒 (غير متاح حالياً)</option>
+      <select id="type-select" onchange="toggleTestType()">
+        <option value="reading" class="available-option">
+          Reading & Grammar Test
+        </option>
+        <option value="listening" class="available-option">
+          Listening Test
+        </option>
       </select>
     </div>
 
-    <!-- 2. اختيار Level -->
     <div class="input-group">
       <label for="level-select">اختر المستوى (Level):</label>
-      <select id="level-select">
-        <!-- يتم التوليد التلقائي عبر JavaScript -->
-      </select>
+      <select id="level-select"></select>
     </div>
 
-    <!-- 3. اختيار Form -->
-    <div class="input-group">
-      <label for="form-select">اختر النموذج (Form):</label>
+    <div class="input-group" id="form-group" style="display:none;">
+      <label for="form-select">اختر النموذج:</label>
       <select id="form-select">
-        <option value="A">Form A (متاح ✅)</option>
-        <option value="B" disabled>Form B 🔒 (غير متاح حالياً)</option>
+        <option value="A" class="available-option">نموذج A</option>
+        <option value="B" class="available-option">نموذج B</option>
       </select>
     </div>
 
-    <!-- 4. اسم الطالب -->
     <div class="input-group">
-      <label for="student-name-input">اسم الطالب بالكامل:</label>
-      <input type="text" id="student-name-input" placeholder="ادخل اسمك..." required>
+      <label for="student-name-input">اسم الطالب/ة بالكامل:</label>
+      <input 
+        type="text" 
+        id="student-name-input" 
+        placeholder="ادخل اسمك..." 
+        required
+      >
     </div>
 
-    <!-- 5. كود التفعيل -->
     <div class="input-group">
       <label for="access-code-input">كود التفعيل (Access Code):</label>
-      <input type="text" id="access-code-input" placeholder="ادخل كود التفعيل الخاص بك..." required>
+      <input 
+        type="text" 
+        id="access-code-input" 
+        placeholder="ادخل كود التفعيل الخاص بك..." 
+        required
+      >
     </div>
 
-    <button class="btn" onclick="validateAndStart()">تأكيد وبدء الامتحان 🚀</button>
-    <div class="error-msg" id="auth-error">❌ كود التفعيل غير صحيح أو غير مخصص لهذا المستوى!</div>
+    <button class="btn" onclick="validateAndStart()">
+      تأكيد وبدء الامتحان 🚀
+    </button>
+
+    <div class="error-msg" id="auth-error">
+      ❌ كود التفعيل غير صحيح أو الاختبار المحدد غير متوفر!
+    </div>
 
     <div class="footer-credits">
       جميع الحقوق محفوظة © منصة زياد الديب للامتحانات
     </div>
   </div>
 
-  <!-- 2. شاشة الاختبار -->
+  <!-- 
+    شاشة الامتحان نفسها
+    هنا بيتعرض السؤال والاختيارات
+  -->
   <div id="exam-screen" class="screen">
     <div class="student-bar">
-      <span id="part-title">Part 1</span>
-      <span id="info-badge" style="font-size: 12px; opacity: 0.8;"></span>
-      <span>الطالب: <span id="display-student-name"></span></span>
+      <span id="part-title">Unit 6 Grammar</span>
+      <span id="info-badge" style="font-size: 11px; opacity: 0.85;"></span>
+      <span>الطالب/ة: <span id="display-student-name"></span></span>
     </div>
+
+    <div class="unit-selector-bar" id="unit-bar"></div>
 
     <audio id="audio" preload="auto"></audio>
 
     <div class="header-info">
+      <span class="speaker-title" id="speaker-name">سؤال 1</span>
       <span class="timer" id="timer-text"></span>
-      <span class="speaker-title" id="speaker-name">Speaker 1</span>
+      <span class="settings-gear" id="gear-btn" 
+            title="قائمة التنقل بين جميع الأسئلة" 
+            onclick="openNavModal()">⚙ 🔢</span>
     </div>
 
     <div class="question" id="question-text">Loading...</div>
     <div class="options" id="options-box"></div>
 
-    <button class="btn" id="next-btn" onclick="manualNext()">السؤال التالي</button>
+    <div id="explanation-box" class="explanation-box"></div>
+
+    <button class="btn" id="next-btn" 
+            style="margin-top:15px;" 
+            onclick="manualNext()">
+      السؤال التالي ⬅
+    </button>
   </div>
 
-  <!-- 3. شاشة النتيجة -->
+  <!-- مودال التنقل السريع بين الاسئلة -->
+  <div id="nav-modal" class="nav-modal">
+    <h3 id="modal-title">⚙ التنقل السريع بين الأسئلة</h3>
+    <p style="font-size:12px; color:#5f6368;">
+      اختر رقم السؤال للانتقال إليه فوراً:
+    </p>
+    <div class="grid-container" id="grid-container"></div>
+    <button class="btn" 
+            style="margin-top:16px; background:#5f6368;" 
+            onclick="closeNavModal()">
+      إغلاق ✖
+    </button>
+  </div>
+
+  <!-- شاشة النتيجة -->
   <div id="result-screen" class="screen">
     <h2>نتيجة الاختبار 📊</h2>
-    <p>الطالب: <strong id="result-student-name"></strong></p>
-    <p id="result-exam-info" style="color: #5f6368; font-size: 14px; margin-top: -5px;"></p>
+    <p>الطالب/ة: <strong id="result-student-name"></strong></p>
+    <p id="result-exam-info" 
+       style="color: #5f6368; font-size: 13px; margin-top: -5px;"></p>
     
-    <div class="score-badge" id="score-text">0 / 15</div>
+    <div class="score-badge" id="score-text">0 / 0</div>
     <p id="feedback-text"></p>
 
     <div class="result-details" id="result-details"></div>
 
-    <button class="btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+    <button class="btn" onclick="location.reload()">
+      إعادة الاختبار 🔄
+    </button>
   </div>
 
 </div>
 
 <script>
-  // أكواد التفعيل المقبولة لـ Level 18
-  const validAccessCodes = ["DEEB18", "LISTEN18", "VIP18", "EXAM2026"];
+  // 
+  // اكواد التفعيل
+  // الطالب لازم يدخل واحد من دول عشان يدخل
+  // 
+  const validAccessCodes = [
+    "DEEB18",
+    "LISTEN18",
+    "VIP18",
+    "EXAM2026",
+    "READ18",
+    "GANGONA"
+  ];
 
-  // توليد قائمة المستويات من 1 إلى 23 مع قفل الجميع عدا Level 18
-  window.onload = function() {
-    const levelSelect = document.getElementById('level-select');
-    for (let i = 1; i <= 23; i++) {
-      const opt = document.createElement('option');
-      opt.value = i;
-      if (i === 18) {
-        opt.text = `Level ${i} (متاح ✅)`;
-      } else {
-        opt.text = `Level ${i} 🔒 (غير متاح)`;
-        opt.disabled = true;
-      }
-      levelSelect.appendChild(opt);
-    }
-    levelSelect.value = "18"; // تحديد المستوى المتاح تلقائياً
-  };
-
+  // 
+  // ملفات الصوت بتاعة الليسننج
+  // خلي بالك لازم يبقوا في نفس الفولدر
+  // 
   const audioPart1 = "11_AEF 2e Level 4 Testing-F6_LA [www.languagecentre.ir].mp3";
   const audioPart2 = "13_AEF 2e Level 4 Testing-F7_LA [www.languagecentre.ir].mp3";
   const audioPart3 = "15_AEF 2e Level 4 Testing-F8_LA [www.languagecentre.ir].mp3";
 
-  const questions = [
-    // --- Part 1 (Music) ---
-    { qNum: 1, partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "1. What does Speaker 1 say about the music they listen to?", options: ["A) Rock music makes me feel more lively.", "B) Hip-hop music is great fun.", "C) For me, jazz music is comforting.", "D) If I'm alone, I listen to pop music."], correctAnswer: 0 },
-    { qNum: 2, partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 2", startTime: 29, endTime: 48, question: "2. What does Speaker 2 say about the music they listen to?", options: ["A) Hip-hop music is great fun.", "B) I like classical music because it has no words.", "C) I've become quite interested in folk music.", "D) For me, jazz music is comforting."], correctAnswer: 1 },
-    { qNum: 3, partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 3", startTime: 48, endTime: 73, question: "3. What does Speaker 3 say about the music they listen to?", options: ["A) If I'm alone, I listen to pop music.", "B) Rock music makes me feel more lively.", "C) I've become quite interested in folk music.", "D) I like classical music because it has no words."], correctAnswer: 2 },
-    { qNum: 4, partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 4", startTime: 73, endTime: 101, question: "4. What does Speaker 4 say about the music they listen to?", options: ["A) If I'm alone, I listen to pop music.", "B) For me, jazz music is comforting.", "C) Hip-hop music is great fun.", "D) Rock music makes me feel more lively."], correctAnswer: 0 },
-    { qNum: 5, partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 5", startTime: 101, endTime: 130, question: "5. What does Speaker 5 say about the music they listen to?", options: ["A) I like classical music because it has no words.", "B) For me, jazz music is comforting.", "C) I've become quite interested in folk music.", "D) Hip-hop music is great fun."], correctAnswer: 1 },
+  // 
+  // هنا بقى بنخزن كل الليفلات
+  // النظام ده عشان لما تضيف Level 19
+  // متلخبطش الدنيا
+  // 
+  const levelsData = {
 
-    // --- Part 2 (Relationships) ---
-    { qNum: 6, partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 1", startTime: 4, endTime: 32, question: "6. What does Speaker 1 say about her relationship?", options: ["A) He's reliable.", "B) He's thoughtful.", "C) He's patient.", "D) He's easygoing."], correctAnswer: 1 },
-    { qNum: 7, partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 2", startTime: 32, endTime: 57, question: "7. What does Speaker 2 say about her relationship?", options: ["A) He's romantic.", "B) He's thoughtful.", "C) He's patient.", "D) He's easygoing."], correctAnswer: 3 },
-    { qNum: 8, partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 3", startTime: 57, endTime: 89, question: "8. What does Speaker 3 say about her relationship?", options: ["A) He's reliable.", "B) He's patient.", "C) He's easygoing.", "D) He's sociable."], correctAnswer: 3 },
-    { qNum: 9, partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 4", startTime: 89, endTime: 120, question: "9. What does Speaker 4 say about her relationship?", options: ["A) He's reliable.", "B) He's thoughtful.", "C) He's romantic.", "D) He's sociable."], correctAnswer: 0 },
-    { qNum: 10, partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 5", startTime: 120, endTime: 150, question: "10. What does Speaker 5 say about her relationship?", options: ["A) He's easygoing.", "B) He's thoughtful.", "C) He's romantic.", "D) He's patient."], correctAnswer: 2 },
+    "18": {
 
-    // --- Part 3 (Keeping in Touch) ---
-    { qNum: 11, partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "11. What does Speaker 1 say about keeping in touch?", options: ["A) Nothing is better than chatting face-to-face.", "B) Writing emails takes up far too much time.", "C) Using social networking sites keeps everyone up-to-date.", "D) Texting is really practical at times."], correctAnswer: 0 },
-    { qNum: 12, partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 2", startTime: 29, endTime: 58, question: "12. What does Speaker 2 say about keeping in touch?", options: ["A) Writing emails takes up far too much time.", "B) Spending a weekend away together is better than meeting for coffee.", "C) Texting is not as good as chatting on the phone.", "D) Using social networking sites keeps everyone up-to-date."], correctAnswer: 1 },
-    { qNum: 13, partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 3", startTime: 58, endTime: 81, question: "13. What does Speaker 3 say about keeping in touch?", options: ["A) Nothing is better than chatting face-to-face.", "B) Texting is really practical at times.", "C) Texting is not as good as chatting on the phone.", "D) Spending a weekend away together is better than meeting for coffee."], correctAnswer: 2 },
-    { qNum: 14, partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 4", startTime: 81, endTime: 106, question: "14. What does Speaker 4 say about keeping in touch?", options: ["A) Using social networking sites keeps everyone up-to-date.", "B) Writing emails takes up far too much time.", "C) Nothing is better than chatting face-to-face.", "D) Texting is not as good as chatting on the phone."], correctAnswer: 0 },
-    { qNum: 15, partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 5", startTime: 106, endTime: 135, question: "15. What does Speaker 5 say about keeping in touch?", options: ["A) Writing emails takes up far too much time.", "B) Spending a weekend away together is better than meeting for coffee.", "C) Texting is really practical at times.", "D) Using social networking sites keeps everyone up-to-date."], correctAnswer: 2 }
-  ];
+      // 
+      // اسئلة الريدينج - 121 سؤال كاملين
+      // متقسمين يونتس
+      // 
+      reading: [
+        { tag: "U6_G", qNum: 1, question: "01 Do you mind ________ for a walk in the park?", options: ["A go", "B going", "C to go", "D to going"], correct: 1, exp: "الفعل mind يتبعه الفعل + ing." },
+        { tag: "U6_G", qNum: 2, question: "02 You should practice ________ English whenever you get the opportunity.", options: ["A speak", "B speaking", "C to speak", "D to speaking"], correct: 1, exp: "الفعل practice يأتي بعده v-ing." },
+        { tag: "U6_G", qNum: 3, question: "03 The shop assistant refused ________ me a refund.", options: ["A give", "B giving", "C to give", "D to giving"], correct: 2, exp: "الفعل refuse يأتي بعده to + المصدر." },
+        { tag: "U6_G", qNum: 4, question: "04 I can't remember ________ a doll when I was a little girl.", options: ["A have", "B having", "C to have", "D to having"], correct: 1, exp: "تذكر حدث سابق في الماضي يتبعه v-ing." },
+        { tag: "U6_G", qNum: 5, question: "05 You'd better ________ Darren and tell him we'll be late.", options: ["A call", "B calling", "C to call", "D to calling"], correct: 0, exp: "'d better يتبعها المصدر بدون to." },
+        { tag: "U6_G", qNum: 6, question: "06 Have you tried ________ on the other side of the bed?", options: ["A sleep", "B sleeping", "C to sleep", "D to sleeping"], correct: 1, exp: "Try + ing تعني تجربة طريقة جديدة." },
+        { tag: "U6_G", qNum: 7, question: "07 We can't wait ________ your new house.", options: ["A see", "B seeing", "C to see", "D to seeing"], correct: 2, exp: "can't wait + to + المصدر." },
+        { tag: "U6_G", qNum: 8, question: "08 My boss makes me ________ on the weekend sometimes.", options: ["A work", "B working", "C to work", "D to working"], correct: 0, exp: "make + مفعول + المصدر بدون to." },
+        { tag: "U6_G", qNum: 9, question: "09 No one forgets ________ Rio de Janeiro for the first time.", options: ["A see", "B seeing", "C to see", "D to seeing"], correct: 1, exp: "Forget + ing تعني تجربة ماضية لا تُنسى." },
+        { tag: "U6_G", qNum: 10, question: "10 Could you let me ________, please?", options: ["A speak", "B speaking", "C to speak", "D to speaking"], correct: 0, exp: "let + مفعول + المصدر بدون to." },
+        { tag: "U6_G", qNum: 11, question: "11 Did you ________ do many sports in school?", options: ["A use to", "B used to", "C uses to", "D using to"], correct: 0, exp: "بعد Did نستخدم use to المصدر." },
+        { tag: "U6_G", qNum: 12, question: "12 Driving on the left was weird at first, but I ________ it now.", options: ["A use to", "B 'm used to", "C used to", "D using to"], correct: 1, exp: "الاعتاد على شيء الآن: am/is/are used to." },
+        { tag: "U6_G", qNum: 13, question: "13 We ________ be very good children most of the time.", options: ["A would", "B used to", "C use to", "D are used to"], correct: 1, exp: "حالة ماضية مع أفعال الحالة تستلزم used to." },
+        { tag: "U6_G", qNum: 14, question: "14 I ________ eat fish at all, but I have it occasionally now.", options: ["A wasn't used to", "B didn't use to", "C am not used to", "D don't use to"], correct: 1, exp: "نفي العادة الماضية: didn't use to." },
+        { tag: "U6_G", qNum: 15, question: "15 Sam ________ goes to work by bus, but he decided to walk today.", options: ["A usually", "B use to", "C used to", "D is used to"], correct: 0, exp: "Usually تُستخدم للمضارع البسيط للتعبير عن العادة الحالية." },
+        { tag: "U6_G", qNum: 16, question: "16 Clara and Tom ________ a couple, but they've split up now.", options: ["A used to be", "B used to being", "C use to be", "D are used to being"], correct: 0, exp: "كانوا في الماضي: used to be." },
+        { tag: "U6_G", qNum: 17, question: "17 I ________ speaking so much English - it's tiring!", options: ["A 'm not used to", "B didn't use to", "C wasn't used to", "D don't use to"], correct: 0, exp: "عدم الاعتياد على شيء حالي يليه V-ing: 'm not used to." },
+        { tag: "U6_G", qNum: 18, question: "18 I can't ________ this new operating system. I prefer the old one.", options: ["A get used to", "B be used to", "C used to", "D getting used to"], correct: 0, exp: "الاعتاد بالتدريج بعد can't: get used to." },
+        { tag: "U6_G", qNum: 19, question: "19 On a free afternoon, I ________ drive to the coast and do some surfing.", options: ["A often", "B 'm used to", "C used to", "D usually"], correct: 0, exp: "Often تعبر عن التكرار مع المضارع." },
+        { tag: "U6_G", qNum: 20, question: "20 My mother ________ always bake cakes on Saturdays when I was young - I loved it!", options: ["A would", "B use to", "C used to", "D uses to"], correct: 2, exp: "العادات السلوكية المكررة بالماضي: used to أو would." },
+        { tag: "U6_V", qNum: 1, question: "01 An ________ is an extra piece performed when the audience calls the performer back.", options: ["A encore", "B echo", "C event", "D entry"], correct: 0, exp: "Encore تعني العزف الإضافي استجابة للجمهور." },
+        { tag: "U6_V", qNum: 2, question: "02 A ________ is a long thin metal instrument that you blow into.", options: ["A flute", "B fiddle", "C forte", "D fret"], correct: 0, exp: "Flute: آلة الفلوت النفعية." },
+        { tag: "U6_V", qNum: 3, question: "03 A ________ is a female singer who sings very high.", options: ["A soprano", "B soloist", "C star", "D singer"], correct: 0, exp: "Soprano: المغنية ذات الصوت العالي." },
+        { tag: "U6_V", qNum: 4, question: "04 Jazz and soul are examples of two different musical ________.", options: ["A genres", "B groups", "C gigs", "D guitars"], correct: 0, exp: "Genres: الأنواع الموسيقية." },
+        { tag: "U6_V", qNum: 5, question: "05 The person who directs an orchestra is called a ________.", options: ["A conductor", "B composer", "C creator", "D chorister"], correct: 0, exp: "Conductor: قائد الأوركسترا." },
+        { tag: "U6_V", qNum: 6, question: "06 A ________ looks like a very big violin.", options: ["A cello", "B chord", "C choir", "D cymbal"], correct: 0, exp: "Cello: التشيلو يشبه الكمان الكبير." },
+        { tag: "U6_V", qNum: 7, question: "07 Why are you ________? Are you tired or just bored?", options: ["A snoring", "B napping", "C yawning", "D sleeping"], correct: 2, exp: "Yawning: التثاؤب." },
+        { tag: "U6_V", qNum: 8, question: "08 I didn't hear you get back last night, I was ________ asleep.", options: ["A fast", "B deep", "C fallen", "D heavily"], correct: 0, exp: "Fast asleep: غارق في النوم." },
+        { tag: "U6_V", qNum: 9, question: "09 I use a special ________ that gives my long neck enough support.", options: ["A duvet", "B blanket", "C pillow", "D sheet"], correct: 2, exp: "Pillow: وسادة للنوم." },
+        { tag: "U6_V", qNum: 10, question: "10 I used to suffer from ________. I would lie awake for hours every night.", options: ["A insomnia", "B jet lag", "C nightmares", "D sleepwalking"], correct: 0, exp: "Insomnia: الأرق وعدم القدرة على النوم." },
+        { tag: "U6_V", qNum: 11, question: "11 When it's really hot in summer, I just sleep under a ________.", options: ["A pillow", "B sheet", "C duvet", "D blanket"], correct: 1, exp: "Sheet: ملاءة خفيفة." },
+        { tag: "U6_V", qNum: 12, question: "12 If you eat too much late at night, it will ________ you awake.", options: ["A stay", "B keep", "C make", "D get"], correct: 1, exp: "Keep awake: يبقيك مستيقظاً." },
+        { tag: "U6_V", qNum: 13, question: "13 My uncle gets up very early but he sometimes has a ________ in the afternoons.", options: ["A dream", "B yawn", "C nap", "D snore"], correct: 2, exp: "Have a nap: يأخذ قيلولة." },
+        { tag: "U6_V", qNum: 14, question: "14 You don't need to worry about ________ – that alarm clock's incredibly loud.", options: ["A oversleeping", "B having a siesta", "C keeping awake", "D sleeping pills"], correct: 0, exp: "Oversleeping: الإطالة في النوم أكثر من اللازم." },
+        { tag: "U6_V", qNum: 15, question: "15 I love the ________ in Rome – there are so many beautiful buildings.", options: ["A architecture", "B graffiti", "C statues", "D paintings"], correct: 0, exp: "Architecture: الهندسة المعمارية المبهرة." },
+        { tag: "U6_V", qNum: 16, question: "16 My aunt once visited a ________ to try and contact my dead uncle.", options: ["A psychic", "B psychologist", "C psychiatrist", "D physician"], correct: 0, exp: "Psychic: عراف أو وسيط روحاني." },
+        { tag: "U6_V", qNum: 17, question: "17 ________ have to go through training to learn how to make really good coffee.", options: ["A Baristas", "B Macchiatos", "C Brewers", "D Bakers"], correct: 0, exp: "Baristas: صانعو القهوة المحترفون." },
+        { tag: "U6_V", qNum: 18, question: "18 Carlo is one of the best ________ around - his restaurant is always booked up.", options: ["A chauffeurs", "B chefs", "C waiters", "D managers"], correct: 1, exp: "Chefs: طهاة المطاعم." },
+        { tag: "U6_V", qNum: 19, question: "19 Hélène Grimaud is performing Brahms Piano ________ no.1 tonight.", options: ["A Concerto", "B Symphony", "C Chorus", "D Opera"], correct: 0, exp: "Concerto: كونشرتو البيانو." },
+        { tag: "U6_V", qNum: 20, question: "20 I've sent Janet some flowers a lovely ________ of roses.", options: ["A bouquet", "B croissant", "C bucket", "D bunch"], correct: 0, exp: "Bouquet: باقة ورد." },
+        { tag: "U7_G", qNum: 1, question: "01 They ________ gone to bed early - there are no lights on in the house.", options: ["A must have", "B should have", "C can't have", "D might have"], correct: 0, exp: "Must have + PP: استنتاج مؤكد بالنفي والوجود في الماضي." },
+        { tag: "U7_G", qNum: 2, question: "02 I suppose I ________ dropped my wallet, but I think it's been stolen.", options: ["A could have", "B must have", "C shouldn't have", "D can't have"], correct: 0, exp: "Could have + PP: الاحتمالية بالماضي." },
+        { tag: "U7_G", qNum: 3, question: "03 You look exhausted. You ________ for a shorter run.", options: ["A should have gone", "B should go", "C must have gone", "D can't have gone"], correct: 0, exp: "Should have + PP: النصيحة عن شيء بالماضي." },
+        { tag: "U7_G", qNum: 4, question: "04 I ________ met her at a conference, but I can't remember if I did.", options: ["A may have", "B must have", "C should have", "D can't have"], correct: 0, exp: "May have + PP: احتمال غير مؤكد للماضي." },
+        { tag: "U7_G", qNum: 5, question: "05 Diana ________ gotten engaged - she's only known him six weeks!", options: ["A can't have", "B mustn't have", "C should have", "D might have"], correct: 0, exp: "Can't have + PP: استحالة وقوع الحدث." },
+        { tag: "U7_G", qNum: 6, question: "06 You ________ looked at my emails; it was very wrong of you.", options: ["A shouldn't have", "B might not have", "C couldn't have", "D must not have"], correct: 0, exp: "Shouldn't have + PP: اللوم على فعل خطأ بالماضي." },
+        { tag: "U7_G", qNum: 7, question: "07 They ________ finished their walk by now. It's too dark to see anything.", options: ["A might have", "B must have", "C shouldn't have", "D can't have"], correct: 1, exp: "Must have + PP: استنتاج مؤكد في الماضي." },
+        { tag: "U7_G", qNum: 8, question: "08 Would you rather ________ out tonight or stay in?", options: ["A eat", "B eating", "C to eat", "D ate"], correct: 0, exp: "Would rather + المصدر بدون to." },
+        { tag: "U7_G", qNum: 9, question: "09 I'd rather you ________ me for lunch today; I've got a lot of work to do.", options: ["A not meet", "B didn't meet", "C don't meet", "D haven't met"], correct: 1, exp: "Would rather + فاعل + ماضي بسيط للحدث الحالي." },
+        { tag: "U7_G", qNum: 10, question: "10 Chris says he'd rather you ________ him up at 8:00, not 7:00.", options: ["A pick", "B picking", "C picked", "D to pick"], correct: 2, exp: "Would rather + فاعل + ماضي بسيط (picked)." },
+        { tag: "U7_G", qNum: 11, question: "11 Danielle admitted that she'd rather ________ to the barbecue.", options: ["A not go", "B didn't go", "C hasn't gone", "D not going"], correct: 0, exp: "Would rather + not + المصدر (بدون فاعل)." },
+        { tag: "U7_G", qNum: 12, question: "12 Wouldn't you rather John ________ the repairs in the bathroom this week?", options: ["A do", "B does", "C did", "D doing"], correct: 2, exp: "Would rather + فاعل + ماضي بسيط." },
+        { tag: "U7_G", qNum: 13, question: "13 Beth told me you ________ like going to a club. Where would you like to go?", options: ["A sound", "B feel", "C look", "D seem"], correct: 1, exp: "Feel like + ing: يرغب في شيء." },
+        { tag: "U7_G", qNum: 14, question: "14 It's so empty here today. It feels ________ we've got the café to ourselves.", options: ["A as if", "B if", "C that", "D like"], correct: 0, exp: "Feels as if + جملة كاملة." },
+        { tag: "U7_G", qNum: 15, question: "15 I don't know what this fruit is but it tastes like ________.", options: ["A great", "B pineapple", "C horrible", "D delicious"], correct: 1, exp: "Taste like + اسم (Pineapple)." },
+        { tag: "U7_G", qNum: 16, question: "16 Mmm, that ________ really good! Are you making a cake?", options: ["A smells", "B tastes", "C feels", "D looks"], correct: 0, exp: "Smells: رائحته طيبة." },
+        { tag: "U7_G", qNum: 17, question: "17 This shirt ________ a little bit tight. Do you have it in a larger size?", options: ["A feels as if", "B feels", "C feels like", "D looks like"], correct: 1, exp: "Feels + صفة (tight)." },
+        { tag: "U7_G", qNum: 18, question: "18 Robert looks more ________ his mother than his father.", options: ["A as", "B like", "C as if", "D though"], correct: 1, exp: "Look like + اسم (his mother)." },
+        { tag: "U7_G", qNum: 19, question: "19 Eve looks as ________ she hasn't slept for a week!", options: ["A though", "B like", "C when", "D if"], correct: 3, exp: "Looks as if + جملة كاملة." },
+        { tag: "U7_G", qNum: 20, question: "20 This music ________ something I've heard before. What's the name of the band?", options: ["A sounds like", "B feels like", "C sounds", "D looks like"], correct: 0, exp: "Sounds like + اسم." },
+        { tag: "U7_V", qNum: 1, question: "01 Please ________ me to set my alarm clock for 7:00 instead of 8:00.", options: ["A remember", "B remind", "C notice", "D warn"], correct: 1, exp: "Remind: يذكر شخصاً." },
+        { tag: "U7_V", qNum: 2, question: "02 Have you ________ that new pizza place on High Street?", options: ["A noticed", "B realized", "C watched", "D stared"], correct: 0, exp: "Noticed: يلاحظ." },
+        { tag: "U7_V", qNum: 3, question: "03 We couldn't ________ her from buying that car.", options: ["A avoid", "B prevent", "C deny", "D refuse"], correct: 1, exp: "Prevent from + ing: يمنع من." },
+        { tag: "U7_V", qNum: 4, question: "04 We really don't ________ Alice staying another night – she's welcome.", options: ["A matter", "B mind", "C care", "D bother"], correct: 1, exp: "Don't mind: لا مانع لدينا." },
+        { tag: "U7_V", qNum: 5, question: "05 I can remember when the Red Sox ________ the Yankees 8-2.", options: ["A beat", "B won", "C scored", "D drew"], correct: 0, exp: "Beat + الفريق المنافس: يهزم." },
+        { tag: "U7_V", qNum: 6, question: "06 The trouble with Jeff is that he ________ to accept that anything is wrong.", options: ["A denies", "B refuses", "C avoids", "D prevents"], correct: 1, exp: "Refuses + to + المصدر: يرفض." },
+        { tag: "U7_V", qNum: 7, question: "07 Unemployment has ________ again this month.", options: ["A risen", "B raised", "C arose", "D lifted"], correct: 0, exp: "Risen: ارتفعت (فعل لازم بدون مفعول)." },
+        { tag: "U7_V", qNum: 8, question: "08 We ________ the blanket on the ground and had a picnic by the river.", options: ["A laid", "B lay", "C lain", "D lied"], correct: 0, exp: "Laid: بسط أو وضع الشي." },
+        { tag: "U7_V", qNum: 9, question: "09 That's the jeweller's that was ________ last week.", options: ["A stolen", "B robbed", "C burgled", "D hijacked"], correct: 1, exp: "Robbed: سُرِقَ (للمكان أو الأشخاص)." },
+        { tag: "U7_V", qNum: 10, question: "10 I ________ you to look for another job – you really don't seem happy in this one.", options: ["A advise", "B warn", "C notice", "D remind"], correct: 0, exp: "Advise + مفعول + to: ينصح." },
+        { tag: "U7_V", qNum: 11, question: "11 You don't look old! You haven't got any ________ on your face!", options: ["A wrinkles", "B scars", "C freckles", "D spots"], correct: 0, exp: "Wrinkles: تجاعيد الوجه." },
+        { tag: "U7_V", qNum: 12, question: "12 You look as if you've just gotten out of bed! You should ________ your hair!", options: ["A comb", "B wash", "C cut", "D dry"], correct: 0, exp: "Comb hair: يمشط الشعر." },
+        { tag: "U7_V", qNum: 13, question: "13 It's very rude to ________ your finger at people.", options: ["A point", "B show", "C wave", "D hold"], correct: 0, exp: "Point finger: يشير بإصبعه." },
+        { tag: "U7_V", qNum: 14, question: "14 I knew you wouldn't agree because you raised your ________ when I suggested it.", options: ["A eyebrows", "B shoulders", "C hands", "D arms"], correct: 0, exp: "Raise eyebrows: يرفع حاجبيه متعجباً." },
+        { tag: "U7_V", qNum: 15, question: "15 Business people often ________ hands when they make a deal.", options: ["A shake", "B hold", "C wave", "D touch"], correct: 0, exp: "Shake hands: يتصافحون." },
+        { tag: "U7_V", qNum: 16, question: "16 Did you use to suck your ________ when you were little?", options: ["A thumb", "B toe", "C finger", "D hand"], correct: 0, exp: "Suck thumb: يمتص إبهامه." },
+        { tag: "U7_V", qNum: 17, question: "17 Can you give me a tissue? I need to blow my ________.", options: ["A nose", "B hair", "C face", "D eyes"], correct: 0, exp: "Blow nose: يتمخط بالنظافة." },
+        { tag: "U7_V", qNum: 18, question: "18 Eric shrugged his ________ and said he had no idea where the path went.", options: ["A shoulders", "B eyebrows", "C hands", "D head"], correct: 0, exp: "Shrug shoulders: يهز كتفيه." },
+        { tag: "U7_V", qNum: 19, question: "19 There's a cold wind today. Put this scarf around your ________.", options: ["A neck", "B head", "C face", "D arms"], correct: 0, exp: "Neck: الرقبة." },
+        { tag: "U7_V", qNum: 20, question: "20 I could tell as soon as I saw your fingers that you bite your ________.", options: ["A nails", "B skin", "C clips", "D thumbs"], correct: 0, exp: "Bite nails: يعض أظافره." },
+        { tag: "U8_G", qNum: 1, question: "01 Jack encouraged me ________ a new hairdresser's.", options: ["A to try", "B that I try", "C trying", "D try"], correct: 0, exp: "Encourage + مفعول + to + المصدر." },
+        { tag: "U8_G", qNum: 2, question: "02 John regretted ________ how much the hotel was before he booked it.", options: ["A not asking", "B to not ask", "C not to ask", "D didn't ask"], correct: 0, exp: "Regret + not + v-ing." },
+        { tag: "U8_G", qNum: 3, question: "03 Sheila insisted ________ for all our drinks.", options: ["A on paying", "B to pay", "C paying", "D at paying"], correct: 0, exp: "Insist on + V-ing." },
+        { tag: "U8_G", qNum: 4, question: "04 Peter convinced me ________ playing soccer.", options: ["A not to give up", "B not giving up", "C don't give up", "D didn't give up"], correct: 0, exp: "Convince + مفعول + (not) to + المصدر." },
+        { tag: "U8_G", qNum: 5, question: "05 I suggested ________ Anne some flowers, but Lisa said she'd prefer chocolates.", options: ["A to buy", "B buying", "C buy", "D bought"], correct: 1, exp: "Suggest + V-ing." },
+        { tag: "U8_G", qNum: 6, question: "06 My neighbor threatened ________ down the trees in the garden.", options: ["A to cut", "B cutting", "C cut", "D cuts"], correct: 0, exp: "Threaten + to + المصدر." },
+        { tag: "U8_G", qNum: 7, question: "07 It's difficult to avoid ________ by paparazzi when you're famous.", options: ["A being photographed", "B photographing", "C to be photographed", "D to photograph"], correct: 0, exp: "Avoid + being + PP في المجهول." },
+        { tag: "U8_G", qNum: 8, question: "08 The gym is closed this week – it ________.", options: ["A is being redecorated", "B is redecorated", "C redecorates", "D has redecorated"], correct: 0, exp: "المبني للمجهول في المضارع المستمر: is being + PP." },
+        { tag: "U8_G", qNum: 9, question: "09 I saw Miranda at the art exhibition. She ________ around by one of the artists.", options: ["A was being shown", "B was showing", "C had shown", "D has been shown"], correct: 0, exp: "الماضي المستمر المبني للمجهول: was being shown." },
+        { tag: "U8_G", qNum: 10, question: "10 Drivers shouldn't ________ for parking ten minutes longer than they've paid for.", options: ["A be fined", "B fine", "C being fined", "D have fined"], correct: 0, exp: "Shouldn't be + PP بالمجهول." },
+        { tag: "U8_G", qNum: 11, question: "11 The Cubs refused ________ and ended up winning the game.", options: ["A to be beaten", "B being beaten", "C to beat", "D beat"], correct: 0, exp: "Refuse + to be + PP في صيغة المجهول." },
+        { tag: "U8_G", qNum: 12, question: "12 The couple ________ to have escaped to France.", options: ["A are thought", "B is thought", "C thinks", "D thought"], correct: 0, exp: "الجمع (The couple) يستلزم are thought." },
+        { tag: "U8_G", qNum: 13, question: "13 Fish and chips used to ________ in old newspapers.", options: ["A be wrapped", "B wrap", "C being wrapped", "D wrapped"], correct: 0, exp: "Used to be + PP بالمجهول." },
+        { tag: "U8_G", qNum: 14, question: "14 That restaurant ________ to be one of the best in Europe.", options: ["A is said", "B has said", "C said", "D is saying"], correct: 0, exp: "Is said to be: يقال عنه أنه..." },
+        { tag: "U8_G", qNum: 15, question: "15 Choose the correct sentence order.", options: ["A I had my photo taken outside the White House.", "B I had taken my photo...", "C I taken my photo had...", "D I my photo had taken..."], correct: 0, exp: "تركيب Causative الصحيح: have + object + PP." },
+        { tag: "U8_G", qNum: 16, question: "16 Choose the correct sentence order.", options: ["A We decided to get the painting valued by an expert.", "B We decided get the painting to valued...", "C We get to decided...", "D We decided to getting..."], correct: 0, exp: "get + object + PP." },
+        { tag: "U8_G", qNum: 17, question: "17 Choose the correct sentence order.", options: ["A I'm going to have my bad tooth taken out tomorrow.", "B I'm going have to my bad tooth...", "C I'm having going to...", "D I going to have..."], correct: 0, exp: "be going to + have + object + PP." },
+        { tag: "U8_G", qNum: 18, question: "18 Choose the correct sentence order.", options: ["A I had my car fully checked before I sold it.", "B I had checked fully my car...", "C I fully checked had my car...", "D I had my car check fully..."], correct: 0, exp: "had + my car + fully checked." },
+        { tag: "U8_G", qNum: 19, question: "19 Choose the correct sentence order.", options: ["A Will you have your house painted exactly the same color?", "B Will have you your house painted...", "C Have you will your house painted...", "D Will you your house have painted..."], correct: 0, exp: "السؤال باستخدام Causative: Will + subject + have + object + PP." },
+        { tag: "U8_G", qNum: 20, question: "20 Choose the correct sentence order.", options: ["A Why would anyone want to get their lips made bigger?", "B Why anyone would want to get...", "C Why would want anyone to get...", "D Why would anyone to get want..."], correct: 0, exp: "الترتيب المعياري الصحيح للجملة الاستفهامبة." },
+        { tag: "U8_G", qNum: 21, question: "21 Choose the correct sentence order.", options: ["A We're having our new heating system installed in two weeks.", "B We're installing our new heating system having...", "C We're our new heating system having installed...", "D We having our new heating system installed..."], correct: 0, exp: "We're + having + object + PP." },
+        { tag: "U8_V", qNum: 1, question: "01 The ________ of the jury was that Mr. Anderson was guilty of all charges.", options: ["A verdict", "B venue", "C victim", "D value"], correct: 0, exp: "Verdict: قرار هيئة المحلفين." },
+        { tag: "U8_V", qNum: 2, question: "02 The man was charged with ________ after following Miss Stevens everywhere.", options: ["A stalking", "B smuggling", "C stealing", "D shoplifting"], correct: 0, exp: "Stalking: تعقب وملاحقة شخص." },
+        { tag: "U8_V", qNum: 3, question: "03 Cigarettes are often ________ into the UK because the tax is so high on them there.", options: ["A smuggled", "B stolen", "C snatched", "D sold"], correct: 0, exp: "Smuggled: يُهرب بضائع." },
+        { tag: "U8_V", qNum: 4, question: "04 Two ________ described seeing the attack from their bedroom windows.", options: ["A witnesses", "B watchers", "C workers", "D wardens"], correct: 0, exp: "Witnesses: شهود عيان." },
+        { tag: "U8_V", qNum: 5, question: "05 After being ________ by police for several hours, the woman confessed to the crime.", options: ["A questioned", "B quoted", "C quartered", "D quieted"], correct: 0, exp: "Questioned: جرى التحقيق معها." },
+        { tag: "U8_V", qNum: 6, question: "06 Both men were ________ to three years in prison.", options: ["A sentenced", "B saved", "C secured", "D sent"], correct: 0, exp: "Sentenced to: حُكم عليهم بالسجن." },
+        { tag: "U8_V", qNum: 7, question: "07 The ________ gave the woman a shorter sentence because she had pled guilty.", options: ["A judge", "B jury", "C jailer", "D justice"], correct: 0, exp: "Judge: القاضي." },
+        { tag: "U8_V", qNum: 8, question: "08 The ________ demanded $50,000 for the safe return of the director's wife.", options: ["A kidnappers", "B killers", "C knights", "D keepers"], correct: 0, exp: "Kidnappers: الخاطفون." },
+        { tag: "U8_V", qNum: 9, question: "09 Both women were ________ because of a lack of reliable evidence.", options: ["A acquitted", "B arrested", "C accused", "D attacked"], correct: 0, exp: "Acquitted: بُرِّئت الساحة." },
+        { tag: "U8_V", qNum: 10, question: "10 The politician was ________ by a friend who knew some of his guilty secrets.", options: ["A blackmailed", "B blamed", "C banned", "D beaten"], correct: 0, exp: "Blackmailed: تُعرّض للابتزاز." },
+        { tag: "U8_V", qNum: 11, question: "11 That news report isn't at all objective – it's very ________.", options: ["A biased", "B freelance", "C censored", "D sensationalist"], correct: 0, exp: "Biased: منحاز وغير محايد." },
+        { tag: "U8_V", qNum: 12, question: "12 Critics have given the new show very favorable ________.", options: ["A reviews", "B gossip", "C vows", "D paparazzi"], correct: 0, exp: "Reviews: آراء وتقييمات نقدية." },
+        { tag: "U8_V", qNum: 13, question: "13 The internet isn't ________ so you can read stories there that aren't in the newspapers.", options: ["A censored", "B biased", "C freelance", "D sensationalist"], correct: 0, exp: "Censored: خاضع للرقابة." },
+        { tag: "U8_V", qNum: 14, question: "14 Bill doesn't work for one single newspaper. He's a ________ journalist.", options: ["A freelance", "B biased", "C gossip", "D censored"], correct: 0, exp: "Freelance: صحفي مستقل." },
+        { tag: "U8_V", qNum: 15, question: "15 Ellen was a war ________ until she had children. She writes about local politics now.", options: ["A reporter", "B commentator", "C newsreader", "D paparazzi"], correct: 0, exp: "War reporter: مراسلة حرب." },
+        { tag: "U8_V", qNum: 16, question: "16 The ________ at the tennis final screamed with joy when Andy Murray won.", options: ["A commentator", "B reporter", "C newsreader", "D gossip"], correct: 0, exp: "Commentator: المعلق الرياضي." },
+        { tag: "U8_V", qNum: 17, question: "17 I read that magazine for all the celebrity ________ - it's fun, but I know it's not all true.", options: ["A gossip", "B reviews", "C vows", "D paparazzi"], correct: 0, exp: "Gossip: أخبار وأقاويل المشاهير." },
+        { tag: "U8_V", qNum: 18, question: "18 They use such strong language in their news stories - it's too ________ for me.", options: ["A sensationalist", "B biased", "C censored", "D freelance"], correct: 0, exp: "Sensationalist: أسلوب إثارة صحفية." },
+        { tag: "U8_V", qNum: 19, question: "19 I loved it when that very serious ________ couldn't stop laughing as he read one story.", options: ["A newsreader", "B commentator", "C reporter", "D paparazzi"], correct: 0, exp: "Newsreader: قارئ الأخبار." },
+        { tag: "U8_V", qNum: 20, question: "20 The government ________ to reduce taxes before the next election.", options: ["A vows", "B reviews", "C gossip", "D censored"], correct: 0, exp: "Vows: تتعهد أو تتعهد رسمياً." }
+      ],
 
+      listening: {
+
+        A: [
+          { qNum: 1, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "1. What does Speaker 1 say about the music they listen to?", options: ["A) Rock music makes me feel more lively.", "B) Hip-hop music is great fun.", "C) For me, jazz music is comforting.", "D) If I'm alone, I listen to pop music."], correct: 0 },
+          { qNum: 2, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 2", startTime: 29, endTime: 48, question: "2. What does Speaker 2 say about the music they listen to?", options: ["A) Hip-hop music is great fun.", "B) I like classical music because it has no words.", "C) I've become quite interested in folk music.", "D) For me, jazz music is comforting."], correct: 1 },
+          { qNum: 3, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 3", startTime: 48, endTime: 73, question: "3. What does Speaker 3 say about the music they listen to?", options: ["A) If I'm alone, I listen to pop music.", "B) Rock music makes me feel more lively.", "C) I've become quite interested in folk music.", "D) I like classical music because it has no words."], correct: 2 },
+          { qNum: 4, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 4", startTime: 73, endTime: 101, question: "4. What does Speaker 4 say about the music they listen to?", options: ["A) If I'm alone, I listen to pop music.", "B) For me, jazz music is comforting.", "C) Hip-hop music is great fun.", "D) Rock music makes me feel more lively."], correct: 0 },
+          { qNum: 5, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 5", startTime: 101, endTime: 130, question: "5. What does Speaker 5 say about the music they listen to?", options: ["A) I like classical music because it has no words.", "B) For me, jazz music is comforting.", "C) I've become quite interested in folk music.", "D) Hip-hop music is great fun."], correct: 1 },
+          { qNum: 6, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 1", startTime: 4, endTime: 32, question: "6. What does Speaker 1 say about her relationship?", options: ["A) He's reliable.", "B) He's thoughtful.", "C) He's patient.", "D) He's easygoing."], correct: 1 },
+          { qNum: 7, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 2", startTime: 32, endTime: 57, question: "7. What does Speaker 2 say about her relationship?", options: ["A) He's romantic.", "B) He's thoughtful.", "C) He's patient.", "D) He's easygoing."], correct: 3 },
+          { qNum: 8, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 3", startTime: 57, endTime: 89, question: "8. What does Speaker 3 say about her relationship?", options: ["A) He's reliable.", "B) He's patient.", "C) He's easygoing.", "D) He's sociable."], correct: 3 },
+          { qNum: 9, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 4", startTime: 89, endTime: 120, question: "9. What does Speaker 4 say about her relationship?", options: ["A) He's reliable.", "B) He's thoughtful.", "C) He's romantic.", "D) He's sociable."], correct: 0 },
+          { qNum: 10, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 5", startTime: 120, endTime: 150, question: "10. What does Speaker 5 say about her relationship?", options: ["A) He's easygoing.", "B) He's thoughtful.", "C) He's romantic.", "D) He's patient."], correct: 2 },
+          { qNum: 11, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "11. What does Speaker 1 say about keeping in touch?", options: ["A) Nothing is better than chatting face-to-face.", "B) Writing emails takes up far too much time.", "C) Using social networking sites keeps everyone up-to-date.", "D) Texting is really practical at times."], correct: 0 },
+          { qNum: 12, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 2", startTime: 29, endTime: 58, question: "12. What does Speaker 2 say about keeping in touch?", options: ["A) Writing emails takes up far too much time.", "B) Spending a weekend away together is better than meeting for coffee.", "C) Texting is not as good as chatting on the phone.", "D) Using social networking sites keeps everyone up-to-date."], correct: 1 },
+          { qNum: 13, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 3", startTime: 58, endTime: 81, question: "13. What does Speaker 3 say about keeping in touch?", options: ["A) Nothing is better than chatting face-to-face.", "B) Texting is really practical at times.", "C) Texting is not as good as chatting on the phone.", "D) Spending a weekend away together is better than meeting for coffee."], correct: 2 },
+          { qNum: 14, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 4", startTime: 81, endTime: 106, question: "14. What does Speaker 4 say about keeping in touch?", options: ["A) Using social networking sites keeps everyone up-to-date.", "B) Writing emails takes up far too much time.", "C) Nothing is better than chatting face-to-face.", "D) Texting is not as good as chatting on the phone."], correct: 0 },
+          { qNum: 15, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 5", startTime: 106, endTime: 135, question: "15. What does Speaker 5 say about keeping in touch?", options: ["A) Writing emails takes up far too much time.", "B) Spending a weekend away together is better than meeting for coffee.", "C) Texting is really practical at times.", "D) Using social networking sites keeps everyone up-to-date."], correct: 2 }
+        ],
+
+        B: [
+          { qNum: 1, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "1. What does Speaker 1 say about the music they listen to?", options: ["A) Hip-hop music is great fun.", "B) I listen to recent pop music.", "C) Jazz music makes me feel calm.", "D) I mainly listen to rock music."], correct: 3 },
+          { qNum: 2, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 2", startTime: 29, endTime: 48, question: "2. What does Speaker 2 say about the music they listen to?", options: ["A) I enjoy listening to my national musical instruments", "B) Because of my work, I prefer listening to classical music.", "C) I mainly listen to rock music.", "D) Hip-hop music is great fun."], correct: 1 },
+          { qNum: 3, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 3", startTime: 48, endTime: 73, question: "3. What does Speaker 3 say about the music they listen to?", options: ["A) Because of my work, I prefer listening to classical music.", "B) I enjoy listening to my national musical instruments", "C) I listen to recent pop music.", "D) Jazz music makes me feel calm."], correct: 1 },
+          { qNum: 4, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 4", startTime: 73, endTime: 101, question: "4. What does Speaker 4 say about the music they listen to?", options: ["A) I listen to recent pop music.", "B) Hip-hop music is great fun.", "C) I enjoy listening to my national musical instruments", "D) I mainly listen to rock music."], correct: 0 },
+          { qNum: 5, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 5", startTime: 101, endTime: 130, question: "5. What does Speaker 5 say about the music they listen to?", options: ["A) Jazz music makes me feel calm.", "B) Because of my work, I prefer listening to classical music.", "C) I listen to recent pop music.", "D) Hip-hop music is great fun."], correct: 0 },
+          { qNum: 6, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 1", startTime: 4, endTime: 32, question: "6. What does Speaker 1 say about her relationship?", options: ["A) He's passionate.", "B) He's caring.", "C) He's handsome.", "D) He's calm."], correct: 1 },
+          { qNum: 7, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 2", startTime: 32, endTime: 57, question: "7. What does Speaker 2 say about her relationship?", options: ["A) He's friendly.", "B) He's calm.", "C) He's passionate.", "D) He's dependable."], correct: 1 },
+          { qNum: 8, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 3", startTime: 57, endTime: 89, question: "8. What does Speaker 3 say about her relationship?", options: ["A) He's handsome.", "B) He's friendly.", "C) He's caring.", "D) He's dependable."], correct: 1 },
+          { qNum: 9, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 4", startTime: 89, endTime: 120, question: "9. What does Speaker 4 say about her relationship?", options: ["A) He's calm.", "B) He's passionate.", "C) He's dependable.", "D) He's handsome."], correct: 2 },
+          { qNum: 10, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 5", startTime: 120, endTime: 150, question: "10. What does Speaker 5 say about her relationship?", options: ["A) He's caring.", "B) He's friendly.", "C) He's passionate.", "D) He's calm."], correct: 2 },
+          { qNum: 11, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "11. What does Speaker 1 say about keeping in touch?", options: ["A) Talking in person is the best way to communicate.", "B) Social media allows all of us to catch up on the others' news.", "C) Writing emails takes up far too much time.", "D) Sometimes sending a text message is convenient."], correct: 0 },
+          { qNum: 12, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 2", startTime: 29, endTime: 58, question: "12. What does Speaker 2 say about keeping in touch?", options: ["A) Having coffee together is not as good as going away together occasionally.", "B) Talking in person is the best way to communicate.", "C) Speaking on the phone is better than texting.", "D) Writing emails takes up far too much time."], correct: 0 },
+          { qNum: 13, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 3", startTime: 58, endTime: 81, question: "13. What does Speaker 3 say about keeping in touch?", options: ["A) Speaking on the phone is better than texting.", "B) Having coffee together is not as good as going away together occasionally.", "C) Social media allows all of us to catch up on the others' news.", "D) Writing emails takes up far too much time."], correct: 0 },
+          { qNum: 14, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 4", startTime: 81, endTime: 106, question: "14. What does Speaker 4 say about keeping in touch?", options: ["A) Social media allows all of us to catch up on the others' news.", "B) Talking in person is the best way to communicate.", "C) Speaking on the phone is better than texting.", "D) Sometimes sending a text message is convenient."], correct: 0 },
+          { qNum: 15, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 5", startTime: 106, endTime: 135, question: "15. What does Speaker 5 say about keeping in touch?", options: ["A) Sometimes sending a text message is convenient.", "B) Writing emails takes up far too much time.", "C) Having coffee together is not as good as going away together occasionally.", "D) Social media allows all of us to catch up on the others' news."], correct: 0 }
+        ]
+      }
+    }
+
+  };
+
+  // 
+  // متغيرات عامة بنستخدمها في الامتحان
+  // 
+  let currentQuestions = [];
   let currentIndex = 0;
   let timerInterval = null;
   let timeLeft = 17;
@@ -331,90 +780,283 @@
   let studentName = "";
   let selectedLevel = "18";
   let selectedForm = "A";
+  let currentSkill = "reading";
 
   const audio = document.getElementById('audio');
 
+  // 
+  // اول ما الصفحة تفتح
+  // بنملى الليستة بتاعة الليفلات
+  // 
+  window.onload = function() {
+    const levelSelect = document.getElementById('level-select');
+
+    for (let i = 1; i <= 23; i++) {
+      const opt = document.createElement('option');
+      opt.value = i;
+
+      if (levelsData[i]) {
+        // ده ليفل متاح - كلمته خضرا
+        opt.text = `Level ${i}`;
+        opt.className = "available-option";
+      } else {
+        // ده مقفول - لسه غير متاح
+        opt.text = `Level ${i} 🔒 (غير متاح)`;
+        opt.className = "locked-option";
+        opt.disabled = true;
+      }
+
+      levelSelect.appendChild(opt);
+    }
+
+    levelSelect.value = "18";
+  };
+
+  // 
+  // لما يغير نوع الاختبار
+  // لو ليسننج بنظهر اختيار النموذج
+  // 
+  function toggleTestType() {
+    const skill = document.getElementById('type-select').value;
+    const formGroup = document.getElementById('form-group');
+
+    if (skill === 'listening') {
+      formGroup.style.display = 'block';
+    } else {
+      formGroup.style.display = 'none';
+    }
+  }
+
+  // 
+  // هنا بنتأكد من الكود والاسم
+  // لو تمام بندخل الامتحان
+  // 
   function validateAndStart() {
     studentName = document.getElementById('student-name-input').value.trim();
     const code = document.getElementById('access-code-input').value.trim();
     const errorMsg = document.getElementById('auth-error');
+
     selectedLevel = document.getElementById('level-select').value;
     selectedForm = document.getElementById('form-select').value;
+    currentSkill = document.getElementById('type-select').value;
 
     if (!studentName) {
-      alert("يرجى إدخال اسم الطالب!");
+      alert("يرجى إدخال اسم الطالب/ة!");
       return;
     }
 
-    if (validAccessCodes.includes(code.toUpperCase())) {
-      errorMsg.style.display = 'none';
-      document.getElementById('display-student-name').innerText = studentName;
-      document.getElementById('info-badge').innerText = `[Level ${selectedLevel} - Form ${selectedForm}]`;
-      
-      switchScreen('exam-screen');
-      playQuestion(0);
-    } else {
+    if (!validAccessCodes.includes(code.toUpperCase())) {
       errorMsg.style.display = 'block';
+      return;
     }
+
+    if (!levelsData[selectedLevel]) {
+      alert("هذا المستوى غير متوفر بعد!");
+      return;
+    }
+
+    errorMsg.style.display = 'none';
+
+    document.getElementById('display-student-name').innerText = studentName;
+    document.getElementById('info-badge').innerText = 
+      `[Level ${selectedLevel}${currentSkill === 'listening' ? ' - نموذج ' + selectedForm : ''}]`;
+    
+    if (currentSkill === 'listening') {
+      currentQuestions = levelsData[selectedLevel].listening[selectedForm];
+      setupListeningUI();
+    } else {
+      currentQuestions = levelsData[selectedLevel].reading;
+      setupReadingUI();
+    }
+
+    userAnswers = new Array(currentQuestions.length).fill(undefined);
+    switchScreen('exam-screen');
+    playQuestion(0);
+  }
+
+  function setupListeningUI() {
+    document.getElementById('timer-text').style.display = 'inline';
+    document.getElementById('gear-btn').style.display = 'none';
+    document.getElementById('unit-bar').style.display = 'none';
+  }
+
+  function setupReadingUI() {
+    document.getElementById('timer-text').style.display = 'none';
+    document.getElementById('gear-btn').style.display = 'inline-block';
+    document.getElementById('unit-bar').style.display = 'flex';
+
+    const unitBar = document.getElementById('unit-bar');
+    unitBar.innerHTML = '';
+
+    const tags = [
+      { key: "U6_G", label: "U6 Grammar" },
+      { key: "U6_V", label: "U6 Vocab" },
+      { key: "U7_G", label: "U7 Grammar" },
+      { key: "U7_V", label: "U7 Vocab" },
+      { key: "U8_G", label: "U8 Grammar" },
+      { key: "U8_V", label: "U8 Vocab" }
+    ];
+
+    tags.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'unit-btn';
+      btn.innerText = t.label;
+      btn.onclick = () => filterByUnitTag(t.key);
+      unitBar.appendChild(btn);
+    });
   }
 
   function switchScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('active-screen');
+    });
     document.getElementById(screenId).classList.add('active-screen');
   }
 
+  // 
+  // دي اهم حتة - بتعرض السؤال
+  // 
   function playQuestion(index) {
-    if (index >= questions.length) {
+    if (index >= currentQuestions.length) {
       showResults();
       return;
     }
 
-    const q = questions[index];
-    document.getElementById('part-title').innerText = q.partName;
-    document.getElementById('speaker-name').innerText = `${q.speaker} (سؤال ${q.qNum})`;
+    currentIndex = index;
+    const q = currentQuestions[index];
+
+    document.getElementById('part-title').innerText = 
+      q.partName || getTagTitle(q.tag);
+
+    document.getElementById('speaker-name').innerText = 
+      `${q.speaker || 'سؤال ' + (index + 1)} من ${currentQuestions.length}`;
+
     document.getElementById('question-text').innerText = q.question;
     document.getElementById('timer-text').innerText = "";
-    
+
+    const expBox = document.getElementById('explanation-box');
+    expBox.style.display = 'none';
+
     const optionsBox = document.getElementById('options-box');
     optionsBox.innerHTML = '';
+
     q.options.forEach((opt, optIndex) => {
       const btn = document.createElement('button');
       btn.className = 'opt-btn';
       btn.innerText = opt;
-      btn.onclick = () => {
-        document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        userAnswers[currentIndex] = optIndex;
-      };
+
+      if (userAnswers[currentIndex] !== undefined) {
+        if (currentSkill === 'reading') {
+          if (optIndex === q.correct) {
+            btn.classList.add('correct');
+          }
+          if (userAnswers[currentIndex] === optIndex && 
+              optIndex !== q.correct) {
+            btn.classList.add('wrong');
+          }
+          btn.disabled = true;
+        } else {
+          if (userAnswers[currentIndex] === optIndex) {
+            btn.classList.add('selected');
+          }
+        }
+      }
+
+      btn.onclick = () => selectOption(optIndex);
       optionsBox.appendChild(btn);
     });
 
-    if (!audio.src.includes(encodeURI(q.audioSrc))) {
-      audio.src = q.audioSrc;
+    if (currentSkill === 'reading' && 
+        userAnswers[currentIndex] !== undefined) {
+      showExplanation(q);
     }
 
-    audio.currentTime = q.startTime;
-    audio.play().catch(e => console.log("Audio autoplay handling:", e));
+    if (currentSkill === 'listening') {
+      if (!audio.src.includes(encodeURI(q.audioSrc))) {
+        audio.src = q.audioSrc;
+      }
+      audio.currentTime = q.startTime;
+      audio.play().catch(e => {
+        console.log("Autoplay handled:", e);
+      });
+    }
   }
 
+  function selectOption(optIndex) {
+    const q = currentQuestions[currentIndex];
+    userAnswers[currentIndex] = optIndex;
+
+    const btns = document.querySelectorAll('.opt-btn');
+
+    if (currentSkill === 'reading') {
+      btns.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.correct) {
+          btn.classList.add('correct');
+        }
+        if (i === optIndex && optIndex !== q.correct) {
+          btn.classList.add('wrong');
+        }
+      });
+      showExplanation(q);
+    } else {
+      btns.forEach((btn, i) => {
+        btn.classList.toggle('selected', i === optIndex);
+      });
+    }
+  }
+
+  function showExplanation(q) {
+    const expBox = document.getElementById('explanation-box');
+    expBox.style.display = 'block';
+
+    const isCorrect = userAnswers[currentIndex] === q.correct;
+
+    expBox.className = 
+      `explanation-box ${isCorrect ? 'correct' : 'wrong'}`;
+
+    expBox.innerHTML = 
+      `<strong>${isCorrect ? 'إجابة صحيحة! 🎉 (+1 درجة)' : 'إجابة خاطئة! ❌'}</strong><br>` +
+      `${isCorrect ? '' : `الإجابة الصحيحة هي: <strong>${q.options[q.correct]}</strong><br>`}` +
+      `<strong>السبب:</strong> ${q.exp || ''}`;
+  }
+
+  function getTagTitle(tag) {
+    const titles = {
+      "U6_G": "Unit 6 - Grammar",
+      "U6_V": "Unit 6 - Vocabulary",
+      "U7_G": "Unit 7 - Grammar",
+      "U7_V": "Unit 7 - Vocabulary",
+      "U8_G": "Unit 8 - Grammar",
+      "U8_V": "Unit 8 - Vocabulary"
+    };
+    return titles[tag] || tag;
+  }
+
+  // تايمر الليسننج
   audio.ontimeupdate = function() {
-    if (currentIndex >= questions.length) return;
-    const currentQ = questions[currentIndex];
+    if (currentSkill !== 'listening' || 
+        currentIndex >= currentQuestions.length) return;
+
+    const currentQ = currentQuestions[currentIndex];
     
     if (audio.currentTime >= currentQ.endTime && !isTimerRunning) {
       audio.pause();
-      start17SecondTimer();
+      startTimer();
     }
   };
 
-  function start17SecondTimer() {
+  function startTimer() {
     isTimerRunning = true;
     timeLeft = 17;
-    document.getElementById('timer-text').innerText = `الوقت المتبقي: ${timeLeft} ثانية`;
+
+    document.getElementById('timer-text').innerText = 
+      `المتبقي: ${timeLeft}ث`;
 
     timerInterval = setInterval(() => {
       timeLeft--;
-      document.getElementById('timer-text').innerText = `الوقت المتبقي: ${timeLeft} ثانية`;
+      document.getElementById('timer-text').innerText = 
+        `المتبقي: ${timeLeft}ث`;
 
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
@@ -425,56 +1067,138 @@
 
   function manualNext() {
     clearInterval(timerInterval);
-    audio.pause();
+    if (currentSkill === 'listening') audio.pause();
     moveToNextQuestion();
   }
 
   function moveToNextQuestion() {
     isTimerRunning = false;
     clearInterval(timerInterval);
-    
+
     if (userAnswers[currentIndex] === undefined) {
       userAnswers[currentIndex] = -1;
     }
 
     currentIndex++;
-    
-    if (currentIndex < questions.length) {
+    if (currentIndex < currentQuestions.length) {
       playQuestion(currentIndex);
     } else {
       showResults();
     }
   }
 
+  function filterByUnitTag(tagKey) {
+    const targetIdx = currentQuestions.findIndex(q => {
+      return q.tag === tagKey;
+    });
+
+    if (targetIdx !== -1) {
+      playQuestion(targetIdx);
+      updateActiveUnitBtn(tagKey);
+    }
+  }
+
+  function updateActiveUnitBtn(tagKey) {
+    const btns = document.querySelectorAll('.unit-btn');
+    btns.forEach(btn => {
+      if (btn.innerText.includes(tagKey.replace('_', ' '))) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  function openNavModal() {
+    const modal = document.getElementById('nav-modal');
+    const container = document.getElementById('grid-container');
+    container.innerHTML = '';
+
+    const titleEl = document.getElementById('modal-title');
+    if (titleEl) {
+      titleEl.innerText = 
+        `⚙ التنقل السريع بين الأسئلة (${currentQuestions.length} سؤال)`;
+    }
+
+    currentQuestions.forEach((q, i) => {
+      const item = document.createElement('div');
+      item.className = 'grid-item';
+
+      if (userAnswers[i] !== undefined && userAnswers[i] !== -1) {
+        item.classList.add('solved');
+      }
+      if (i === currentIndex) {
+        item.classList.add('active-q');
+      }
+
+      item.innerText = i + 1;
+      item.onclick = () => {
+        closeNavModal();
+        playQuestion(i);
+      };
+      container.appendChild(item);
+    });
+
+    modal.style.display = 'block';
+  }
+
+  function closeNavModal() {
+    document.getElementById('nav-modal').style.display = 'none';
+  }
+
   function showResults() {
-    audio.pause();
+    if (currentSkill === 'listening') audio.pause();
     switchScreen('result-screen');
 
     document.getElementById('result-student-name').innerText = studentName;
-    document.getElementById('result-exam-info').innerText = `Level ${selectedLevel} - Form ${selectedForm}`;
+
+    document.getElementById('result-exam-info').innerText = 
+      `Level ${selectedLevel} ${currentSkill === 'listening' ? '- نموذج ' + selectedForm : '- (121 سؤال)'}`;
 
     let score = 0;
     let detailsHTML = '';
 
-    questions.forEach((q, i) => {
-      const isCorrect = userAnswers[i] === q.correctAnswer;
+    currentQuestions.forEach((q, i) => {
+      const userSelectedIdx = userAnswers[i];
+      const isCorrect = userSelectedIdx === q.correct;
       if (isCorrect) score++;
+
+      const userChoiceText = 
+        (userSelectedIdx !== undefined && 
+         userSelectedIdx !== -1 && 
+         q.options[userSelectedIdx]) 
+        ? q.options[userSelectedIdx] 
+        : "لم يتم الإجابة";
+        
+      const correctChoiceText = q.options[q.correct];
 
       detailsHTML += `
         <div class="result-item">
-          <strong>سؤال ${q.qNum} (${q.speaker}):</strong> 
+          <strong>سؤال ${i + 1}:</strong> 
           ${isCorrect ? '<span class="correct-text">إجابة صحيحة ✓</span>' : '<span class="wrong-text">إجابة خاطئة ✗</span>'}
+          <div class="answer-detail">
+            <div>• إجابتك: ${userChoiceText}</div>
+            ${!isCorrect ? `<div style="color: #137333; font-weight: bold;">• الإجابة الصحيحة: ${correctChoiceText}</div>` : ''}
+          </div>
         </div>
       `;
     });
 
-    document.getElementById('score-text').innerText = `${score} / ${questions.length}`;
+    document.getElementById('score-text').innerText = 
+      `${score} / ${currentQuestions.length}`;
+
     document.getElementById('result-details').innerHTML = detailsHTML;
 
     const feedback = document.getElementById('feedback-text');
-    if (score === 15) feedback.innerText = "ممتاز جداً! أداء متكامل 👏";
-    else if (score >= 10) feedback.innerText = "أداء جيد جداً! واصل التدريب 👍";
-    else feedback.innerText = "يحتاج إلى مزيد من التركيز والاستماع التكراري 🎧";
+    const percent = (score / currentQuestions.length) * 100;
+
+    if (percent === 100) {
+      feedback.innerText = "ممتاز جداً! أداء متكامل وأنيق 👏";
+    } else if (percent >= 75) {
+      feedback.innerText = "أداء جيد جداً! واصل/ي المراجعة والتدريب 👍";
+    } else {
+      feedback.innerText = "يحتاج إلى مزيد من التركيز ومراجعة ملف زياد الديب 📖";
+    }
   }
 </script>
 
