@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار ليسننج متكامل - زياد الديب</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+    }
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      width: 100%;
+      max-width: 580px;
+      text-align: center;
+    }
+    h1 { color: #1a73e8; margin-bottom: 5px; font-size: 24px; }
+    p.subtitle { color: #5f6368; font-size: 14px; margin-bottom: 25px; }
+    
+    .input-group { margin-bottom: 20px; text-align: right; }
+    .input-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #3c4043; }
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #dadce0;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+    .input-group input:focus { border-color: #1a73e8; }
+    
+    .start-btn, .next-btn, .restart-btn {
+      width: 100%;
+      padding: 14px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .start-btn:hover, .next-btn:hover, .restart-btn:hover { background: #1557b0; }
+
+    .exam-screen, .result-screen { display: none; }
+    .student-bar {
+      background: #e8f0fe;
+      color: #1967d2;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    .speaker-title { font-size: 18px; font-weight: bold; color: #1a73e8; }
+    .timer { font-size: 15px; font-weight: bold; color: #d93025; }
+    
+    .question { 
+      font-size: 18px; 
+      color: #202124; 
+      margin: 15px 0; 
+      font-weight: bold;
+      direction: ltr; 
+      text-align: left;
+    }
+    .options { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 10px; 
+      margin-bottom: 20px; 
+      direction: ltr;
+    }
+    .opt-btn {
+      padding: 12px 15px;
+      border: 2px solid #dadce0;
+      background: #fff;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .opt-btn.selected { background-color: #e8f0fe; border-color: #1a73e8; color: #1a73e8; font-weight: bold; }
+    
+    audio { display: none; }
+
+    .score-badge {
+      font-size: 48px;
+      font-weight: bold;
+      color: #1a73e8;
+      margin: 15px 0;
+    }
+    .result-details {
+      text-align: right;
+      margin: 20px 0;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .result-item {
+      margin-bottom: 8px;
+      font-size: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 5px;
+    }
+    .correct-text { color: #1e8e3e; font-weight: bold; }
+    .wrong-text { color: #d93025; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- 1. شاشة البداية -->
+  <div id="welcome-screen">
+    <h1>🎧 اختبار ليسننج شامل - زياد الديب</h1>
+    <p class="subtitle">قم بتركيب الصوت والتركيز جيداً قبل البدء (15 سؤالاً)</p>
+    
+    <div class="input-group">
+      <label for="student-name-input">اسم الطالب:</label>
+      <input type="text" id="student-name-input" placeholder="ادخل اسمك بالكامل..." required>
+    </div>
+    
+    <button class="start-btn" onclick="startExam()">START EXAM</button>
+  </div>
+
+  <!-- 2. شاشة الاختبار -->
+  <div id="exam-screen" class="exam-screen">
+    <div class="student-bar">
+      <span id="part-title">Part 1</span>
+      <span>الطالب: <span id="display-student-name"></span></span>
+    </div>
+
+    <!-- عنصر الصوت الأساسي -->
+    <audio id="audio" preload="auto"></audio>
+
+    <div class="header-info">
+      <span class="timer" id="timer-text"></span>
+      <span class="speaker-title" id="speaker-name">Speaker 1</span>
+    </div>
+
+    <div class="question" id="question-text">Loading...</div>
+    <div class="options" id="options-box"></div>
+
+    <button class="next-btn" id="next-btn" onclick="manualNext()">السؤال التالي</button>
+  </div>
+
+  <!-- 3. شاشة النتيجة والتفاصيل -->
+  <div id="result-screen" class="result-screen">
+    <h2>نتيجة الاختبار 📊</h2>
+    <p>الطالب: <strong id="result-student-name"></strong></p>
+    
+    <div class="score-badge" id="score-text">0 / 15</div>
+    <p id="feedback-text"></p>
+
+    <div class="result-details" id="result-details"></div>
+
+    <button class="restart-btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+  </div>
+</div>
+
+<script>
+  // مسارات الملفات الصوتية الثلاثة
+  const audioPart1 = "11_AEF 2e Level 4 Testing-F6_LA [www.languagecentre.ir].mp3";
+  const audioPart2 = "13_AEF 2e Level 4 Testing-F7_LA [www.languagecentre.ir].mp3";
+  const audioPart3 = "15_AEF 2e Level 4 Testing-F8_LA [www.languagecentre.ir].mp3";
+
+  // مصفوفة الأسئلة المدمجة (15 سؤالاً)
+  const questions = [
+    // --- Part 1 (Music) ---
+    {
+      qNum: 1,
+      partName: "Part 1 - Music",
+      audioSrc: audioPart1,
+      speaker: "Speaker 1",
+      startTime: 4,
+      endTime: 29,
+      question: "1. What does Speaker 1 say about the music they listen to?",
+      options: [
+        "A) Rock music makes me feel more lively.",
+        "B) Hip-hop music is great fun.",
+        "C) For me, jazz music is comforting.",
+        "D) If I'm alone, I listen to pop music."
+      ],
+      correctAnswer: 0
+    },
+    {
+      qNum: 2,
+      partName: "Part 1 - Music",
+      audioSrc: audioPart1,
+      speaker: "Speaker 2",
+      startTime: 29,
+      endTime: 48,
+      question: "2. What does Speaker 2 say about the music they listen to?",
+      options: [
+        "A) Hip-hop music is great fun.",
+        "B) I like classical music because it has no words.",
+        "C) I've become quite interested in folk music.",
+        "D) For me, jazz music is comforting."
+      ],
+      correctAnswer: 1
+    },
+    {
+      qNum: 3,
+      partName: "Part 1 - Music",
+      audioSrc: audioPart1,
+      speaker: "Speaker 3",
+      startTime: 48,
+      endTime: 73,
+      question: "3. What does Speaker 3 say about the music they listen to?",
+      options: [
+        "A) If I'm alone, I listen to pop music.",
+        "B) Rock music makes me feel more lively.",
+        "C) I've become quite interested in folk music.",
+        "D) I like classical music because it has no words."
+      ],
+      correctAnswer: 2
+    },
+    {
+      qNum: 4,
+      partName: "Part 1 - Music",
+      audioSrc: audioPart1,
+      speaker: "Speaker 4",
+      startTime: 73,
+      endTime: 101,
+      question: "4. What does Speaker 4 say about the music they listen to?",
+      options: [
+        "A) If I'm alone, I listen to pop music.",
+        "B) For me, jazz music is comforting.",
+        "C) Hip-hop music is great fun.",
+        "D) Rock music makes me feel more lively."
+      ],
+      correctAnswer: 0
+    },
+    {
+      qNum: 5,
+      partName: "Part 1 - Music",
+      audioSrc: audioPart1,
+      speaker: "Speaker 5",
+      startTime: 101,
+      endTime: 130,
+      question: "5. What does Speaker 5 say about the music they listen to?",
+      options: [
+        "A) I like classical music because it has no words.",
+        "B) For me, jazz music is comforting.",
+        "C) I've become quite interested in folk music.",
+        "D) Hip-hop music is great fun."
+      ],
+      correctAnswer: 1
+    },
+
+    // --- Part 2 (Relationships) ---
+    {
+      qNum: 6,
+      partName: "Part 2 - Relationships",
+      audioSrc: audioPart2,
+      speaker: "Speaker 1",
+      startTime: 4,
+      endTime: 32,
+      question: "6. What does Speaker 1 say about her relationship?",
+      options: [
+        "A) He's reliable.",
+        "B) He's thoughtful.",
+        "C) He's patient.",
+        "D) He's easygoing."
+      ],
+      correctAnswer: 1
+    },
+    {
+      qNum: 7,
+      partName: "Part 2 - Relationships",
+      audioSrc: audioPart2,
+      speaker: "Speaker 2",
+      startTime: 32,
+      endTime: 57,
+      question: "7. What does Speaker 2 say about her relationship?",
+      options: [
+        "A) He's romantic.",
+        "B) He's thoughtful.",
+        "C) He's patient.",
+        "D) He's easygoing."
+      ],
+      correctAnswer: 3
+    },
+    {
+      qNum: 8,
+      partName: "Part 2 - Relationships",
+      audioSrc: audioPart2,
+      speaker: "Speaker 3",
+      startTime: 57,
+      endTime: 89,
+      question: "8. What does Speaker 3 say about her relationship?",
+      options: [
+        "A) He's reliable.",
+        "B) He's patient.",
+        "C) He's easygoing.",
+        "D) He's sociable."
+      ],
+      correctAnswer: 3
+    },
+    {
+      qNum: 9,
+      partName: "Part 2 - Relationships",
+      audioSrc: audioPart2,
+      speaker: "Speaker 4",
+      startTime: 89,
+      endTime: 120,
+      question: "9. What does Speaker 4 say about her relationship?",
+      options: [
+        "A) He's reliable.",
+        "B) He's thoughtful.",
+        "C) He's romantic.",
+        "D) He's sociable."
+      ],
+      correctAnswer: 0
+    },
+    {
+      qNum: 10,
+      partName: "Part 2 - Relationships",
+      audioSrc: audioPart2,
+      speaker: "Speaker 5",
+      startTime: 120,
+      endTime: 150,
+      question: "10. What does Speaker 5 say about her relationship?",
+      options: [
+        "A) He's easygoing.",
+        "B) He's thoughtful.",
+        "C) He's romantic.",
+        "D) He's patient."
+      ],
+      correctAnswer: 2
+    },
+
+    // --- Part 3 (Keeping in Touch) ---
+    {
+      qNum: 11,
+      partName: "Part 3 - Keeping in Touch",
+      audioSrc: audioPart3,
+      speaker: "Speaker 1",
+      startTime: 4,
+      endTime: 29,
+      question: "11. What does Speaker 1 say about keeping in touch?",
+      options: [
+        "A) Nothing is better than chatting face-to-face.",
+        "B) Writing emails takes up far too much time.",
+        "C) Using social networking sites keeps everyone up-to-date.",
+        "D) Texting is really practical at times."
+      ],
+      correctAnswer: 0
+    },
+    {
+      qNum: 12,
+      partName: "Part 3 - Keeping in Touch",
+      audioSrc: audioPart3,
+      speaker: "Speaker 2",
+      startTime: 29,
+      endTime: 58,
+      question: "12. What does Speaker 2 say about keeping in touch?",
+      options: [
+        "A) Writing emails takes up far too much time.",
+        "B) Spending a weekend away together is better than meeting for coffee.",
+        "C) Texting is not as good as chatting on the phone.",
+        "D) Using social networking sites keeps everyone up-to-date."
+      ],
+      correctAnswer: 1
+    },
+    {
+      qNum: 13,
+      partName: "Part 3 - Keeping in Touch",
+      audioSrc: audioPart3,
+      speaker: "Speaker 3",
+      startTime: 58,
+      endTime: 81,
+      question: "13. What does Speaker 3 say about keeping in touch?",
+      options: [
+        "A) Nothing is better than chatting face-to-face.",
+        "B) Texting is really practical at times.",
+        "C) Texting is not as good as chatting on the phone.",
+        "D) Spending a weekend away together is better than meeting for coffee."
+      ],
+      correctAnswer: 2
+    },
+    {
+      qNum: 14,
+      partName: "Part 3 - Keeping in Touch",
+      audioSrc: audioPart3,
+      speaker: "Speaker 4",
+      startTime: 81,
+      endTime: 106,
+      question: "14. What does Speaker 4 say about keeping in touch?",
+      options: [
+        "A) Using social networking sites keeps everyone up-to-date.",
+        "B) Writing emails takes up far too much time.",
+        "C) Nothing is better than chatting face-to-face.",
+        "D) Texting is not as good as chatting on the phone."
+      ],
+      correctAnswer: 0
+    },
+    {
+      qNum: 15,
+      partName: "Part 3 - Keeping in Touch",
+      audioSrc: audioPart3,
+      speaker: "Speaker 5",
+      startTime: 106,
+      endTime: 135,
+      question: "15. What does Speaker 5 say about keeping in touch?",
+      options: [
+        "A) Writing emails takes up far too much time.",
+        "B) Spending a weekend away together is better than meeting for coffee.",
+        "C) Texting is really practical at times.",
+        "D) Using social networking sites keeps everyone up-to-date."
+      ],
+      correctAnswer: 2
+    }
+  ];
+
+  let currentIndex = 0;
+  let timerInterval = null;
+  let timeLeft = 17;
+  let isTimerRunning = false;
+  let userAnswers = [];
+  let studentName = "";
+
+  const audio = document.getElementById('audio');
+
+  function startExam() {
+    studentName = document.getElementById('student-name-input').value.trim();
+    if (!studentName) {
+      alert("برجاء إدخال اسم الطالب أولاً للبدء!");
+      return;
+    }
+
+    document.getElementById('display-student-name').innerText = studentName;
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('exam-screen').style.display = 'block';
+
+    playQuestion(0);
+  }
+
+  function playQuestion(index) {
+    if (index >= questions.length) {
+      showResults();
+      return;
+    }
+
+    const q = questions[index];
+    document.getElementById('part-title').innerText = q.partName;
+    document.getElementById('speaker-name').innerText = `${q.speaker} (سؤال ${q.qNum})`;
+    document.getElementById('question-text').innerText = q.question;
+    document.getElementById('timer-text').innerText = "";
+    
+    const optionsBox = document.getElementById('options-box');
+    optionsBox.innerHTML = '';
+    q.options.forEach((opt, optIndex) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerText = opt;
+      btn.onclick = () => {
+        document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        userAnswers[currentIndex] = optIndex;
+      };
+      optionsBox.appendChild(btn);
+    });
+
+    if (!audio.src.includes(encodeURI(q.audioSrc))) {
+      audio.src = q.audioSrc;
+    }
+
+    audio.currentTime = q.startTime;
+    audio.play().catch(e => console.log("Audio autoplay handling:", e));
+  }
+
+  audio.ontimeupdate = function() {
+    if (currentIndex >= questions.length) return;
+    const currentQ = questions[currentIndex];
+    
+    if (audio.currentTime >= currentQ.endTime && !isTimerRunning) {
+      audio.pause();
+      start17SecondTimer();
+    }
+  };
+
+  function start17SecondTimer() {
+    isTimerRunning = true;
+    timeLeft = 17;
+    document.getElementById('timer-text').innerText = `الوقت المتبقي: ${timeLeft} ثانية`;
+
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      document.getElementById('timer-text').innerText = `الوقت المتبقي: ${timeLeft} ثانية`;
+
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        moveToNextQuestion();
+      }
+    }, 1000);
+  }
+
+  function manualNext() {
+    clearInterval(timerInterval);
+    audio.pause();
+    moveToNextQuestion();
+  }
+
+  function moveToNextQuestion() {
+    isTimerRunning = false;
+    clearInterval(timerInterval);
+    
+    if (userAnswers[currentIndex] === undefined) {
+      userAnswers[currentIndex] = -1;
+    }
+
+    currentIndex++;
+    
+    if (currentIndex < questions.length) {
+      playQuestion(currentIndex);
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    audio.pause();
+    document.getElementById('exam-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+
+    document.getElementById('result-student-name').innerText = studentName;
+
+    let score = 0;
+    let detailsHTML = '';
+
+    questions.forEach((q, i) => {
+      const isCorrect = userAnswers[i] === q.correctAnswer;
+      if (isCorrect) score++;
+
+      detailsHTML += `
+        <div class="result-item">
+          <strong>سؤال ${q.qNum} (${q.speaker}):</strong> 
+          ${isCorrect ? '<span class="correct-text">إجابة صحيحة ✓</span>' : '<span class="wrong-text">إجابة خاطئة ✗</span>'}
+        </div>
+      `;
+    });
+
+    document.getElementById('score-text').innerText = `${score} / ${questions.length}`;
+    document.getElementById('result-details').innerHTML = detailsHTML;
+
+    const feedback = document.getElementById('feedback-text');
+    if (score === 15) feedback.innerText = "ممتاز جداً! أداء متكامل 👏";
+    else if (score >= 10) feedback.innerText = "أداء جيد جداً! واصل التدريب 👍";
+    else feedback.innerText = "يحتاج إلى مزيد من التركيز والاستماع التكراري 🎧";
+  }
+</script>
+
+</body>
+</html>
