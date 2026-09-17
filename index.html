@@ -83,6 +83,10 @@ audio{display:none}
 .admin-stat{display:inline-block;background:#f1f3f4;padding:10px 14px;border-radius:10px;margin:6px;font-size:13px;font-weight:bold}
 .admin-stat span{color:#1a73e8;font-size:18px;display:block}
 .footer-credits{margin-top:14px;font-size:11px;color:#70757a;border-top:1px solid #eee;padding-top:8px}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+.card{visibility:hidden}
+.card.ready{visibility:visible}
 </style>
 <script>
 window.addEventListener('DOMContentLoaded', ()=>{
@@ -96,7 +100,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
     inp.style.paddingLeft='40px';
     const eye = document.createElement('span');
     eye.id = inputId+'-eye';
-    eye.innerText='👁️';
+    eye.innerText='👁';
     eye.style.cssText='position:absolute;left:10px;top:50%;transform:translateY(-50%);cursor:pointer;user-select:none;font-size:18px';
     eye.onclick = ()=>togglePass(inputId);
     wrapper.appendChild(eye);
@@ -104,7 +108,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
   addEye('reg-pass');
   addEye('log-pass');
   
-  // شيل ايموجي تسجيل جديد / دخول بس
   const regTab = document.getElementById('tab-reg');
   if(regTab) regTab.innerText = 'تسجيل جديد';
   const logTab = document.getElementById('tab-log');
@@ -115,7 +118,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 </head>
 <body>
 <div class="card">
-<div id="login-screen" class="screen active-screen">
+<div id="login-screen" class="screen">
 <h1>🎧 منصة الامتحانات</h1>
 <p class="subtitle">تم التطوير بواسطة: <strong>زياد الديب</strong></p>
 <div class="whatsapp-box">💬 للحصول على كود التفعيل تواصل واتساب<br><a href="https://wa.me/201273552486" target="_blank" class="wa-btn">💬 واتساب</a></div>
@@ -352,20 +355,84 @@ fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>{ currentIP
 
 function getDB(){ try{ return JSON.parse(localStorage.getItem('students_db_final')||'{}'); }catch(e){ return {}; } }
 function saveDB(db){ localStorage.setItem('students_db_final', JSON.stringify(db)); }
+
+// === لو الباسورد اتغير من الشيت يطلع تلقائي ===
+async function verifyPasswordFromSheet(){
+  if(!currentPhone) return;
+  try{
+    const res = await fetchWithRetry(GOOGLE_SHEET_URL+"?phone="+encodeURIComponent(currentPhone)+"&t="+Date.now(), 10000, 1);
+    const students = await res.json();
+    if(Array.isArray(students) && students.length>0){
+      const sheetPass = (students[0].password||'').toString().trim();
+      const db = getDB();
+      const local = db[currentPhone];
+      if(!local || !sheetPass) return;
+      if(local.password !== sheetPass){
+        // الباسورد اتغير - اطرده
+        console.log('Password changed in sheet, logging out');
+        localStorage.removeItem('currentSessionPhone');
+        currentPhone = "";
+        local.password = sheetPass;
+        saveDB(db);
+        document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
+        const loginScreen = document.getElementById('login-screen');
+        if(loginScreen) loginScreen.classList.add('active-screen');
+        switchAuth('log');
+        const err = document.getElementById('log-error');
+        if(err){
+          err.innerText = '⚠️ تم تغيير الباسورد من الإدارة - سجل دخول بالباسورد الجديد';
+          err.style.display = 'block';
+        }
+        const logPhone = document.getElementById('log-phone');
+        if(logPhone) logPhone.value = '';
+        const logPass = document.getElementById('log-pass');
+        if(logPass) logPass.value = '';
+      }
+    }
+  }catch(e){
+    // لو النت واقع منطلعوش
+  }
+}
+
+// فحص دوري كل 15 ثانية + لما يرجع للصفحة
+setInterval(verifyPasswordFromSheet, 15000);
+window.addEventListener('focus', verifyPasswordFromSheet);
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden) verifyPasswordFromSheet();
+});
+
 function switchScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); const el=document.getElementById(id); if(el) el.classList.add('active-screen'); }
 function switchAuth(t){ document.getElementById('tab-reg').classList.toggle('active', t==='reg'); document.getElementById('tab-log').classList.toggle('active', t==='log'); document.getElementById('reg-box').style.display=t==='reg'?'block':'none'; document.getElementById('log-box').style.display=t==='log'?'block':'none'; }
-function backToLogin(){ switchScreen('login-screen'); }
+function backToLogin(){ 
+  localStorage.removeItem('currentSessionPhone');
+  currentPhone="";
+  switchScreen('login-screen'); 
+  switchAuth('log');
+  const lp = document.getElementById('log-phone');
+  if(lp) setTimeout(()=>lp.focus(), 100);
+}
 function goToLevelsFromSkill(){ renderLevels(); setExamStudentName(); switchScreen('levels-screen'); }
 
-function normalizePhone(p){ if(!p) return ''; return p.toString().trim().replace(/[^0-9]/g,''); }
+
+// === الحل النهائي للصفر ===
+// للعرض في الشيت والموقع - نحتفظ بالصفر
+function keepZeroPhone(p){
+  if(!p) return '';
+  return p.toString().trim().replace(/[^0-9]/g,'');
+}
+// للبحث فقط - نشيل الصفر عشان نمنع التكرار
+function searchKey(p){
+  if(!p) return '';
+  return p.toString().trim().replace(/[^0-9]/g,'').replace(/^0+/, '');
+}
+function normalizePhone(p){ return keepZeroPhone(p); }
 function findStudentByPhone(db, inputPhone){
-  const norm = normalizePhone(inputPhone);
-  if(!norm) return null;
-  if(db[norm]) return {st: db[norm], key: norm};
-  if(norm.startsWith('0') && db[norm.substring(1)]) return {st: db[norm.substring(1)], key: norm.substring(1)};
-  if(!norm.startsWith('0') && db['0'+norm]) return {st: db['0'+norm], key: '0'+norm};
+  let key = searchKey(inputPhone);
+  if(!key) return null;
+  if(db[key]) return {st: db[key], key: key};
   return null;
 }
+
 
 
 function togglePass(id){
@@ -376,7 +443,7 @@ function togglePass(id){
   else { inp.type='password'; if(eye) eye.innerText='👁️'; }
 }
 
-function generateRandomCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let r=''; for(let i=0;i<7;i++) r+=c.charAt(Math.floor(Math.random()*c.length)); return 'ZIAD-'+r; }
+function generateRandomCode(prefix='ZIAD-'){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let r=''; for(let i=0;i<7;i++) r+=c.charAt(Math.floor(Math.random()*c.length)); return prefix+r; }
 function setExamStudentName(){ const db=getDB(); const st=db[currentPhone]; const name=st?st.name:document.getElementById('welcome-name')?.innerText||'طالب'; const el1=document.getElementById('display-student-name'); if(el1) el1.innerText=name; const el2=document.getElementById('result-student-name'); if(el2) el2.innerText=name; studentName=name; }
 function syncToSheet(data){ try{ fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}); }catch(e){} }
 
@@ -416,10 +483,10 @@ async function autoLoadSheet(force=false){
     const db=getDB();
     let newCount=0, updated=0;
     students.forEach(s=>{
-      let phone=(s.phone||'').toString().trim(); if(!phone) return;
+      let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return;
       let existed=!!db[phone];
       if(!db[phone]){
-        db[phone]={name:(s.name||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}};
+        db[phone]={name:(s.name||'').toString().trim()||disp,phone:disp,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}};
         newCount++;
       } else {
         updated++;
@@ -453,7 +520,9 @@ window.addEventListener('load', ()=>{ setTimeout(()=>autoLoadSheet(false), 800);
 
 function registerPhone(){
   const name=document.getElementById('reg-name').value.trim();
-  const phone=normalizePhone(document.getElementById('reg-phone').value);
+  const rawPhone=document.getElementById('reg-phone').value.trim();
+  const phoneDisplay=keepZeroPhone(rawPhone);
+  const phone=searchKey(rawPhone);
   const pass=document.getElementById('reg-pass').value.trim();
   const err=document.getElementById('reg-error');
   const suc=document.getElementById('reg-success');
@@ -461,16 +530,16 @@ function registerPhone(){
   err.style.display='none'; suc.style.display='none';
   if(!name||!phone||!pass){ err.innerText='❌ اكمل البيانات'; err.style.display='block'; return; }
   const db=getDB();
-  if(db[phone]){ err.innerText='❌ الرقم موجود من قبل'; err.style.display='block'; return; }
+  if(findStudentByPhone(db, phone)){ err.innerText='❌ الرقم موجود من قبل'; err.style.display='block'; return; }
   const oldT=btn?btn.innerText:'تسجيل'; if(btn){btn.innerText='⏳...'; btn.disabled=true;}
   const id='Z-'+Math.floor(1000+Math.random()*9000);
   const newCode=generateRandomCode();
   const pending={}; pending[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
-  db[phone]={name:name,phone:phone,password:pass,id:id,ip:currentIP||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:pending};
+  db[phone]={name:name,phone:phoneDisplay,password:pass,id:id,ip:currentIP||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:pending};
   saveDB(db);
   suc.innerText='✅ تم التسجيل بنجاح'; suc.style.display='block';
   if(btn){btn.innerText=oldT; btn.disabled=false;}
-  syncToSheet({name:name,phone:phone,password:pass,id:id,ip:currentIP||'',levels:'',code:newCode,pendingCodes:JSON.stringify(pending),created:new Date().toLocaleString('ar-EG')});
+  syncToSheet({name:name,phone:phoneDisplay,password:pass,id:id,ip:currentIP||'',levels:'',code:newCode,pendingCodes:JSON.stringify(pending),created:new Date().toLocaleString('ar-EG')});
   setTimeout(()=>switchAuth('log'), 800);
   renderAdmin();
 }
@@ -496,7 +565,7 @@ function quickAddStudent(){
 }
 
 async function loginPhone(){
-  const phone=normalizePhone(document.getElementById('log-phone').value);
+  const phone=searchKey(document.getElementById('log-phone').value);
   const pass=document.getElementById('log-pass').value.trim();
   const err=document.getElementById('log-error');
   const suc=document.getElementById('log-success');
@@ -514,13 +583,14 @@ async function loginPhone(){
     setExamStudentName();
     switchScreen('levels-screen');
     renderLevels();
+    setTimeout(verifyPasswordFromSheet, 2000);
     return;
   }
   if(st && (st.password||'').toString().trim()!==pass){
     err.innerText='❌ الباسورد غلط'; err.style.display='block'; return;
   }
   const oldT=btn.innerText; btn.innerText='⏳ جاري التحميل...'; btn.disabled=true; 
-  /* fast - no double loading */
+  suc.innerText='⏳ جاري التحميل...'; suc.style.display='block';
   try{
     const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?phone="+encodeURIComponent(phone)+"&t="+Date.now(), 20000, 2);
     const students=await res.json();
@@ -634,16 +704,135 @@ function toggleAutoSpeed(){
 function openAdminLogin(){ const modal=document.getElementById('admin-login-modal'); if(modal){ modal.classList.add('active'); const inp=document.getElementById('admin-pass-input'); if(inp){ inp.value=''; setTimeout(()=>inp.focus(),100); } } else { const p=prompt('باسورد الأدمن:'); if(p==='••••'||p==='010'||p==='admin'){ switchScreen('admin-screen'); setTimeout(()=>pullFromSheet(),400); } } }
 function closeAdminLogin(){ const m=document.getElementById('admin-login-modal'); if(m) m.classList.remove('active'); }
 function loginAdmin(){ const pass=document.getElementById('admin-pass-input').value.trim(); const err=document.getElementById('admin-login-error'); if(pass==='••••'||pass==='010'||pass==='admin'||pass==='ZIAD-MASTER-2024'){ closeAdminLogin(); switchScreen('admin-screen'); setTimeout(()=>pullFromSheet(),300); if(adminInterval) clearInterval(adminInterval); adminInterval=setInterval(()=>{ const s=document.getElementById('admin-screen'); if(s&&s.classList.contains('active-screen')) pullFromSheetSilent(); },2000); } else { err.innerText='❌ باسورد غلط'; err.style.display='block'; } }
-async function pullFromSheet(){ const statusEl=document.getElementById('auto-status'); if(statusEl){ statusEl.innerText='● جاري السحب...'; statusEl.style.color='#fbbc04'; } try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,2); const students=await res.json(); if(!Array.isArray(students)) throw new Error('invalid'); const db=getDB(); students.forEach(s=>{ let phone=(s.phone||'').toString().trim(); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.name||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.name) db[phone].name=s.name; if(s.password) db[phone].password=s.password; if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } if(!db[phone].pendingCodes||Object.keys(db[phone].pendingCodes).length===0){ const nc=generateRandomCode(); db[phone].pendingCodes={}; db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; syncToSheet({name:db[phone].name,phone:db[phone].phone,password:db[phone].password,id:db[phone].id,ip:db[phone].ip,levels:Object.keys(db[phone].unlockedLevels||{}).join(','),code:nc,pendingCodes:JSON.stringify(db[phone].pendingCodes),created:new Date().toLocaleString('ar-EG')}); } }); saveDB(db); renderAdmin(); if(statusEl){ statusEl.innerText='● live - '+new Date().toLocaleTimeString('ar-EG')+' - '+Object.keys(db).length+' طالب'; statusEl.style.color='#34a853'; } }catch(e){ if(statusEl){ statusEl.innerText='● خطأ: '+e.message; statusEl.style.color='#d93025'; } } }
-async function pullFromSheetSilent(){ try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,1); const students=await res.json(); if(!Array.isArray(students)) return; const db=getDB(); students.forEach(s=>{ let phone=(s.phone||'').toString().trim(); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.phone||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } }); saveDB(db); renderAdmin(); }catch(e){} }
-function renderAdmin(){ const db=getDB(); const tbody=document.getElementById('admin-tbody'); if(!tbody) return; const search=(document.getElementById('admin-search')?.value||'').toLowerCase(); tbody.innerHTML=''; let total=0,today=0,unlocked=0; const todayStr=new Date().toDateString(); const all=Object.values(db); if(all.length===0){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">لا يوجد طلاب - دوس سحب </td></tr>'; } all.forEach(st=>{ if(!st||!st.phone) return; if(search&&!(`${st.name} ${st.phone} ${st.id}`.toLowerCase().includes(search))) return; total++; try{ if(new Date(st.created).toDateString()===todayStr) today++; }catch(e){} if(st.unlockedLevels&&Object.keys(st.unlockedLevels).length>0) unlocked++; let levelsStr=Object.keys(st.unlockedLevels||{}).map(l=>`L${l}`).join(', ')||'—'; let firstCode=st.pendingCodes?Object.keys(st.pendingCodes)[0]:''; const tr=document.createElement('tr'); tr.innerHTML=`<td>${st.name}</td><td dir="ltr">${st.phone}</td><td dir="ltr">${st.password}</td><td>${st.id}</td><td dir="ltr">${(st.ip||'').substring(0,16)}</td><td>${levelsStr}</td><td dir="ltr"><div style="font-weight:bold;color:#1a73e8">${firstCode||'—'}</div></td><td><div style="display:flex;flex-direction:column;gap:4px"><button class="btn btn-small" style="background:#1a73e8" onclick="openEditModal('${st.phone}')">✏ تعديل</button><button class="btn btn-small" style="background:#0f9d58" onclick="copyCode('${firstCode}')">نسخ</button></div></td>`; tbody.appendChild(tr); }); const el1=document.getElementById('stat-total'); if(el1) el1.innerText=total; const el2=document.getElementById('stat-today'); if(el2) el2.innerText=today; const el3=document.getElementById('stat-unlocked'); if(el3) el3.innerText=unlocked; }
-function openEditModal(phone){ const db=getDB(); const st=db[phone]; if(!st){alert('مش موجود - حاول مرة أخرى'); return;} document.getElementById('edit-phone-old').value=phone; document.getElementById('edit-name').value=st.name||''; document.getElementById('edit-phone').value=st.phone||''; document.getElementById('edit-pass').value=st.password||''; document.getElementById('edit-id').value=st.id||''; document.getElementById('edit-ip').value=st.ip||''; document.getElementById('edit-levels').value=Object.keys(st.unlockedLevels||{}).join(','); document.getElementById('edit-msg').style.display='none'; document.getElementById('edit-modal').classList.add('active'); renderPendingCodesList(phone); }
+async function pullFromSheet(){ const statusEl=document.getElementById('auto-status'); if(statusEl){ statusEl.innerText='● جاري السحب...'; statusEl.style.color='#fbbc04'; } try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,2); const students=await res.json(); if(!Array.isArray(students)) throw new Error('invalid'); const db=getDB(); students.forEach(s=>{
+      let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.name||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.name) db[phone].name=s.name; if(s.password) db[phone].password=s.password; if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } if(!db[phone].pendingCodes||Object.keys(db[phone].pendingCodes).length===0){ const nc=generateRandomCode(); db[phone].pendingCodes={}; db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; syncToSheet({name:db[phone].name,phone:db[phone].phone,password:db[phone].password,id:db[phone].id,ip:db[phone].ip,levels:Object.keys(db[phone].unlockedLevels||{}).join(','),code:nc,pendingCodes:JSON.stringify(db[phone].pendingCodes),created:new Date().toLocaleString('ar-EG')}); } }); saveDB(db); renderAdmin(); if(statusEl){ statusEl.innerText='● live - '+new Date().toLocaleTimeString('ar-EG')+' - '+Object.keys(db).length+' طالب'; statusEl.style.color='#34a853'; } }catch(e){ if(statusEl){ statusEl.innerText='● خطأ: '+e.message; statusEl.style.color='#d93025'; } } }
+async function pullFromSheetSilent(){ try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,1); const students=await res.json(); if(!Array.isArray(students)) return; const db=getDB(); students.forEach(s=>{
+      let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.phone||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } }); saveDB(db); renderAdmin(); }catch(e){} }
+function renderAdmin(){
+  const db=getDB();
+  const tbody=document.getElementById('admin-tbody'); if(!tbody) return;
+  const search=(document.getElementById('admin-search')?.value||'').toLowerCase();
+  tbody.innerHTML='';
+  let total=0,today=0,unlocked=0;
+  const todayStr=new Date().toDateString();
+  const entries=Object.entries(db);
+  if(entries.length===0){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">لا يوجد طلاب - دوس سحب </td></tr>'; }
+  entries.forEach(([dbKey, st])=>{
+    if(!st||!st.phone) return;
+    if(search&&!(`${st.name} ${st.phone} ${st.id} ${dbKey}`.toLowerCase().includes(search))) return;
+    total++;
+    try{ if(new Date(st.created).toDateString()===todayStr) today++; }catch(e){}
+    if(st.unlockedLevels&&Object.keys(st.unlockedLevels).length>0) unlocked++;
+    let levelsStr=Object.keys(st.unlockedLevels||{}).map(l=>`L${l}`).join(', ')||'—';
+    let firstCode=st.pendingCodes?Object.keys(st.pendingCodes)[0]:'';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${st.name}</td><td dir="ltr">${st.phone}</td><td dir="ltr">${st.password}</td><td>${st.id}</td><td dir="ltr">${(st.ip||'').substring(0,16)}</td><td>${levelsStr}</td><td dir="ltr"><div style="font-weight:bold;color:#1a73e8">${firstCode||'—'}</div></td><td><div style="display:flex;flex-direction:column;gap:4px"><button class="btn btn-small" style="background:#1a73e8" onclick="openEditModal('${dbKey}')">✏ تعديل</button><button class="btn btn-small" style="background:#0f9d58" onclick="copyCode('${firstCode}')">نسخ</button></div></td>`;
+    tbody.appendChild(tr);
+  });
+  const el1=document.getElementById('stat-total'); if(el1) el1.innerText=total;
+  const el2=document.getElementById('stat-today'); if(el2) el2.innerText=today;
+  const el3=document.getElementById('stat-unlocked'); if(el3) el3.innerText=unlocked;
+}
+function openEditModal(dbKey){
+  const db=getDB();
+  // ندور على الطالب بالمفتاح أو بالرقم بعد تنظيفه
+  let st=db[dbKey];
+  let actualKey=dbKey;
+  if(!st){
+    const cleaned=searchKey(dbKey);
+    st=db[cleaned];
+    actualKey=cleaned;
+  }
+  if(!st){alert('مش موجود - حاول مرة أخرى'); return;}
+  document.getElementById('edit-phone-old').value=actualKey;
+  document.getElementById('edit-name').value=st.name||'';
+  document.getElementById('edit-phone').value=st.phone||'';
+  document.getElementById('edit-pass').value=st.password||'';
+  document.getElementById('edit-id').value=st.id||'';
+  document.getElementById('edit-ip').value=st.ip||'';
+  document.getElementById('edit-levels').value=Object.keys(st.unlockedLevels||{}).join(',');
+  document.getElementById('edit-msg').style.display='none';
+  document.getElementById('edit-modal').classList.add('active');
+  renderPendingCodesList(actualKey);
+}
 function closeEditModal(){ document.getElementById('edit-modal').classList.remove('active'); }
-function saveEditStudent(){ const oldPhone=document.getElementById('edit-phone-old').value.trim(); const newName=document.getElementById('edit-name').value.trim(); const newPhone=document.getElementById('edit-phone').value.trim(); const newPass=document.getElementById('edit-pass').value.trim(); const newIP=document.getElementById('edit-ip').value.trim(); const newLevels=document.getElementById('edit-levels').value.trim(); if(!newName||!newPhone||!newPass){alert('اكمل'); return;} const db=getDB(); const st=db[oldPhone]; if(!st){alert('مش موجود'); return;} if(newPhone!==oldPhone){ if(db[newPhone]){alert('موجود'); return;} delete db[oldPhone]; st.phone=newPhone; } st.name=newName; st.password=newPass; st.ip=newIP; if(!st.pendingCodes||Object.keys(st.pendingCodes).length===0){ const nc=generateRandomCode(); st.pendingCodes={}; st.pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; } if(newLevels){ if(!st.unlockedLevels) st.unlockedLevels={}; const keep=st.unlockedLevels; st.unlockedLevels={}; newLevels.split(',').forEach(l=>{ let num=l.replace(/[^0-9]/g,'').trim(); if(num) st.unlockedLevels[num]=keep[num]||{code:'ADMIN-EDIT',ip:'admin',at:new Date().toISOString()}; }); } db[st.phone]=st; saveDB(db); syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:newLevels,code:'ADMIN-EDIT',pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')}); renderAdmin(); const msg=document.getElementById('edit-msg'); msg.innerText='✅ تم الحفظ - كود: '+(Object.keys(st.pendingCodes)[0]||''); msg.style.display='block'; setTimeout(()=>closeEditModal(),1000); }
+function saveEditStudent(){
+  const oldKey=document.getElementById('edit-phone-old').value.trim();
+  const oldKeyClean=searchKey(oldKey) || oldKey;
+  const newName=document.getElementById('edit-name').value.trim();
+  const newPhoneRaw=document.getElementById('edit-phone').value.trim();
+  const newPhoneDisplay=keepZeroPhone(newPhoneRaw);
+  const newPhoneKey=searchKey(newPhoneRaw);
+  const newPass=document.getElementById('edit-pass').value.trim();
+  const newIP=document.getElementById('edit-ip').value.trim();
+  const newLevels=document.getElementById('edit-levels').value.trim();
+  if(!newName||!newPhoneKey||!newPass){alert('اكمل البيانات'); return;}
+  const db=getDB();
+  const st=db[oldKeyClean] || db[oldKey];
+  if(!st){alert('الطالب مش موجود'); return;}
+  if(newPhoneKey!==oldKeyClean){
+    if(db[newPhoneKey]){alert('الرقم موجود بالفعل'); return;}
+    delete db[oldKeyClean];
+    if(oldKey!==oldKeyClean && db[oldKey]) delete db[oldKey];
+  }
+  st.name=newName;
+  st.phone=newPhoneDisplay;
+  st.password=newPass;
+  st.ip=newIP;
+  if(!st.pendingCodes||Object.keys(st.pendingCodes).length===0){
+    const nc=generateRandomCode('ZIAD-');
+    st.pendingCodes={};
+    st.pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
+  }
+  if(newLevels){
+    if(!st.unlockedLevels) st.unlockedLevels={};
+    const keep=st.unlockedLevels;
+    st.unlockedLevels={};
+    newLevels.split(',').forEach(l=>{ let num=l.replace(/[^0-9]/g,'').trim(); if(num) st.unlockedLevels[num]=keep[num]||{code:'ADMIN-EDIT',ip:'admin',at:new Date().toISOString()}; });
+  }
+  db[newPhoneKey]=st;
+  saveDB(db);
+  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:newLevels,code:'ADMIN-EDIT',pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')});
+  renderAdmin();
+  const msg=document.getElementById('edit-msg');
+  msg.innerText='✅ تم الحفظ - كود: '+(Object.keys(st.pendingCodes)[0]||'');
+  msg.style.display='block';
+  setTimeout(()=>closeEditModal(),1000);
+}
 function resetStudentIP(){ document.getElementById('edit-ip').value=''; }
-function generateCodeForStudent(phone){ if(!phone) phone=document.getElementById('edit-phone-old')?.value.trim(); if(!phone){alert('حدد'); return;} const db=getDB(); const st=db[phone]; if(!st){alert('مش موجود'); return;} const newCode=generateRandomCode(); st.pendingCodes={}; st.pendingCodes[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; saveDB(db); syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:Object.keys(st.unlockedLevels||{}).join(','),code:newCode,pendingCodes:JSON.stringify(st.pendingCodes),created:new Date().toLocaleString('ar-EG')}); renderAdmin(); renderPendingCodesList(phone); try{navigator.clipboard.writeText(newCode);}catch(e){} return newCode; }
+function generateCodeForStudent(phone, prefix){
+  if(!prefix) prefix='ZIAD-';
+  if(!phone) phone=document.getElementById('edit-phone-old')?.value.trim();
+  if(!phone){alert('حدد الطالب'); return;}
+  const db=getDB(); const st=db[phone];
+  if(!st){alert('مش موجود'); return;}
+  const newCode=generateRandomCode(prefix);
+  st.pendingCodes={};
+  st.pendingCodes[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
+  saveDB(db);
+  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:Object.keys(st.unlockedLevels||{}).join(','),code:newCode,pendingCodes:JSON.stringify(st.pendingCodes),created:new Date().toLocaleString('ar-EG')});
+  renderAdmin();
+  renderPendingCodesList(phone);
+  try{navigator.clipboard.writeText(newCode);}catch(e){}
+  return newCode;
+}
 function adminOpenLevelDirect(phone,level){ if(!phone){alert('حدد'); return;} const db=getDB(); const st=db[phone]; if(!st){alert('مش موجود'); return;} if(!level){level=prompt('رقم الليفل:','19'); if(!level) return;} level=level.toString().replace(/[^0-9]/g,'').trim(); if(!level) return; if(!st.unlockedLevels) st.unlockedLevels={}; st.unlockedLevels[level]={code:'ADMIN-DIRECT',ip:'admin',at:new Date().toISOString()}; saveDB(db); syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:level+','+Object.keys(st.unlockedLevels).join(','),code:'ADMIN-DIRECT',pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')}); renderAdmin(); renderPendingCodesList(phone); const inp=document.getElementById('edit-levels'); if(inp){ let arr=inp.value.trim()?inp.value.split(',').map(x=>x.trim()):[]; if(!arr.includes(level)) arr.push(level); inp.value=arr.join(','); } }
-function renderPendingCodesList(phone){ const db=getDB(); const st=db[phone]; const c=document.getElementById('pending-codes-list'); if(!c) return; if(!st||!st.pendingCodes||Object.keys(st.pendingCodes).length===0){ c.innerHTML='<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;text-align:center"><small>⚠ مفيش كود - دوس كود جديد</small><br><button onclick="generateCodeForStudent(\''+phone+'\')" style="margin-top:8px;background:#0f9d58;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">🎫 ولد كود</button></div>'; return; } let html='<div style="border:2px solid #1a73e8;border-radius:10px;padding:8px;background:#e8f0fe">'; for(let code in st.pendingCodes){ html+=`<div style="background:#fff;border-radius:8px;padding:12px;text-align:center"><div style="font-size:10px;color:#5f6368">الكود الحالي:</div><div dir="ltr" style="direction:ltr;font-weight:bold;font-size:18px;color:#1a73e8;background:#f1f3f4;padding:10px;border-radius:8px;border:2px dashed #1a73e8">${code}</div><div style="display:flex;gap:8px;margin-top:10px"><button onclick="copyCode('${code}')" style="flex:1;background:#1a73e8;color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer">نسخ</button><button onclick="generateCodeForStudent('${phone}')" style="flex:1;background:#fbbc04;color:#000;border:none;padding:8px;border-radius:6px;cursor:pointer">🔄 غيره</button></div></div>`; } html+='</div>'; c.innerHTML=html; }
+function renderPendingCodesList(phone){
+  const db=getDB(); const st=db[phone]; const c=document.getElementById('pending-codes-list'); if(!c) return;
+  if(!st||!st.pendingCodes||Object.keys(st.pendingCodes).length===0){
+    c.innerHTML='<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;text-align:center"><small>⚠ مفيش كود - دوس كود جديد</small><br><div style="display:flex;gap:8px;margin-top:8px"><button onclick="generateCodeForStudent(\''+phone+'\', \'ZIAD-\')" style="flex:1;background:#1a73e8;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">🎫 ZIAD</button><button onclick="generateCodeForStudent(\''+phone+'\', \'GANGONA-\')" style="flex:1;background:#6f42c1;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">🔥 GANGONA</button></div></div>';
+    return;
+  }
+  let html='<div style="border:2px solid #1a73e8;border-radius:10px;padding:8px;background:#e8f0fe">';
+  for(let code in st.pendingCodes){
+    const isGangona = code.startsWith('GANGONA-');
+    const color = isGangona ? '#6f42c1' : '#1a73e8';
+    const label = isGangona ? 'كود GANGONA الحالي:' : 'الكود الحالي (ZIAD):';
+    html+=`<div style="background:#fff;border-radius:8px;padding:12px;text-align:center;margin-bottom:8px"><div style="font-size:10px;color:#5f6368">${label}</div><div dir="ltr" style="direction:ltr;font-weight:bold;font-size:18px;color:${color};background:#f1f3f4;padding:10px;border-radius:8px;border:2px dashed ${color}">${code}</div><div style="display:flex;gap:8px;margin-top:10px"><button onclick="copyCode('${code}')" style="flex:1;background:${color};color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer">نسخ</button><button onclick="generateCodeForStudent('${phone}', '${isGangona ? 'GANGONA-' : 'ZIAD-'}')" style="flex:1;background:#fbbc04;color:#000;border:none;padding:8px;border-radius:6px;cursor:pointer">🔄 غيره</button></div></div>`;
+  }
+  html+='<div style="display:flex;gap:8px;margin-top:10px"><button onclick="generateCodeForStudent(\''+phone+'\', \'ZIAD-\')" style="flex:1;background:#1a73e8;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold">🎫 ولد ZIAD</button><button onclick="generateCodeForStudent(\''+phone+'\', \'GANGONA-\')" style="flex:1;background:#6f42c1;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold">🔥 ولد GANGONA</button></div></div>';
+  c.innerHTML=html;
+}
 function copyCode(code){
   if(!code){alert('مفيش كود'); return;}
   const done = ()=>{
@@ -818,37 +1007,91 @@ function showResults(){
 
 </script>
 
+
+
 <script>
-// حفظ الجلسة - سريع ومش بيبطأ الدخول
+// دخول فوري بدون فلاش - الحل رقم 2
+(function(){
+  function instantAutoLogin(){
+    try{
+      const saved = localStorage.getItem('currentSessionPhone');
+      const card = document.querySelector('.card');
+      if(card) card.classList.add('ready');
+      
+      if(saved){
+        const db = JSON.parse(localStorage.getItem('students_db_final')||'{}');
+        let found=null, key=saved;
+        if(db[saved]) found=db[saved];
+        else if(db['0'+saved]) { found=db['0'+saved]; key='0'+saved; }
+        else if(db[saved.replace(/^0/, '')]) { found=db[saved.replace(/^0/, '')]; key=saved.replace(/^0/, ''); }
+        else {
+          const sk = saved.replace(/[^0-9]/g,'').replace(/^0+/,'');
+          for(let k in db){
+            if(k.replace(/[^0-9]/g,'').replace(/^0+/,'')===sk){ found=db[k]; key=k; break; }
+          }
+        }
+        if(found){
+          currentPhone=key;
+          // عبي البيانات فورا
+          const setIfExists = (id,val)=>{
+            const el=document.getElementById(id);
+            if(el) el.innerText=val||'';
+          };
+          setIfExists('welcome-name', found.name);
+          setIfExists('welcome-phone', found.phone);
+          setIfExists('welcome-id', found.id);
+          setIfExists('display-student-name', found.name);
+          setIfExists('result-student-name', found.name);
+          
+          // اظهر الليفلات مباشرة - بدون ما تعدي على اللوجين
+          document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
+          const levelsScreen = document.getElementById('levels-screen');
+          if(levelsScreen) levelsScreen.classList.add('active-screen');
+          
+          // رندر الليفلات بعد ما الصفحة تبان
+          // شيك على الباسورد من الشيت بعد الدخول مباشرة
+          verifyPasswordFromSheet();
+          setTimeout(()=>{
+            if(typeof renderLevels==='function') renderLevels();
+            if(typeof setExamStudentName==='function') setExamStudentName();
+            // Avatar
+            const nameEl = document.getElementById('welcome-name');
+            const avatarEl = document.getElementById('welcome-avatar');
+            if(nameEl && avatarEl && nameEl.innerText){
+              avatarEl.innerText = nameEl.innerText.trim().charAt(0).toUpperCase();
+            }
+          }, 0);
+          return;
+        }
+      }
+      // مفيش حساب - اظهر اللوجين
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
+      const loginScreen = document.getElementById('login-screen');
+      if(loginScreen) loginScreen.classList.add('active-screen');
+    }catch(e){
+      // في حالة اي خطأ اظهر اللوجين
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
+      const loginScreen = document.getElementById('login-screen');
+      if(loginScreen) loginScreen.classList.add('active-screen');
+      const card = document.querySelector('.card');
+      if(card) card.classList.add('ready');
+    }
+  }
+  
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', instantAutoLogin);
+  } else {
+    instantAutoLogin();
+  }
+})();
+
+// حفظ الجلسة
 const _origLoginPhone = window.loginPhone;
 window.loginPhone = async function(){
   const result = await _origLoginPhone.apply(this, arguments);
   if(currentPhone) localStorage.setItem('currentSessionPhone', currentPhone);
   return result;
 };
-// استرجاع سريع عند الفتح
-window.addEventListener('load', ()=>{
-  setTimeout(()=>{
-    const saved = localStorage.getItem('currentSessionPhone');
-    if(saved && !currentPhone){
-      try{
-        const db = JSON.parse(localStorage.getItem('students_db_final')||'{}');
-        let found=null, key=saved;
-        if(db[saved]) found=db[saved];
-        else if(db['0'+saved]) { found=db['0'+saved]; key='0'+saved; }
-        else if(db[saved.replace(/^0/, '')]) { found=db[saved.replace(/^0/, '')]; key=saved.replace(/^0/, ''); }
-        if(found){
-          currentPhone=key;
-          document.getElementById('welcome-name').innerText=found.name||'';
-          document.getElementById('welcome-phone').innerText=found.phone||'';
-          document.getElementById('welcome-id').innerText=found.id||'';
-          renderLevels();
-          switchScreen('levels-screen');
-        }
-      }catch(e){}
-    }
-  }, 300);
-});
 </script>
 
 <script>
@@ -866,4 +1109,5 @@ window.renderLevels = function(){
 };
 </script>
 </body>
+
 </html>
