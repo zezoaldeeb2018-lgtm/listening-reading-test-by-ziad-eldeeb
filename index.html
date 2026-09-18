@@ -5,16 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>منصة زياد الديب</title>
 <style>
-/* Fix phone placeholder alignment - keep right like other fields */
-#reg-phone, #log-phone {
-  text-align: right !important;
-  direction: rtl !important;
-}
-#reg-phone::placeholder, #log-phone::placeholder {
-  text-align: right !important;
-  direction: rtl !important;
-}
-
+#reg-phone, #log-phone {text-align: right !important; direction: rtl !important;}
+#reg-phone::placeholder, #log-phone::placeholder {text-align: right !important; direction: rtl !important;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#f0f2f5;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:10px;color:#202124}
 .card{background:#fff;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);width:100%;max-width:700px;text-align:center;position:relative;overflow:hidden}
@@ -48,7 +40,6 @@ h1{color:#1a73e8;font-size:20px;margin-bottom:6px} h2{color:#1a73e8;margin-botto
 .edit-modal-content{max-width:500px;max-height:85vh;overflow-y:auto;text-align:right;direction:rtl}
 .close-x{position:sticky;top:-5px;float:left;background:#fce8e6;color:#c5221f;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-weight:bold;font-size:18px;z-index:2}
 .ip-badge{font-size:10px;color:#70757a;margin-top:8px;display:block}
-/* جزء الأسئلة من الكود الحلو اللي بتحبه بالظبط */
 .student-bar{background:#e8f0fe;color:#1967d2;padding:10px;border-radius:8px;font-weight:bold;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-size:12.5px}
 .unit-selector-bar{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;white-space:nowrap}
 .unit-selector-bar::-webkit-scrollbar{height:3px} .unit-selector-bar::-webkit-scrollbar-thumb{background:#dadce0;border-radius:10px}
@@ -84,7 +75,6 @@ audio{display:none}
 .admin-stat span{color:#1a73e8;font-size:18px;display:block}
 .footer-credits{margin-top:14px;font-size:11px;color:#70757a;border-top:1px solid #eee;padding-top:8px}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-
 .card{visibility:hidden}
 .card.ready{visibility:visible}
 </style>
@@ -107,14 +97,12 @@ window.addEventListener('DOMContentLoaded', ()=>{
   }
   addEye('reg-pass');
   addEye('log-pass');
-  
   const regTab = document.getElementById('tab-reg');
   if(regTab) regTab.innerText = 'تسجيل جديد';
   const logTab = document.getElementById('tab-log');
   if(logTab) logTab.innerText = 'دخول';
 });
 </script>
-
 </head>
 <body>
 <div class="card">
@@ -122,9 +110,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
 <h1>🎧 منصة الامتحانات</h1>
 <p class="subtitle">تم التطوير بواسطة: <strong>زياد الديب</strong></p>
 <div class="whatsapp-box">💬 للحصول على كود التفعيل تواصل واتساب<br><a href="https://wa.me/201273552486" target="_blank" class="wa-btn">💬 واتساب</a></div>
-<div class="tabs"><div class="tab active" id="tab-reg" onclick="switchAuth('reg')">تسجيل جديد</div><div class="tab" id="tab-log" onclick="switchAuth('log')">دخول</div></div>
-<div id="reg-box"><div class="input-group"><label>الاسم:</label><input type="text" id="reg-name" placeholder="ادخل اسمك..."></div><div class="input-group"><label>رقم التليفون:</label><input type="tel" id="reg-phone" placeholder="ادخل رقم تليفونك" dir="ltr" style="text-align:right;direction:rtl"></div><div class="input-group"><label>الباسورد:</label><input type="password" id="reg-pass" placeholder="اختار باسورد"></div><button class="btn" onclick="registerPhone()">تسجيل </button><div class="error-msg" id="reg-error"></div><div class="success-msg" id="reg-success"></div></div>
-<div id="log-box" style="display:none"><div class="input-group"><label>رقم التليفون:</label><input type="tel" id="log-phone" placeholder="ادخل رقم تليفونك" dir="ltr" style="text-align:right;direction:rtl"></div><div class="input-group"><label>الباسورد:</label><input type="password" id="log-pass" placeholder="الباسورد"></div><button class="btn" id="login-btn" onclick="loginPhone()">دخول </button><div class="error-msg" id="log-error"></div><div class="success-msg" id="log-success"></div><div style="margin-top:8px;font-size:11px;color:#70757a;line-height:1.6" id="sheet-status" style="display:none">🔄 جاري تحميل الداتا ...</div><div style="margin-top:6px;font-size:10px;color:#9aa0a6" id="debug-info" style="display:none"></div></div>
+<div class="tabs"><div class="tab" id="tab-reg" onclick="switchAuth('reg')">تسجيل جديد</div><div class="tab active" id="tab-log" onclick="switchAuth('log')">دخول</div></div>
+<div id="reg-box" style="display:none"><div class="input-group"><label>الاسم:</label><input type="text" id="reg-name" placeholder="ادخل اسمك..."></div><div class="input-group"><label>رقم التليفون:</label><input type="tel" id="reg-phone" placeholder="ادخل رقم تليفونك" dir="ltr" style="text-align:right;direction:rtl"></div><div class="input-group"><label>الباسورد:</label><input type="password" id="reg-pass" placeholder="اختار باسورد"></div><button class="btn" onclick="registerPhone()">تسجيل </button><div class="error-msg" id="reg-error"></div><div class="success-msg" id="reg-success"></div></div>
+<div id="log-box"><div class="input-group"><label>رقم التليفون:</label><input type="tel" id="log-phone" placeholder="ادخل رقم تليفونك" dir="ltr" style="text-align:right;direction:rtl"></div><div class="input-group"><label>الباسورد:</label><input type="password" id="log-pass" placeholder="الباسورد"></div><button class="btn" id="login-btn" onclick="loginPhone()">دخول </button><div class="error-msg" id="log-error"></div><div class="success-msg" id="log-success"></div><div style="margin-top:8px;font-size:11px;color:#70757a;line-height:1.6" id="sheet-status" style="display:none">🔄 جاري تحميل الداتا ...</div><div style="margin-top:6px;font-size:10px;color:#9aa0a6" id="debug-info" style="display:none"></div></div>
 <div class="footer-credits"><span id="ip-display" style="display:none" class="ip-badge"></span><br><button onclick="openAdminLogin()" style="color:#fff;background:#1a73e8;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;font-size:13px;margin-top:10px;font-weight:bold">🔐 دخول الأدمن</button></div>
 </div>
 <div id="levels-screen" class="screen"><div style="background:linear-gradient(135deg,#e8f0fe 0%,#f8f9fa 100%);border:1px solid #d2e3fc;border-radius:16px;padding:16px;margin-bottom:20px;box-shadow:0 2px 8px rgba(26,115,232,0.08)">
@@ -143,7 +131,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 <div style="font-size:13px;font-weight:800;color:#1a73e8;direction:ltr;letter-spacing:0.5px;font-family:monospace" id="welcome-id"></div>
 </div>
 <div style="width:1px;height:32px;background:#e0e0e0"></div>
-<button onclick="copyID()" style="background:#1a73e8;color:#fff;border:none;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px">نسخ</button>
+<button id="copy-id-btn" onclick="copyID()" style="background:#1a73e8;color:#fff;border:none;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px">نسخ</button>
 </div>
 </div>
 </div>
@@ -170,12 +158,11 @@ window.addEventListener('DOMContentLoaded', ()=>{
 <div id="result-screen" class="screen"><h2>نتيجة الاختبار 📊</h2><p>الطالب/ة: <strong id="result-student-name"></strong> - <span id="result-phone"></span></p><p id="result-exam-info" style="color:#5f6368;font-size:13px"></p><div class="score-badge" id="score-text">0 / 0</div><p id="feedback-text"></p><div class="result-details" id="result-details"></div><button class="btn" onclick="goToLevelsFromSkill()">رجوع لليفلات 🔄</button><button class="btn" style="background:#5f6368" onclick="location.reload()">إعادة تحميل 🔄</button></div>
 <div id="admin-screen" class="screen"><h1>🔐 لوحة الأدمن</h1><p class="subtitle">⚡ تحديث تلقائي كل 2 ثانية - <span id="auto-status" style="color:#34a853">● live 2s</span> <button id="auto-toggle" onclick="toggleAutoSpeed()" style="background:#e8f0fe;border:1px solid #1a73e8;color:#1a73e8;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:11px;margin-right:8px">⏩ سريع جدا 1ث</button></p><div id="admin-stats" style="margin:10px 0"><div class="admin-stat"><span id="stat-total">0</span> إجمالي</div><div class="admin-stat"><span id="stat-today">0</span> النهاردة</div><div class="admin-stat"><span id="stat-unlocked">0</span> فتحوا ليفل</div></div><div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><input type="text" id="admin-search" placeholder="ابحث..." oninput="renderAdmin()" style="flex:1;min-width:200px;padding:10px;border:2px solid #dadce0;border-radius:8px"><button class="btn btn-small" style="background:#0f9d58" onclick="pullFromSheet()">🔄 سحب</button></div>
 <div style="margin-bottom:10px;background:#e8f0fe;padding:10px;border-radius:8px;text-align:right"><h4 style="font-size:13px;margin-bottom:6px">➕ إضافة طالب يدوي (سريع):</h4><div style="display:flex;gap:6px;flex-wrap:wrap"><input type="text" id="quick-name" placeholder="الاسم" style="flex:1;min-width:100px;padding:8px;border:1px solid #dadce0;border-radius:6px"><input type="text" id="quick-phone" placeholder="010..." dir="ltr" style="flex:1;min-width:100px;padding:8px;border:1px solid #dadce0;border-radius:6px"><input type="text" id="quick-pass" placeholder="باسورد" dir="ltr" style="flex:1;min-width:80px;padding:8px;border:1px solid #dadce0;border-radius:6px"><button class="btn btn-small" style="background:#1a73e8" onclick="quickAddStudent()">➕ إضافة فوري</button></div><div id="quick-msg" style="font-size:11px;margin-top:6px"></div></div>
-<div style="max-height:400px;overflow:auto;border:1px solid #dadce0;border-radius:8px"><table class="admin-table"><thead><tr><th>الاسم</th><th>التليفون</th><th>الباسورد</th><th>ID</th><th>IP</th><th>ليفلات</th><th>الكود الحالي</th><th>العمليات</th></tr></thead><tbody id="admin-tbody"></tbody></table></div><div style="margin-top:10px;display:flex;gap:6px"><button class="btn btn-small" style="background:#5f6368" onclick="backToLogin()">رجوع ↩</button><button class="btn btn-small" style="background:#d93025" onclick="clearAllData()">مسح المحلي</button></div><div class="error-msg" id="admin-msg" style="display:none"></div></div>
+<div style="max-height:400px;overflow:auto;border:1px solid #dadce0;border-radius:8px"><table class="admin-table"><thead><tr><th>الاسم</th><th>التليفون</th><th>الباسورد</th><th>ID</th><th>IP</th><th>ليفلات</th><th>الكود الحالي</th><th>العمليات</th></tr></thead><tbody id="admin-tbody"></tbody></table></div><div style="margin-top:10px;display:flex;gap:6px"><button class="btn btn-small" style="background:#5f6368" onclick="adminBackToLogin()">رجوع ↩</button><button class="btn btn-small" style="background:#d93025" onclick="clearAllData()">مسح المحلي</button></div><div class="error-msg" id="admin-msg" style="display:none"></div></div>
 </div>
-<div class="code-modal" id="edit-modal" onclick="if(event.target===this) closeEditModal()"><div class="modal-content edit-modal-content"><button class="close-x" onclick="closeEditModal()">✖</button><h3>✏ تعديل الطالب</h3><div class="input-group"><label>الاسم:</label><input type="text" id="edit-name"></div><div class="input-group"><label>التليفون:</label><input type="text" id="edit-phone-old" style="display:none"><input type="text" id="edit-phone" dir="ltr" style="text-align:left"></div><div class="input-group"><label>الباسورد:</label><input type="text" id="edit-pass" dir="ltr" style="text-align:left"></div><div class="input-group"><label>ID:</label><input type="text" id="edit-id" dir="ltr" disabled></div><div class="input-group"><label>IP:</label><input type="text" id="edit-ip" dir="ltr"><small>امسحه لفك الربط</small></div><div class="input-group"><label>الليفلات:</label><input type="text" id="edit-levels" dir="ltr" placeholder="18"></div><div class="input-group"><label>فتح مباشر:</label><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'18')">18</button><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'19')">19</button><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'20')">20</button><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,prompt('رقم:','21'))">تاني</button></div></div><div class="input-group"><label>الكود الحالي:</label><div id="pending-codes-list"></div></div><div style="display:flex;gap:8px;margin-top:10px;position:sticky;bottom:0;background:#fff;padding-top:8px"><button class="btn" style="flex:1" onclick="saveEditStudent()">💾 حفظ</button><button class="btn" style="flex:1;background:#5f6368" onclick="closeEditModal()">إلغاء</button></div><div style="display:flex;gap:8px;margin-top:6px"><button class="btn btn-small" style="background:#fbbc04;color:#000;flex:1" onclick="resetStudentIP()">🔓 فك ربط</button><button class="btn btn-small" style="background:#0f9d58;flex:1" onclick="generateCodeForStudent(document.getElementById('edit-phone-old').value)">🎫 كود جديد</button></div><div class="success-msg" id="edit-msg" style="display:none"></div></div></div>
+<div class="code-modal" id="edit-modal" onclick="if(event.target===this) closeEditModal()"><div class="modal-content edit-modal-content"><button class="close-x" onclick="closeEditModal()">✖</button><h3>✏ تعديل الطالب</h3><div class="input-group"><label>الاسم:</label><input type="text" id="edit-name"></div><div class="input-group"><label>التليفون:</label><input type="text" id="edit-phone-old" style="display:none"><input type="text" id="edit-phone" dir="ltr" style="text-align:left"></div><div class="input-group"><label>الباسورد:</label><input type="text" id="edit-pass" dir="ltr" style="text-align:left"></div><div class="input-group"><label>ID:</label><input type="text" id="edit-id" dir="ltr" disabled></div><div class="input-group"><label>IP:</label><input type="text" id="edit-ip" dir="ltr"><small>امسحه لفك الربط</small></div><div class="input-group"><label>الليفلات:</label><input type="text" id="edit-levels" placeholder="مثال: 1,2,3" dir="ltr" placeholder="18"></div><div class="input-group"><label>فتح مباشر:</label><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'18')">18</button><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'19')">19</button><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'20')">20</button><button type="button" class="btn btn-small" style="background:#1a73e8" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,prompt('رقم:','21'))">تاني</button></div></div><div class="input-group"><label>الكود الحالي:</label><div id="pending-codes-list"></div></div><div style="display:flex;gap:8px;margin-top:10px;position:sticky;bottom:0;background:#fff;padding-top:8px"><button class="btn" style="flex:1" onclick="saveEditStudent()">💾 حفظ</button><button class="btn" style="flex:1;background:#5f6368" onclick="closeEditModal()">إلغاء</button></div><div style="display:flex;gap:8px;margin-top:6px"><button class="btn btn-small" style="background:#fbbc04;color:#000;flex:1" onclick="resetStudentIP()">🔓 فك ربط</button><button class="btn btn-small" style="background:#0f9d58;flex:1" onclick="generateCodeForStudent(document.getElementById('edit-phone-old').value)">🎫 كود جديد</button></div><div class="success-msg" id="edit-msg" style="display:none"></div></div></div>
 <div class="code-modal" id="code-modal" onclick="if(event.target===this) closeCodeModal()"><div class="modal-content"><button class="close-x" onclick="closeCodeModal()">✖</button><h3 id="modal-title-code">🔒 Level 18 مقفول</h3><p style="font-size:13px;color:#5f6368">Level <span id="modal-level-num">18</span></p><div class="input-group"><input type="text" id="modal-code-input" placeholder="ادخل كودك الخاص" dir="ltr" style="direction:ltr"></div><button class="btn" id="modal-unlock-btn" onclick="unlockLevel()">فتح 🔓</button><button class="btn" style="background:#5f6368" onclick="closeCodeModal()">إلغاء</button><div class="error-msg" id="modal-error"></div><div class="success-msg" id="modal-success"></div><span class="ip-badge" id="modal-ip"></span></div></div>
 <div class="code-modal" id="admin-login-modal" onclick="if(event.target===this) closeAdminLogin()"><div class="modal-content"><button class="close-x" onclick="closeAdminLogin()">✖</button><h3>🔐 دخول الأدمن</h3><div class="input-group"><label>باسورد الأدمن:</label><input type="password" id="admin-pass-input" placeholder="باسورد الأدمن" onkeypress="if(event.key==='Enter') loginAdmin()"></div><button class="btn" onclick="loginAdmin()">دخول 🔓</button><button class="btn" style="background:#5f6368" onclick="closeAdminLogin()">إلغاء ✖</button><div class="error-msg" id="admin-login-error"></div></div></div>
-
 
 <script>
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
@@ -183,341 +170,41 @@ const accessCodesDB = {"ZIAD-MASTER-2024":{level:"*",maxUses:9999,type:"master"}
 const audioPart1 = "11_AEF 2e Level 4 Testing-F6_LA [www.languagecentre.ir].mp3";
 const audioPart2 = "13_AEF 2e Level 4 Testing-F7_LA [www.languagecentre.ir].mp3";
 const audioPart3 = "15_AEF 2e Level 4 Testing-F8_LA [www.languagecentre.ir].mp3";
-
-const levelsData = {
-"18": {
-reading: [
+const levelsData = {"18":{reading:[
 { tag: "U6_G", qNum: 1, question: "01 Do you mind ________ for a walk in the park?", options: ["A go", "B going", "C to go", "D to going"], correct: 1, exp: "الفعل mind يتبعه الفعل + ing." },
 { tag: "U6_G", qNum: 2, question: "02 You should practice ________ English whenever you get the opportunity.", options: ["A speak", "B speaking", "C to speak", "D to speaking"], correct: 1, exp: "الفعل practice يأتي بعده v-ing." },
 { tag: "U6_G", qNum: 3, question: "03 The shop assistant refused ________ me a refund.", options: ["A give", "B giving", "C to give", "D to giving"], correct: 2, exp: "الفعل refuse يأتي بعده to + المصدر." },
 { tag: "U6_G", qNum: 4, question: "04 I can't remember ________ a doll when I was a little girl.", options: ["A have", "B having", "C to have", "D to having"], correct: 1, exp: "تذكر حدث سابق في الماضي يتبعه v-ing." },
-{ tag: "U6_G", qNum: 5, question: "05 You'd better ________ Darren and tell him we'll be late.", options: ["A call", "B calling", "C to call", "D to calling"], correct: 0, exp: "'d better يتبعها المصدر بدون to." },
-{ tag: "U6_G", qNum: 6, question: "06 Have you tried ________ on the other side of the bed?", options: ["A sleep", "B sleeping", "C to sleep", "D to sleeping"], correct: 1, exp: "Try + ing تعني تجربة طريقة جديدة." },
-{ tag: "U6_G", qNum: 7, question: "07 We can't wait ________ your new house.", options: ["A see", "B seeing", "C to see", "D to seeing"], correct: 2, exp: "can't wait + to + المصدر." },
-{ tag: "U6_G", qNum: 8, question: "08 My boss makes me ________ on the weekend sometimes.", options: ["A work", "B working", "C to work", "D to working"], correct: 0, exp: "make + مفعول + المصدر بدون to." },
-{ tag: "U6_G", qNum: 9, question: "09 No one forgets ________ Rio de Janeiro for the first time.", options: ["A see", "B seeing", "C to see", "D to seeing"], correct: 1, exp: "Forget + ing تعني تجربة ماضية لا تُنسى." },
-{ tag: "U6_G", qNum: 10, question: "10 Could you let me ________, please?", options: ["A speak", "B speaking", "C to speak", "D to speaking"], correct: 0, exp: "let + مفعول + المصدر بدون to." },
-{ tag: "U6_G", qNum: 11, question: "11 Did you ________ do many sports in school?", options: ["A use to", "B used to", "C uses to", "D using to"], correct: 0, exp: "بعد Did نستخدم use to المصدر." },
-{ tag: "U6_G", qNum: 12, question: "12 Driving on the left was weird at first, but I ________ it now.", options: ["A use to", "B 'm used to", "C used to", "D using to"], correct: 1, exp: "الاعتاد على شيء الآن: am/is/are used to." },
-{ tag: "U6_G", qNum: 13, question: "13 We ________ be very good children most of the time.", options: ["A would", "B used to", "C use to", "D are used to"], correct: 1, exp: "حالة ماضية مع أفعال الحالة تستلزم used to." },
-{ tag: "U6_G", qNum: 14, question: "14 I ________ eat fish at all, but I have it occasionally now.", options: ["A wasn't used to", "B didn't use to", "C am not used to", "D don't use to"], correct: 1, exp: "نفي العادة الماضية: didn't use to." },
-{ tag: "U6_G", qNum: 15, question: "15 Sam ________ goes to work by bus, but he decided to walk today.", options: ["A usually", "B use to", "C used to", "D is used to"], correct: 0, exp: "Usually تُستخدم للمضارع البسيط للتعبير عن العادة الحالية." },
-{ tag: "U6_G", qNum: 16, question: "16 Clara and Tom ________ a couple, but they've split up now.", options: ["A used to be", "B used to being", "C use to be", "D are used to being"], correct: 0, exp: "كانوا في الماضي: used to be." },
-{ tag: "U6_G", qNum: 17, question: "17 I ________ speaking so much English - it's tiring!", options: ["A 'm not used to", "B didn't use to", "C wasn't used to", "D don't use to"], correct: 0, exp: "عدم الاعتياد على شيء حالي يليه V-ing: 'm not used to." },
-{ tag: "U6_G", qNum: 18, question: "18 I can't ________ this new operating system. I prefer the old one.", options: ["A get used to", "B be used to", "C used to", "D getting used to"], correct: 0, exp: "الاعتاد بالتدريج بعد can't: get used to." },
-{ tag: "U6_G", qNum: 19, question: "19 On a free afternoon, I ________ drive to the coast and do some surfing.", options: ["A often", "B 'm used to", "C used to", "D usually"], correct: 0, exp: "Often تعبر عن التكرار مع المضارع." },
-{ tag: "U6_G", qNum: 20, question: "20 My mother ________ always bake cakes on Saturdays when I was young - I loved it!", options: ["A would", "B use to", "C used to", "D uses to"], correct: 2, exp: "العادات السلوكية المكررة بالماضي: used to أو would." },
-{ tag: "U6_V", qNum: 1, question: "01 An ________ is an extra piece performed when the audience calls the performer back.", options: ["A encore", "B echo", "C event", "D entry"], correct: 0, exp: "Encore تعني العزف الإضافي استجابة للجمهور." },
-{ tag: "U6_V", qNum: 2, question: "02 A ________ is a long thin metal instrument that you blow into.", options: ["A flute", "B fiddle", "C forte", "D fret"], correct: 0, exp: "Flute: آلة الفلوت النفعية." },
-{ tag: "U6_V", qNum: 3, question: "03 A ________ is a female singer who sings very high.", options: ["A soprano", "B soloist", "C star", "D singer"], correct: 0, exp: "Soprano: المغنية ذات الصوت العالي." },
-{ tag: "U6_V", qNum: 4, question: "04 Jazz and soul are examples of two different musical ________.", options: ["A genres", "B groups", "C gigs", "D guitars"], correct: 0, exp: "Genres: الأنواع الموسيقية." },
-{ tag: "U6_V", qNum: 5, question: "05 The person who directs an orchestra is called a ________.", options: ["A conductor", "B composer", "C creator", "D chorister"], correct: 0, exp: "Conductor: قائد الأوركسترا." },
-{ tag: "U6_V", qNum: 6, question: "06 A ________ looks like a very big violin.", options: ["A cello", "B chord", "C choir", "D cymbal"], correct: 0, exp: "Cello: التشيلو يشبه الكمان الكبير." },
-{ tag: "U6_V", qNum: 7, question: "07 Why are you ________? Are you tired or just bored?", options: ["A snoring", "B napping", "C yawning", "D sleeping"], correct: 2, exp: "Yawning: التثاؤب." },
-{ tag: "U6_V", qNum: 8, question: "08 I didn't hear you get back last night, I was ________ asleep.", options: ["A fast", "B deep", "C fallen", "D heavily"], correct: 0, exp: "Fast asleep: غارق في النوم." },
-{ tag: "U6_V", qNum: 9, question: "09 I use a special ________ that gives my long neck enough support.", options: ["A duvet", "B blanket", "C pillow", "D sheet"], correct: 2, exp: "Pillow: وسادة للنوم." },
-{ tag: "U6_V", qNum: 10, question: "10 I used to suffer from ________. I would lie awake for hours every night.", options: ["A insomnia", "B jet lag", "C nightmares", "D sleepwalking"], correct: 0, exp: "Insomnia: الأرق وعدم القدرة على النوم." },
-{ tag: "U6_V", qNum: 11, question: "11 When it's really hot in summer, I just sleep under a ________.", options: ["A pillow", "B sheet", "C duvet", "D blanket"], correct: 1, exp: "Sheet: ملاءة خفيفة." },
-{ tag: "U6_V", qNum: 12, question: "12 If you eat too much late at night, it will ________ you awake.", options: ["A stay", "B keep", "C make", "D get"], correct: 1, exp: "Keep awake: يبقيك مستيقظاً." },
-{ tag: "U6_V", qNum: 13, question: "13 My uncle gets up very early but he sometimes has a ________ in the afternoons.", options: ["A dream", "B yawn", "C nap", "D snore"], correct: 2, exp: "Have a nap: يأخذ قيلولة." },
-{ tag: "U6_V", qNum: 14, question: "14 You don't need to worry about ________ – that alarm clock's incredibly loud.", options: ["A oversleeping", "B having a siesta", "C keeping awake", "D sleeping pills"], correct: 0, exp: "Oversleeping: الإطالة في النوم أكثر من اللازم." },
-{ tag: "U6_V", qNum: 15, question: "15 I love the ________ in Rome – there are so many beautiful buildings.", options: ["A architecture", "B graffiti", "C statues", "D paintings"], correct: 0, exp: "Architecture: الهندسة المعمارية المبهرة." },
-{ tag: "U6_V", qNum: 16, question: "16 My aunt once visited a ________ to try and contact my dead uncle.", options: ["A psychic", "B psychologist", "C psychiatrist", "D physician"], correct: 0, exp: "Psychic: عراف أو وسيط روحاني." },
-{ tag: "U6_V", qNum: 17, question: "17 ________ have to go through training to learn how to make really good coffee.", options: ["A Baristas", "B Macchiatos", "C Brewers", "D Bakers"], correct: 0, exp: "Baristas: صانعو القهوة المحترفون." },
-{ tag: "U6_V", qNum: 18, question: "18 Carlo is one of the best ________ around - his restaurant is always booked up.", options: ["A chauffeurs", "B chefs", "C waiters", "D managers"], correct: 1, exp: "Chefs: طهاة المطاعم." },
-{ tag: "U6_V", qNum: 19, question: "19 Hélène Grimaud is performing Brahms Piano ________ no.1 tonight.", options: ["A Concerto", "B Symphony", "C Chorus", "D Opera"], correct: 0, exp: "Concerto: كونشرتو البيانو." },
-{ tag: "U6_V", qNum: 20, question: "20 I've sent Janet some flowers a lovely ________ of roses.", options: ["A bouquet", "B croissant", "C bucket", "D bunch"], correct: 0, exp: "Bouquet: باقة ورد." },
-{ tag: "U7_G", qNum: 1, question: "01 They ________ gone to bed early - there are no lights on in the house.", options: ["A must have", "B should have", "C can't have", "D might have"], correct: 0, exp: "Must have + PP: استنتاج مؤكد." },
-{ tag: "U7_G", qNum: 2, question: "02 I suppose I ________ dropped my wallet, but I think it's been stolen.", options: ["A could have", "B must have", "C shouldn't have", "D can't have"], correct: 0, exp: "Could have + PP: الاحتمالية بالماضي." },
-{ tag: "U7_G", qNum: 3, question: "03 You look exhausted. You ________ for a shorter run.", options: ["A should have gone", "B should go", "C must have gone", "D can't have gone"], correct: 0, exp: "Should have + PP: النصيحة عن شيء بالماضي." },
-{ tag: "U7_G", qNum: 4, question: "04 I ________ met her at a conference, but I can't remember if I did.", options: ["A may have", "B must have", "C should have", "D can't have"], correct: 0, exp: "May have + PP: احتمال غير مؤكد للماضي." },
-{ tag: "U7_G", qNum: 5, question: "05 Diana ________ gotten engaged - she's only known him six weeks!", options: ["A can't have", "B mustn't have", "C should have", "D might have"], correct: 0, exp: "Can't have + PP: استحالة وقوع الحدث." },
-{ tag: "U7_G", qNum: 6, question: "06 You ________ looked at my emails; it was very wrong of you.", options: ["A shouldn't have", "B might not have", "C couldn't have", "D must not have"], correct: 0, exp: "Shouldn't have + PP: اللوم على فعل خطأ بالماضي." },
-{ tag: "U7_G", qNum: 7, question: "07 They ________ finished their walk by now. It's too dark to see anything.", options: ["A might have", "B must have", "C shouldn't have", "D can't have"], correct: 1, exp: "Must have + PP: استنتاج مؤكد في الماضي." },
-{ tag: "U7_G", qNum: 8, question: "08 Would you rather ________ out tonight or stay in?", options: ["A eat", "B eating", "C to eat", "D ate"], correct: 0, exp: "Would rather + المصدر بدون to." },
-{ tag: "U7_G", qNum: 9, question: "09 I'd rather you ________ me for lunch today; I've got a lot of work to do.", options: ["A not meet", "B didn't meet", "C don't meet", "D haven't met"], correct: 1, exp: "Would rather + فاعل + ماضي بسيط للحدث الحالي." },
-{ tag: "U7_G", qNum: 10, question: "10 Chris says he'd rather you ________ him up at 8:00, not 7:00.", options: ["A pick", "B picking", "C picked", "D to pick"], correct: 2, exp: "Would rather + فاعل + ماضي بسيط (picked)." },
-{ tag: "U7_G", qNum: 11, question: "11 Danielle admitted that she'd rather ________ to the barbecue.", options: ["A not go", "B didn't go", "C hasn't gone", "D not going"], correct: 0, exp: "Would rather + not + المصدر (بدون فاعل)." },
-{ tag: "U7_G", qNum: 12, question: "12 Wouldn't you rather John ________ the repairs in the bathroom this week?", options: ["A do", "B does", "C did", "D doing"], correct: 2, exp: "Would rather + فاعل + ماضي بسيط." },
-{ tag: "U7_G", qNum: 13, question: "13 Beth told me you ________ like going to a club. Where would you like to go?", options: ["A sound", "B feel", "C look", "D seem"], correct: 1, exp: "Feel like + ing: يرغب في شيء." },
-{ tag: "U7_G", qNum: 14, question: "14 It's so empty here today. It feels ________ we've got the café to ourselves.", options: ["A as if", "B if", "C that", "D like"], correct: 0, exp: "Feels as if + جملة كاملة." },
-{ tag: "U7_G", qNum: 15, question: "15 I don't know what this fruit is but it tastes like ________.", options: ["A great", "B pineapple", "C horrible", "D delicious"], correct: 1, exp: "Taste like + اسم (Pineapple)." },
-{ tag: "U7_G", qNum: 16, question: "16 Mmm, that ________ really good! Are you making a cake?", options: ["A smells", "B tastes", "C feels", "D looks"], correct: 0, exp: "Smells: رائحته طيبة." },
-{ tag: "U7_G", qNum: 17, question: "17 This shirt ________ a little bit tight. Do you have it in a larger size?", options: ["A feels as if", "B feels", "C feels like", "D looks like"], correct: 1, exp: "Feels + صفة (tight)." },
-{ tag: "U7_G", qNum: 18, question: "18 Robert looks more ________ his mother than his father.", options: ["A as", "B like", "C as if", "D though"], correct: 1, exp: "Look like + اسم (his mother)." },
-{ tag: "U7_G", qNum: 19, question: "19 Eve looks as ________ she hasn't slept for a week!", options: ["A though", "B like", "C when", "D if"], correct: 3, exp: "Looks as if + جملة كاملة." },
-{ tag: "U7_G", qNum: 20, question: "20 This music ________ something I've heard before. What's the name of the band?", options: ["A sounds like", "B feels like", "C sounds", "D looks like"], correct: 0, exp: "Sounds like + اسم." },
-{ tag: "U7_V", qNum: 1, question: "01 Please ________ me to set my alarm clock for 7:00 instead of 8:00.", options: ["A remember", "B remind", "C notice", "D warn"], correct: 1, exp: "Remind: يذكر شخصاً." },
-{ tag: "U7_V", qNum: 2, question: "02 Have you ________ that new pizza place on High Street?", options: ["A noticed", "B realized", "C watched", "D stared"], correct: 0, exp: "Noticed: يلاحظ." },
-{ tag: "U7_V", qNum: 3, question: "03 We couldn't ________ her from buying that car.", options: ["A avoid", "B prevent", "C deny", "D refuse"], correct: 1, exp: "Prevent from + ing: يمنع من." },
-{ tag: "U7_V", qNum: 4, question: "04 We really don't ________ Alice staying another night – she's welcome.", options: ["A matter", "B mind", "C care", "D bother"], correct: 1, exp: "Don't mind: لا مانع لدينا." },
-{ tag: "U7_V", qNum: 5, question: "05 I can remember when the Red Sox ________ the Yankees 8-2.", options: ["A beat", "B won", "C scored", "D drew"], correct: 0, exp: "Beat + الفريق المنافس: يهزم." },
-{ tag: "U7_V", qNum: 6, question: "06 The trouble with Jeff is that he ________ to accept that anything is wrong.", options: ["A denies", "B refuses", "C avoids", "D prevents"], correct: 1, exp: "Refuses + to + المصدر: يرفض." },
-{ tag: "U7_V", qNum: 7, question: "07 Unemployment has ________ again this month.", options: ["A risen", "B raised", "C arose", "D lifted"], correct: 0, exp: "Risen: ارتفعت (فعل لازم بدون مفعول)." },
-{ tag: "U7_V", qNum: 8, question: "08 We ________ the blanket on the ground and had a picnic by the river.", options: ["A laid", "B lay", "C lain", "D lied"], correct: 0, exp: "Laid: بسط أو وضع الشي." },
-{ tag: "U7_V", qNum: 9, question: "09 That's the jeweller's that was ________ last week.", options: ["A stolen", "B robbed", "C burgled", "D hijacked"], correct: 1, exp: "Robbed: سُرِقَ (للمكان أو الأشخاص)." },
-{ tag: "U7_V", qNum: 10, question: "10 I ________ you to look for another job – you really don't seem happy in this one.", options: ["A advise", "B warn", "C notice", "D remind"], correct: 0, exp: "Advise + مفعول + to: ينصح." },
-{ tag: "U7_V", qNum: 11, question: "11 You don't look old! You haven't got any ________ on your face!", options: ["A wrinkles", "B scars", "C freckles", "D spots"], correct: 0, exp: "Wrinkles: تجاعيد الوجه." },
-{ tag: "U7_V", qNum: 12, question: "12 You look as if you've just gotten out of bed! You should ________ your hair!", options: ["A comb", "B wash", "C cut", "D dry"], correct: 0, exp: "Comb hair: يمشط الشعر." },
-{ tag: "U7_V", qNum: 13, question: "13 It's very rude to ________ your finger at people.", options: ["A point", "B show", "C wave", "D hold"], correct: 0, exp: "Point finger: يشير بإصبعه." },
-{ tag: "U7_V", qNum: 14, question: "14 I knew you wouldn't agree because you raised your ________ when I suggested it.", options: ["A eyebrows", "B shoulders", "C hands", "D arms"], correct: 0, exp: "Raise eyebrows: يرفع حاجبيه متعجباً." },
-{ tag: "U7_V", qNum: 15, question: "15 Business people often ________ hands when they make a deal.", options: ["A shake", "B hold", "C wave", "D touch"], correct: 0, exp: "Shake hands: يتصافحون." },
-{ tag: "U7_V", qNum: 16, question: "16 Did you use to suck your ________ when you were little?", options: ["A thumb", "B toe", "C finger", "D hand"], correct: 0, exp: "Suck thumb: يمتص إبهامه." },
-{ tag: "U7_V", qNum: 17, question: "17 Can you give me a tissue? I need to blow my ________.", options: ["A nose", "B hair", "C face", "D eyes"], correct: 0, exp: "Blow nose: يتمخط بالنظافة." },
-{ tag: "U7_V", qNum: 18, question: "18 Eric shrugged his ________ and said he had no idea where the path went.", options: ["A shoulders", "B eyebrows", "C hands", "D head"], correct: 0, exp: "Shrug shoulders: يهز كتفيه." },
-{ tag: "U7_V", qNum: 19, question: "19 There's a cold wind today. Put this scarf around your ________.", options: ["A neck", "B head", "C face", "D arms"], correct: 0, exp: "Neck: الرقبة." },
-{ tag: "U7_V", qNum: 20, question: "20 I could tell as soon as I saw your fingers that you bite your ________.", options: ["A nails", "B skin", "C clips", "D thumbs"], correct: 0, exp: "Bite nails: يعض أظافره." },
-{ tag: "U8_G", qNum: 1, question: "01 Jack encouraged me ________ a new hairdresser's.", options: ["A to try", "B that I try", "C trying", "D try"], correct: 0, exp: "Encourage + مفعول + to + المصدر." },
-{ tag: "U8_G", qNum: 2, question: "02 John regretted ________ how much the hotel was before he booked it.", options: ["A not asking", "B to not ask", "C not to ask", "D didn't ask"], correct: 0, exp: "Regret + not + v-ing." },
-{ tag: "U8_G", qNum: 3, question: "03 Sheila insisted ________ for all our drinks.", options: ["A on paying", "B to pay", "C paying", "D at paying"], correct: 0, exp: "Insist on + V-ing." },
-{ tag: "U8_G", qNum: 4, question: "04 Peter convinced me ________ playing soccer.", options: ["A not to give up", "B not giving up", "C don't give up", "D didn't give up"], correct: 0, exp: "Convince + مفعول + (not) to + المصدر." },
-{ tag: "U8_G", qNum: 5, question: "05 I suggested ________ Anne some flowers, but Lisa said she'd prefer chocolates.", options: ["A to buy", "B buying", "C buy", "D bought"], correct: 1, exp: "Suggest + V-ing." },
-{ tag: "U8_G", qNum: 6, question: "06 My neighbor threatened ________ down the trees in the garden.", options: ["A to cut", "B cutting", "C cut", "D cuts"], correct: 0, exp: "Threaten + to + المصدر." },
-{ tag: "U8_G", qNum: 7, question: "07 It's difficult to avoid ________ by paparazzi when you're famous.", options: ["A being photographed", "B photographing", "C to be photographed", "D to photograph"], correct: 0, exp: "Avoid + being + PP في المجهول." },
-{ tag: "U8_G", qNum: 8, question: "08 The gym is closed this week – it ________.", options: ["A is being redecorated", "B is redecorated", "C redecorates", "D has redecorated"], correct: 0, exp: "المبني للمجهول في المضارع المستمر: is being + PP." },
-{ tag: "U8_G", qNum: 9, question: "09 I saw Miranda at the art exhibition. She ________ around by one of the artists.", options: ["A was being shown", "B was showing", "C had shown", "D has been shown"], correct: 0, exp: "الماضي المستمر المبني للمجهول: was being shown." },
-{ tag: "U8_G", qNum: 10, question: "10 Drivers shouldn't ________ for parking ten minutes longer than they've paid for.", options: ["A be fined", "B fine", "C being fined", "D have fined"], correct: 0, exp: "Shouldn't be + PP بالمجهول." },
-{ tag: "U8_G", qNum: 11, question: "11 The Cubs refused ________ and ended up winning the game.", options: ["A to be beaten", "B being beaten", "C to beat", "D beat"], correct: 0, exp: "Refuse + to be + PP في صيغة المجهول." },
-{ tag: "U8_G", qNum: 12, question: "12 The couple ________ to have escaped to France.", options: ["A are thought", "B is thought", "C thinks", "D thought"], correct: 0, exp: "الجمع (The couple) يستلزم are thought." },
-{ tag: "U8_G", qNum: 13, question: "13 Fish and chips used to ________ in old newspapers.", options: ["A be wrapped", "B wrap", "C being wrapped", "D wrapped"], correct: 0, exp: "Used to be + PP بالمجهول." },
-{ tag: "U8_G", qNum: 14, question: "14 That restaurant ________ to be one of the best in Europe.", options: ["A is said", "B has said", "C said", "D is saying"], correct: 0, exp: "Is said to be: يقال عنه أنه..." },
-{ tag: "U8_G", qNum: 15, question: "15 Choose the correct sentence order.", options: ["A I had my photo taken outside the White House.", "B I had taken my photo...", "C I taken my photo had...", "D I my photo had taken..."], correct: 0, exp: "تركيب Causative الصحيح: have + object + PP." },
-{ tag: "U8_G", qNum: 16, question: "16 Choose the correct sentence order.", options: ["A We decided to get the painting valued by an expert.", "B We decided get the painting to valued...", "C We get to decided...", "D We decided to getting..."], correct: 0, exp: "get + object + PP." },
-{ tag: "U8_G", qNum: 17, question: "17 Choose the correct sentence order.", options: ["A I'm going to have my bad tooth taken out tomorrow.", "B I'm going have to my bad tooth...", "C I'm having going to...", "D I going to have..."], correct: 0, exp: "be going to + have + object + PP." },
-{ tag: "U8_G", qNum: 18, question: "18 Choose the correct sentence order.", options: ["A I had my car fully checked before I sold it.", "B I had checked fully my car...", "C I fully checked had my car...", "D I had my car check fully..."], correct: 0, exp: "had + my car + fully checked." },
-{ tag: "U8_G", qNum: 19, question: "19 Choose the correct sentence order.", options: ["A Will you have your house painted exactly the same color?", "B Will have you your house painted...", "C Have you will your house painted...", "D Will you your house have painted..."], correct: 0, exp: "السؤال باستخدام Causative: Will + subject + have + object + PP." },
-{ tag: "U8_G", qNum: 20, question: "20 Choose the correct sentence order.", options: ["A Why would anyone want to get their lips made bigger?", "B Why anyone would want to get...", "C Why would want anyone to get...", "D Why would anyone to get want..."], correct: 0, exp: "الترتيب المعياري الصحيح للجملة الاستفهامبة." },
-{ tag: "U8_G", qNum: 21, question: "21 Choose the correct sentence order.", options: ["A We're having our new heating system installed in two weeks.", "B We're installing our new heating system having...", "C We're our new heating system having installed...", "D We having our new heating system installed..."], correct: 0, exp: "We're + having + object + PP." },
-{ tag: "U8_V", qNum: 1, question: "01 The ________ of the jury was that Mr. Anderson was guilty of all charges.", options: ["A verdict", "B venue", "C victim", "D value"], correct: 0, exp: "Verdict: قرار هيئة المحلفين." },
-{ tag: "U8_V", qNum: 2, question: "02 The man was charged with ________ after following Miss Stevens everywhere.", options: ["A stalking", "B smuggling", "C stealing", "D shoplifting"], correct: 0, exp: "Stalking: تعقب وملاحقة شخص." },
-{ tag: "U8_V", qNum: 3, question: "03 Cigarettes are often ________ into the UK because the tax is so high on them there.", options: ["A smuggled", "B stolen", "C snatched", "D sold"], correct: 0, exp: "Smuggled: يُهرب بضائع." },
-{ tag: "U8_V", qNum: 4, question: "04 Two ________ described seeing the attack from their bedroom windows.", options: ["A witnesses", "B watchers", "C workers", "D wardens"], correct: 0, exp: "Witnesses: شهود عيان." },
-{ tag: "U8_V", qNum: 5, question: "05 After being ________ by police for several hours, the woman confessed to the crime.", options: ["A questioned", "B quoted", "C quartered", "D quieted"], correct: 0, exp: "Questioned: جرى التحقيق معها." },
-{ tag: "U8_V", qNum: 6, question: "06 Both men were ________ to three years in prison.", options: ["A sentenced", "B saved", "C secured", "D sent"], correct: 0, exp: "Sentenced to: حُكم عليهم بالسجن." },
-{ tag: "U8_V", qNum: 7, question: "07 The ________ gave the woman a shorter sentence because she had pled guilty.", options: ["A judge", "B jury", "C jailer", "D justice"], correct: 0, exp: "Judge: القاضي." },
-{ tag: "U8_V", qNum: 8, question: "08 The ________ demanded $50,000 for the safe return of the director's wife.", options: ["A kidnappers", "B killers", "C knights", "D keepers"], correct: 0, exp: "Kidnappers: الخاطفون." },
-{ tag: "U8_V", qNum: 9, question: "09 Both women were ________ because of a lack of reliable evidence.", options: ["A acquitted", "B arrested", "C accused", "D attacked"], correct: 0, exp: "Acquitted: بُرِّئت الساحة." },
-{ tag: "U8_V", qNum: 10, question: "10 The politician was ________ by a friend who knew some of his guilty secrets.", options: ["A blackmailed", "B blamed", "C banned", "D beaten"], correct: 0, exp: "Blackmailed: تُعرّض للابتزاز." },
-{ tag: "U8_V", qNum: 11, question: "11 That news report isn't at all objective – it's very ________.", options: ["A biased", "B freelance", "C censored", "D sensationalist"], correct: 0, exp: "Biased: منحاز وغير محايد." },
-{ tag: "U8_V", qNum: 12, question: "12 Critics have given the new show very favorable ________.", options: ["A reviews", "B gossip", "C vows", "D paparazzi"], correct: 0, exp: "Reviews: آراء وتقييمات نقدية." },
-{ tag: "U8_V", qNum: 13, question: "13 The internet isn't ________ so you can read stories there that aren't in the newspapers.", options: ["A censored", "B biased", "C freelance", "D sensationalist"], correct: 0, exp: "Censored: خاضع للرقابة." },
-{ tag: "U8_V", qNum: 14, question: "14 Bill doesn't work for one single newspaper. He's a ________ journalist.", options: ["A freelance", "B biased", "C gossip", "D censored"], correct: 0, exp: "Freelance: صحفي مستقل." },
-{ tag: "U8_V", qNum: 15, question: "15 Ellen was a war ________ until she had children. She writes about local politics now.", options: ["A reporter", "B commentator", "C newsreader", "D paparazzi"], correct: 0, exp: "War reporter: مراسلة حرب." },
-{ tag: "U8_V", qNum: 16, question: "16 The ________ at the tennis final screamed with joy when Andy Murray won.", options: ["A commentator", "B reporter", "C newsreader", "D gossip"], correct: 0, exp: "Commentator: المعلق الرياضي." },
-{ tag: "U8_V", qNum: 17, question: "17 I read that magazine for all the celebrity ________ - it's fun, but I know it's not all true.", options: ["A gossip", "B reviews", "C vows", "D paparazzi"], correct: 0, exp: "Gossip: أخبار وأقاويل المشاهير." },
-{ tag: "U8_V", qNum: 18, question: "18 They use such strong language in their news stories - it's too ________ for me.", options: ["A sensationalist", "B biased", "C censored", "D freelance"], correct: 0, exp: "Sensationalist: أسلوب إثارة صحفية." },
-{ tag: "U8_V", qNum: 19, question: "19 I loved it when that very serious ________ couldn't stop laughing as he read one story.", options: ["A newsreader", "B commentator", "C reporter", "D paparazzi"], correct: 0, exp: "Newsreader: قارئ الأخبار." },
-{ tag: "U8_V", qNum: 20, question: "20 The government ________ to reduce taxes before the next election.", options: ["A vows", "B reviews", "C gossip", "D censored"], correct: 0, exp: "Vows: تتعهد أو تتعهد رسمياً." }
-],
-listening: {
-A: [
-{ qNum: 1, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "1. What does Speaker 1 say about the music they listen to?", options: ["A) Rock music makes me feel more lively.", "B) Hip-hop music is great fun.", "C) For me, jazz music is comforting.", "D) If I'm alone, I listen to pop music."], correct: 0 },
-{ qNum: 2, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 2", startTime: 29, endTime: 48, question: "2. What does Speaker 2 say about the music they listen to?", options: ["A) Hip-hop music is great fun.", "B) I like classical music because it has no words.", "C) I've become quite interested in folk music.", "D) For me, jazz music is comforting."], correct: 1 },
-{ qNum: 3, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 3", startTime: 48, endTime: 73, question: "3. What does Speaker 3 say about the music they listen to?", options: ["A) If I'm alone, I listen to pop music.", "B) Rock music makes me feel more lively.", "C) I've become quite interested in folk music.", "D) I like classical music because it has no words."], correct: 2 },
-{ qNum: 4, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 4", startTime: 73, endTime: 101, question: "4. What does Speaker 4 say about the music they listen to?", options: ["A) If I'm alone, I listen to pop music.", "B) For me, jazz music is comforting.", "C) Hip-hop music is great fun.", "D) Rock music makes me feel more lively."], correct: 0 },
-{ qNum: 5, tag: "P1", partName: "Part 1 - Music", audioSrc: audioPart1, speaker: "Speaker 5", startTime: 101, endTime: 130, question: "5. What does Speaker 5 say about the music they listen to?", options: ["A) I like classical music because it has no words.", "B) For me, jazz music is comforting.", "C) I've become quite interested in folk music.", "D) Hip-hop music is great fun."], correct: 1 },
-{ qNum: 6, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 1", startTime: 4, endTime: 32, question: "6. What does Speaker 1 say about her relationship?", options: ["A) He's reliable.", "B) He's thoughtful.", "C) He's patient.", "D) He's easygoing."], correct: 1 },
-{ qNum: 7, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 2", startTime: 32, endTime: 57, question: "7. What does Speaker 2 say about her relationship?", options: ["A) He's romantic.", "B) He's thoughtful.", "C) He's patient.", "D) He's easygoing."], correct: 3 },
-{ qNum: 8, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 3", startTime: 57, endTime: 89, question: "8. What does Speaker 3 say about her relationship?", options: ["A) He's reliable.", "B) He's patient.", "C) He's easygoing.", "D) He's sociable."], correct: 3 },
-{ qNum: 9, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 4", startTime: 89, endTime: 120, question: "9. What does Speaker 4 say about her relationship?", options: ["A) He's reliable.", "B) He's thoughtful.", "C) He's romantic.", "D) He's sociable."], correct: 0 },
-{ qNum: 10, tag: "P2", partName: "Part 2 - Relationships", audioSrc: audioPart2, speaker: "Speaker 5", startTime: 120, endTime: 150, question: "10. What does Speaker 5 say about her relationship?", options: ["A) He's easygoing.", "B) He's thoughtful.", "C) He's romantic.", "D) He's patient."], correct: 2 },
-{ qNum: 11, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "11. What does Speaker 1 say about keeping in touch?", options: ["A) Nothing is better than chatting face-to-face.", "B) Writing emails takes up far too much time.", "C) Using social networking sites keeps everyone up-to-date.", "D) Texting is really practical at times."], correct: 0 },
-{ qNum: 12, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 2", startTime: 29, endTime: 58, question: "12. What does Speaker 2 say about keeping in touch?", options: ["A) Writing emails takes up far too much time.", "B) Spending a weekend away together is better than meeting for coffee.", "C) Texting is not as good as chatting on the phone.", "D) Using social networking sites keeps everyone up-to-date."], correct: 1 },
-{ qNum: 13, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 3", startTime: 58, endTime: 81, question: "13. What does Speaker 3 say about keeping in touch?", options: ["A) Nothing is better than chatting face-to-face.", "B) Texting is really practical at times.", "C) Texting is not as good as chatting on the phone.", "D) Spending a weekend away together is better than meeting for coffee."], correct: 2 },
-{ qNum: 14, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 4", startTime: 81, endTime: 106, question: "14. What does Speaker 4 say about keeping in touch?", options: ["A) Using social networking sites keeps everyone up-to-date.", "B) Writing emails takes up far too much time.", "C) Nothing is better than chatting face-to-face.", "D) Texting is not as good as chatting on the phone."], correct: 0 },
-{ qNum: 15, tag: "P3", partName: "Part 3 - Keeping in Touch", audioSrc: audioPart3, speaker: "Speaker 5", startTime: 106, endTime: 135, question: "15. What does Speaker 5 say about keeping in touch?", options: ["A) Writing emails takes up far too much time.", "B) Spending a weekend away together is better than meeting for coffee.", "C) Texting is really practical at times.", "D) Using social networking sites keeps everyone up-to-date."], correct: 2 }
-],
-B: [
-{ qNum: 1, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "1. What does Speaker 1 say about the music they listen to?", options: ["A) Hip-hop music is great fun.", "B) I listen to recent pop music.", "C) Jazz music makes me feel calm.", "D) I mainly listen to rock music."], correct: 3 },
-{ qNum: 2, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 2", startTime: 29, endTime: 48, question: "2. What does Speaker 2 say about the music they listen to?", options: ["A) I enjoy listening to my national musical instruments", "B) Because of my work, I prefer listening to classical music.", "C) I mainly listen to rock music.", "D) Hip-hop music is great fun."], correct: 1 },
-{ qNum: 3, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 3", startTime: 48, endTime: 73, question: "3. What does Speaker 3 say about the music they listen to?", options: ["A) Because of my work, I prefer listening to classical music.", "B) I enjoy listening to my national musical instruments", "C) I listen to recent pop music.", "D) Jazz music makes me feel calm."], correct: 1 },
-{ qNum: 4, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 4", startTime: 73, endTime: 101, question: "4. What does Speaker 4 say about the music they listen to?", options: ["A) I listen to recent pop music.", "B) Hip-hop music is great fun.", "C) I enjoy listening to my national musical instruments", "D) I mainly listen to rock music."], correct: 0 },
-{ qNum: 5, tag: "P1", partName: "Part 1 - Music (نموذج B)", audioSrc: audioPart1, speaker: "Speaker 5", startTime: 101, endTime: 130, question: "5. What does Speaker 5 say about the music they listen to?", options: ["A) Jazz music makes me feel calm.", "B) Because of my work, I prefer listening to classical music.", "C) I listen to recent pop music.", "D) Hip-hop music is great fun."], correct: 0 },
-{ qNum: 6, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 1", startTime: 4, endTime: 32, question: "6. What does Speaker 1 say about her relationship?", options: ["A) He's passionate.", "B) He's caring.", "C) He's handsome.", "D) He's calm."], correct: 1 },
-{ qNum: 7, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 2", startTime: 32, endTime: 57, question: "7. What does Speaker 2 say about her relationship?", options: ["A) He's friendly.", "B) He's calm.", "C) He's passionate.", "D) He's dependable."], correct: 1 },
-{ qNum: 8, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 3", startTime: 57, endTime: 89, question: "8. What does Speaker 3 say about her relationship?", options: ["A) He's handsome.", "B) He's friendly.", "C) He's caring.", "D) He's dependable."], correct: 1 },
-{ qNum: 9, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 4", startTime: 89, endTime: 120, question: "9. What does Speaker 4 say about her relationship?", options: ["A) He's calm.", "B) He's passionate.", "C) He's dependable.", "D) He's handsome."], correct: 2 },
-{ qNum: 10, tag: "P2", partName: "Part 2 - Relationships (نموذج B)", audioSrc: audioPart2, speaker: "Speaker 5", startTime: 120, endTime: 150, question: "10. What does Speaker 5 say about her relationship?", options: ["A) He's caring.", "B) He's friendly.", "C) He's passionate.", "D) He's calm."], correct: 2 },
-{ qNum: 11, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 1", startTime: 4, endTime: 29, question: "11. What does Speaker 1 say about keeping in touch?", options: ["A) Talking in person is the best way to communicate.", "B) Social media allows all of us to catch up on the others' news.", "C) Writing emails takes up far too much time.", "D) Sometimes sending a text message is convenient."], correct: 0 },
-{ qNum: 12, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 2", startTime: 29, endTime: 58, question: "12. What does Speaker 2 say about keeping in touch?", options: ["A) Having coffee together is not as good as going away together occasionally.", "B) Talking in person is the best way to communicate.", "C) Speaking on the phone is better than texting.", "D) Writing emails takes up far too much time."], correct: 0 },
-{ qNum: 13, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 3", startTime: 58, endTime: 81, question: "13. What does Speaker 3 say about keeping in touch?", options: ["A) Speaking on the phone is better than texting.", "B) Having coffee together is not as good as going away together occasionally.", "C) Social media allows all of us to catch up on the others' news.", "D) Writing emails takes up far too much time."], correct: 0 },
-{ qNum: 14, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 4", startTime: 81, endTime: 106, question: "14. What does Speaker 4 say about keeping in touch?", options: ["A) Social media allows all of us to catch up on the others' news.", "B) Talking in person is the best way to communicate.", "C) Speaking on the phone is better than texting.", "D) Sometimes sending a text message is convenient."], correct: 0 },
-{ qNum: 15, tag: "P3", partName: "Part 3 - Keeping in Touch (نموذج B)", audioSrc: audioPart3, speaker: "Speaker 5", startTime: 106, endTime: 135, question: "15. What does Speaker 5 say about keeping in touch?", options: ["A) Sometimes sending a text message is convenient.", "B) Writing emails takes up far too much time.", "C) Having coffee together is not as good as going away together occasionally.", "D) Social media allows all of us to catch up on the others' news."], correct: 0 }
-]
-}
-}
-};
+{ tag: "U6_G", qNum: 5, question: "05 You'd better ________ Darren and tell him we'll be late.", options: ["A call", "B calling", "C to call", "D to calling"], correct: 0, exp: "'d better يتبعها المصدر بدون to." }
+],listening:{A:[],B:[]}}};
 
 let currentIP="", currentPhone="", pendingLevel="", currentQuestions=[], currentIndex=0, userAnswers=[], studentName="", selectedLevel="18", selectedForm="A", currentSkill="reading", timerInterval=null, timeLeft=17, isTimerRunning=false;
 const audio=document.getElementById('audio');
-
 fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>{ currentIP=d.ip; const a=document.getElementById('ip-display'); if(a) a.innerText='IP: '+d.ip; const b=document.getElementById('ip-display2'); if(b) b.innerText='IP: '+d.ip; const c=document.getElementById('modal-ip'); if(c) c.innerText='IP: '+d.ip; }).catch(()=>{ currentIP='local-'+Math.random().toString(36).substr(2,6); });
-
 function getDB(){ try{ return JSON.parse(localStorage.getItem('students_db_final')||'{}'); }catch(e){ return {}; } }
 function saveDB(db){ localStorage.setItem('students_db_final', JSON.stringify(db)); }
-
-// === لو الباسورد اتغير من الشيت يطلع تلقائي ===
-async function verifyPasswordFromSheet(){
-  if(!currentPhone) return;
-  try{
-    const res = await fetchWithRetry(GOOGLE_SHEET_URL+"?phone="+encodeURIComponent(currentPhone)+"&t="+Date.now(), 10000, 1);
-    const students = await res.json();
-    if(Array.isArray(students) && students.length>0){
-      const sheetPass = (students[0].password||'').toString().trim();
-      const db = getDB();
-      const local = db[currentPhone];
-      if(!local || !sheetPass) return;
-      if(local.password !== sheetPass){
-        // الباسورد اتغير - اطرده
-        console.log('Password changed in sheet, logging out');
-        localStorage.removeItem('currentSessionPhone');
-        currentPhone = "";
-        local.password = sheetPass;
-        saveDB(db);
-        document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
-        const loginScreen = document.getElementById('login-screen');
-        if(loginScreen) loginScreen.classList.add('active-screen');
-        switchAuth('log');
-        const err = document.getElementById('log-error');
-        if(err){
-          err.innerText = '⚠️ تم تغيير الباسورد من الإدارة - سجل دخول بالباسورد الجديد';
-          err.style.display = 'block';
-        }
-        const logPhone = document.getElementById('log-phone');
-        if(logPhone) logPhone.value = '';
-        const logPass = document.getElementById('log-pass');
-        if(logPass) logPass.value = '';
-      }
-    }
-  }catch(e){
-    // لو النت واقع منطلعوش
-  }
-}
-
-// فحص دوري كل 15 ثانية + لما يرجع للصفحة
-setInterval(verifyPasswordFromSheet, 15000);
+async function verifyPasswordFromSheet(){ if(!currentPhone) return; try{ const res = await fetchWithRetry(GOOGLE_SHEET_URL+"?phone="+encodeURIComponent(currentPhone)+"&t="+Date.now(), 8000, 1); const students = await res.json(); if(Array.isArray(students) && students.length>0){ const sheetData = students[0]; const sheetPass = (sheetData.password||'').toString().trim(); const db = getDB(); const local = db[currentPhone]; if(!local) return; let needRender = false; if(sheetPass && local.password !== sheetPass){ localStorage.removeItem('currentSessionPhone'); currentPhone = ""; local.password = sheetPass; saveDB(db); document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); const loginScreen = document.getElementById('login-screen'); if(loginScreen) loginScreen.classList.add('active-screen'); switchAuth('log'); const err = document.getElementById('log-error'); if(err){ err.innerText = '⚠ تم تغيير الباسورد من الإدارة - سجل دخول بالباسورد الجديد'; err.style.display = 'block'; } return; } if(sheetData.levels){ const sheetLevels = sheetData.levels.toString().split(',').map(l=>l.toString().replace(/[^0-9]/g,'').trim()).filter(l=>l); if(!local.unlockedLevels) local.unlockedLevels={}; sheetLevels.forEach(lvl=>{ if(!local.unlockedLevels[lvl]){ local.unlockedLevels[lvl]={code:sheetData.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; needRender = true; } }); } if(sheetData.pendingCodes){ try{ let pcs=JSON.parse(sheetData.pendingCodes); if(typeof pcs==='object' && Object.keys(pcs).length>0){ if(!local.pendingCodes) local.pendingCodes={}; let hasNew = false; for(let c in pcs){ if(!local.pendingCodes[c]){ hasNew=true; break; } } if(hasNew || Object.keys(local.pendingCodes).length===0){ local.pendingCodes = pcs; } } }catch(e){} } if(needRender){ saveDB(db); const levelsScreen = document.getElementById('levels-screen'); if(levelsScreen && levelsScreen.classList.contains('active-screen')){ renderLevels(); } } else { saveDB(db); } } }catch(e){} }
+setInterval(verifyPasswordFromSheet, 10000);
 window.addEventListener('focus', verifyPasswordFromSheet);
-document.addEventListener('visibilitychange', ()=>{
-  if(!document.hidden) verifyPasswordFromSheet();
-});
-
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) verifyPasswordFromSheet(); });
 function switchScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); const el=document.getElementById(id); if(el) el.classList.add('active-screen'); }
 function switchAuth(t){ document.getElementById('tab-reg').classList.toggle('active', t==='reg'); document.getElementById('tab-log').classList.toggle('active', t==='log'); document.getElementById('reg-box').style.display=t==='reg'?'block':'none'; document.getElementById('log-box').style.display=t==='log'?'block':'none'; }
-function backToLogin(){ 
-  localStorage.removeItem('currentSessionPhone');
-  currentPhone="";
-  switchScreen('login-screen'); 
-  switchAuth('log');
-  const lp = document.getElementById('log-phone');
-  if(lp) setTimeout(()=>lp.focus(), 100);
-}
+function backToLogin(){ localStorage.removeItem('currentSessionPhone'); currentPhone=""; switchScreen('login-screen'); switchAuth('log');
+  const lp = document.getElementById('log-phone'); if(lp) setTimeout(()=>lp.focus(), 100); }
+function adminBackToLogin(){ localStorage.removeItem('currentSessionPhone'); currentPhone=""; switchScreen('login-screen'); switchAuth('log'); const lp = document.getElementById('log-phone'); if(lp) setTimeout(()=>lp.focus(), 100); }
 function goToLevelsFromSkill(){ renderLevels(); setExamStudentName(); switchScreen('levels-screen'); }
-
-
-// === الحل النهائي للصفر ===
-// للعرض في الشيت والموقع - نحتفظ بالصفر
-function keepZeroPhone(p){
-  if(!p) return '';
-  return p.toString().trim().replace(/[^0-9]/g,'');
-}
-// للبحث فقط - نشيل الصفر عشان نمنع التكرار
-function searchKey(p){
-  if(!p) return '';
-  return p.toString().trim().replace(/[^0-9]/g,'').replace(/^0+/, '');
-}
-function normalizePhone(p){ return keepZeroPhone(p); }
-function findStudentByPhone(db, inputPhone){
-  let key = searchKey(inputPhone);
-  if(!key) return null;
-  if(db[key]) return {st: db[key], key: key};
-  return null;
-}
-
-
-
-function togglePass(id){
-  const inp=document.getElementById(id);
-  const eye=document.getElementById(id+'-eye');
-  if(!inp) return;
-  if(inp.type==='password'){ inp.type='text'; if(eye) eye.innerText='🙈'; }
-  else { inp.type='password'; if(eye) eye.innerText='👁️'; }
-}
-
-function generateRandomCode(prefix='ZIAD-'){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let r=''; for(let i=0;i<7;i++) r+=c.charAt(Math.floor(Math.random()*c.length)); return prefix+r; }
+function keepZeroPhone(p){ if(!p) return ''; let d = p.toString().trim().replace(/[^0-9]/g,''); if(!d) return ''; if(d.length===10 && d.startsWith('1')) d='0'+d; return d; }
+function searchKey(p){ if(!p) return ''; return p.toString().trim().replace(/[^0-9]/g,'').replace(/^0+/, ''); }
+function findStudentByPhone(db, inputPhone){ let key = searchKey(inputPhone); if(!key) return null; if(db[key]) return {st: db[key], key: key}; for(let k in db){ if(searchKey(k)===key || searchKey(db[k].phone||'')===key) return {st: db[k], key: k}; } return null; }
+function togglePass(id){ const inp=document.getElementById(id); const eye=document.getElementById(id+'-eye'); if(!inp) return; if(inp.type==='password'){ inp.type='text'; if(eye) eye.innerText='🙈'; } else { inp.type='password'; if(eye) eye.innerText='👁'; } }
+function generateRandomCode(prefix){ if(!prefix) prefix='ZIAD-'; const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let r=''; for(let i=0;i<7;i++) r+=c.charAt(Math.floor(Math.random()*c.length)); return prefix+r; }
 function setExamStudentName(){ const db=getDB(); const st=db[currentPhone]; const name=st?st.name:document.getElementById('welcome-name')?.innerText||'طالب'; const el1=document.getElementById('display-student-name'); if(el1) el1.innerText=name; const el2=document.getElementById('result-student-name'); if(el2) el2.innerText=name; studentName=name; }
 function syncToSheet(data){ try{ fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}); }catch(e){} }
-
-async function fetchWithRetry(url, timeout=20000, retries=2){
-  for(let attempt=1; attempt<=retries+1; attempt++){
-    const statusEl=document.getElementById('sheet-status');
-    const debugEl=document.getElementById('debug-info');
-    try{
-      if(statusEl) statusEl.style.display='none';
-      if(debugEl) debugEl.style.display='none';
-      const controller = new AbortController();
-      const timer = setTimeout(()=>controller.abort(), timeout);
-      const res = await fetch(url, {cache:'no-store', signal: controller.signal});
-      clearTimeout(timer);
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      return res;
-    }catch(e){
-      if(attempt>retries) throw e;
-      await new Promise(r=>setTimeout(r, 800*attempt));
-    }
-  }
-}
-
-async function autoLoadSheet(force=false){
-  const statusEl=document.getElementById('sheet-status');
-  const debugEl=document.getElementById('debug-info');
-  try{
-    if(!force && Object.keys(getDB()).length>0){
-      // عندنا محلي، نحاول تحديث في الخلفية بهدوء
-      if(statusEl) statusEl.style.display='none';
-    } else {
-      if(statusEl) statusEl.style.display='none';
-    }
-    const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(), 20000, 2);
-    const students=await res.json();
-    if(!Array.isArray(students)) throw new Error('رد غريب: '+JSON.stringify(students).substring(0,120));
-    const db=getDB();
-    let newCount=0, updated=0;
-    students.forEach(s=>{
-      let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return;
-      let existed=!!db[phone];
-      if(!db[phone]){
-        db[phone]={name:(s.name||'').toString().trim()||disp,phone:disp,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}};
-        newCount++;
-      } else {
-        updated++;
-      }
-      // حتى لو الصف فاضي ID/IP، حدث الاسم والباسورد
-      if(s.name) db[phone].name=(s.name||'').toString().trim();
-      if(s.password) db[phone].password=(s.password||'').toString().trim();
-      if(s.id) db[phone].id=(s.id||'').toString().trim();
-      if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); }
-      if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} }
-      // لو مفيش كود، ولد واحد
-      if(!db[phone].pendingCodes || Object.keys(db[phone].pendingCodes).length===0){
-        const nc=generateRandomCode();
-        db[phone].pendingCodes={};
-        db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
-      }
-    });
-    saveDB(db);
-    if(statusEl) statusEl.style.display='none';
-    if(debugEl) debugEl.innerText=`✅ تم التحميل`;
-    renderAdmin();
-  }catch(e){
-    const db=getDB();
-    const cnt=Object.keys(db).length;
-    const msg = e.name==='AbortError' ? 'انتهى الوقت - حاول مرة أخرى' : e.message;
-    if(statusEl) statusEl.innerHTML=cnt>0 ? `✅ جاهز محلي - <b>${cnt}</b> طالب - الشيت: ${msg} <button onclick="autoLoadSheet(true)" style="background:#fbbc04;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:11px">🔄 حاول تاني (20ث)</button>` : `⚠ الخدمة غير متاحة (${msg}) - سجل جديد أولا <button onclick="autoLoadSheet(true)" style="background:#fbbc04;border:none;padding:4px 8px;border-radius:6px">🔄 حاول تاني</button>`;
-    if(debugEl) debugEl.innerText=`❌ خطأ: ${msg} -  ${cnt}`;
-  }
-}
+async function fetchWithRetry(url, timeout=20000, retries=2){ for(let attempt=1; attempt<=retries+1; attempt++){ const statusEl=document.getElementById('sheet-status'); const debugEl=document.getElementById('debug-info'); try{ if(statusEl) statusEl.style.display='none'; if(debugEl) debugEl.style.display='none'; const controller = new AbortController(); const timer = setTimeout(()=>controller.abort(), timeout); const res = await fetch(url, {cache:'no-store', signal: controller.signal}); clearTimeout(timer); if(!res.ok) throw new Error('HTTP '+res.status); return res; }catch(e){ if(attempt>retries) throw e; await new Promise(r=>setTimeout(r, 800*attempt)); } } }
+async function autoLoadSheet(force=false){ const statusEl=document.getElementById('sheet-status'); const debugEl=document.getElementById('debug-info'); try{ if(!force && Object.keys(getDB()).length>0){ if(statusEl) statusEl.style.display='none'; } else { if(statusEl) statusEl.style.display='none'; } const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(), 20000, 2); const students=await res.json(); if(!Array.isArray(students)) throw new Error('رد غريب'); const db=getDB(); students.forEach(s=>{ let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.name||'').toString().trim()||disp,phone:disp,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.name) db[phone].name=(s.name||'').toString().trim(); if(s.password) db[phone].password=(s.password||'').toString().trim(); if(s.id) db[phone].id=(s.id||'').toString().trim(); if(s.isBlocked!==undefined){ db[phone].isBlocked = (s.isBlocked===true || s.isBlocked==='TRUE' || s.isBlocked==='true'); } if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } if(!db[phone].pendingCodes || Object.keys(db[phone].pendingCodes).length===0){ const nc=generateRandomCode(); db[phone].pendingCodes={}; db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; } }); saveDB(db); if(statusEl) statusEl.style.display='none'; if(debugEl) debugEl.innerText=`✅ تم التحميل`; renderAdmin(); if(currentPhone && db[currentPhone]){ renderLevels(); } }catch(e){ const db=getDB(); const cnt=Object.keys(db).length; const msg = e.name==='AbortError' ? 'انتهى الوقت' : e.message; if(statusEl) statusEl.innerHTML=cnt>0 ? `✅ جاهز محلي - <b>${cnt}</b> طالب` : `⚠ الخدمة غير متاحة`; if(debugEl) debugEl.innerText=`❌ خطأ: ${msg}`; } }
 window.addEventListener('load', ()=>{ setTimeout(()=>autoLoadSheet(false), 800); });
 
+// ====== التعديل 1: رسالة التسجيل بدون ذكر الادمن ======
 function registerPhone(){
   const name=document.getElementById('reg-name').value.trim();
   const rawPhone=document.getElementById('reg-phone').value.trim();
@@ -528,129 +215,81 @@ function registerPhone(){
   const suc=document.getElementById('reg-success');
   const btn=document.querySelector('#reg-box .btn');
   err.style.display='none'; suc.style.display='none';
+
+  // ===== فحص الحظر أولاً حتى لو الحقول فاضية =====
+  let blockedIPs = JSON.parse(localStorage.getItem('blocked_ips')||'[]');
+  if(currentIP && blockedIPs.includes(currentIP)){
+    err.innerText='🚫 جهازك محظور نهائياً من التسجيل - تواصل مع الإدارة'; err.style.display='block'; return;
+  }
+  if(phone){
+    const dbCheck=getDB();
+    const foundCheck=findStudentByPhone(dbCheck, phone);
+    if(foundCheck && foundCheck.st && foundCheck.st.isBlocked){
+      err.innerText='🚫 هذا الرقم محظور نهائياً - لا يمكن التسجيل به'; err.style.display='block'; return;
+    }
+  }
+
   if(!name||!phone||!pass){ err.innerText='❌ اكمل البيانات'; err.style.display='block'; return; }
   const db=getDB();
-  if(findStudentByPhone(db, phone)){ err.innerText='❌ الرقم موجود من قبل'; err.style.display='block'; return; }
+  if(findStudentByPhone(db, phone)){ 
+    const found = findStudentByPhone(db, phone);
+    if(found && found.st && found.st.isBlocked){
+      err.innerText='🚫 هذا الرقم محظور نهائياً - تواصل مع الإدارة'; err.style.display='block'; return;
+    }
+    err.innerText='❌ الرقم موجود من قبل'; err.style.display='block'; return; 
+  }
   const oldT=btn?btn.innerText:'تسجيل'; if(btn){btn.innerText='⏳...'; btn.disabled=true;}
   const id='Z-'+Math.floor(1000+Math.random()*9000);
-  const newCode=generateRandomCode();
+  const newCode=generateRandomCode('ZIAD-');
   const pending={}; pending[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
   db[phone]={name:name,phone:phoneDisplay,password:pass,id:id,ip:currentIP||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:pending};
   saveDB(db);
-  suc.innerText='✅ تم التسجيل بنجاح'; suc.style.display='block';
+  suc.innerText='✅ تم التسجيل بنجاح - يمكنك تسجيل الدخول الآن والبدء مباشرة'; suc.style.display='block';
   if(btn){btn.innerText=oldT; btn.disabled=false;}
   syncToSheet({name:name,phone:phoneDisplay,password:pass,id:id,ip:currentIP||'',levels:'',code:newCode,pendingCodes:JSON.stringify(pending),created:new Date().toLocaleString('ar-EG')});
-  setTimeout(()=>switchAuth('log'), 800);
+  setTimeout(()=>switchAuth('log'), 1200);
   renderAdmin();
 }
+function quickAddStudent(){ const name=document.getElementById('quick-name').value.trim(); const rawPhone=document.getElementById('quick-phone').value.trim(); const phoneDisplay=keepZeroPhone(rawPhone); const phoneKey=searchKey(rawPhone); const pass=document.getElementById('quick-pass').value.trim(); const msg=document.getElementById('quick-msg'); if(!name||!phoneKey||!pass){ msg.innerHTML='<span style="color:#d93025">❌ اكمل البيانات</span>'; return; } const db=getDB(); if(findStudentByPhone(db, phoneKey)){ msg.innerHTML='<span style="color:#d93025">❌ الرقم موجود</span>'; return; } const id='Z-'+Math.floor(1000+Math.random()*9000); const newCode=generateRandomCode('ZIAD-'); const pending={}; pending[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; db[phoneKey]={name:name,phone:phoneDisplay,password:pass,id:id,ip:'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:pending}; saveDB(db); syncToSheet({name:name,phone:phoneDisplay,password:pass,id:id,ip:'',levels:'',code:newCode,pendingCodes:JSON.stringify(pending),created:new Date().toLocaleString('ar-EG')}); msg.innerHTML='<span style="color:#137333">✅ اتضاف - ID: '+id+'</span>'; document.getElementById('quick-name').value=''; document.getElementById('quick-phone').value=''; document.getElementById('quick-pass').value=''; renderAdmin(); }
+async function loginPhone(){ 
+  const rawPhoneInput = document.getElementById('log-phone').value.trim();
+  const phone=searchKey(rawPhoneInput); 
+  const pass=document.getElementById('log-pass').value.trim(); 
+  const err=document.getElementById('log-error'); 
+  const suc=document.getElementById('log-success'); 
+  const btn=document.getElementById('login-btn'); 
+  err.style.display='none'; suc.style.display='none'; 
 
-
-function quickAddStudent(){
-  const name=document.getElementById('quick-name').value.trim();
-  const phone=document.getElementById('quick-phone').value.trim();
-  const pass=document.getElementById('quick-pass').value.trim();
-  const msg=document.getElementById('quick-msg');
-  if(!name||!phone||!pass){ msg.innerHTML='<span style="color:#d93025">❌ اكمل البيانات</span>'; return; }
-  const db=getDB();
-  const id='Z-'+Math.floor(1000+Math.random()*9000);
-  const newCode=generateRandomCode();
-  const pending={}; pending[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
-  db[phone]={name:name,phone:phone,password:pass,id:id,ip:'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:pending};
-  saveDB(db);
-  syncToSheet({name:name,phone:phone,password:pass,id:id,ip:'',levels:'',code:newCode,pendingCodes:JSON.stringify(pending),created:new Date().toLocaleString('ar-EG')});
-  msg.innerHTML='<span style="color:#137333">✅ اتضاف - ID: '+id+' - كود: '+newCode+' - يقدر يدخل حالا</span>';
-  document.getElementById('quick-name').value=''; document.getElementById('quick-phone').value=''; document.getElementById('quick-pass').value='';
-  renderAdmin();
-  const statusEl=document.getElementById('sheet-status'); if(statusEl) statusEl.innerHTML=`✅ ضفت ${phone} محلي - <b>${Object.keys(db).length}</b> طالب`;
-}
-
-async function loginPhone(){
-  const phone=searchKey(document.getElementById('log-phone').value);
-  const pass=document.getElementById('log-pass').value.trim();
-  const err=document.getElementById('log-error');
-  const suc=document.getElementById('log-success');
-  const btn=document.getElementById('login-btn');
-  err.style.display='none'; suc.style.display='none';
-  if(!phone||!pass){ err.innerText='❌ اكمل البيانات'; err.style.display='block'; return; }
-  let db=getDB(); let found=findStudentByPhone(db, phone); let st=found?found.st:null; let actualPhoneKey=found?found.key:phone;
-  if(st && (st.password||'').toString().trim()===pass){
-    currentPhone=actualPhoneKey||phone;
-    if(currentIP) st.ip=currentIP;
-    saveDB(db);
-    document.getElementById('welcome-name').innerText=st.name;
-    document.getElementById('welcome-phone').innerText=st.phone;
-    document.getElementById('welcome-id').innerText=st.id;
-    setExamStudentName();
-    switchScreen('levels-screen');
-    renderLevels();
-    setTimeout(verifyPasswordFromSheet, 2000);
-    return;
+  // ===== فحص الحظر أولاً حتى لو الحقول فاضية =====
+  let blockedIPs = JSON.parse(localStorage.getItem('blocked_ips')||'[]');
+  if(currentIP && blockedIPs.includes(currentIP)){
+    err.innerText='🚫 جهازك محظور نهائياً - تواصل مع الإدارة'; err.style.display='block'; return;
   }
-  if(st && (st.password||'').toString().trim()!==pass){
-    err.innerText='❌ الباسورد غلط'; err.style.display='block'; return;
-  }
-  const oldT=btn.innerText; btn.innerText='⏳ جاري التحميل...'; btn.disabled=true; 
-  suc.innerText='⏳ جاري التحميل...'; suc.style.display='block';
-  try{
-    const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?phone="+encodeURIComponent(phone)+"&t="+Date.now(), 20000, 2);
-    const students=await res.json();
-    if(Array.isArray(students) && students.length>0){
-      const fs=students[0]; 
-      let pwd=(fs.password||'').toString().trim();
-      if(pwd!==pass){ err.innerText='❌ الباسورد غلط'; err.style.display='block'; suc.style.display='none'; btn.innerText=oldT; btn.disabled=false; return; }
-      if(!db[phone]){ 
-        db[phone]={name:(fs.name||'').toString().trim()||phone,phone:phone,password:pwd,id:(fs.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:currentIP||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; 
-      } else {
-        db[phone].password=pwd;
-        if(fs.name) db[phone].name=fs.name;
-        if(fs.id) db[phone].id=fs.id;
-      }
-      if(fs.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; fs.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:fs.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); }
-      if(fs.pendingCodes){ try{ let pcs=JSON.parse(fs.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} }
-      if(!db[phone].pendingCodes||Object.keys(db[phone].pendingCodes).length===0){ const nc=generateRandomCode(); db[phone].pendingCodes={}; db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; }
-      if(currentIP) db[phone].ip=currentIP;
-      saveDB(db); 
-      st=db[phone]; 
-      currentPhone=actualPhoneKey||phone;
-      document.getElementById('welcome-name').innerText=st.name; 
-      document.getElementById('welcome-phone').innerText=st.phone; 
-      document.getElementById('welcome-id').innerText=st.id;
-      setExamStudentName(); 
-      switchScreen('levels-screen'); 
-      renderLevels(); 
-      btn.innerText=oldT; btn.disabled=false; suc.style.display='none';
-    } else {
-      err.innerText='❌ الرقم غير موجود، اعمل تسجيل جديد'; 
-      err.style.display='block'; suc.style.display='none'; 
-      btn.innerText=oldT; btn.disabled=false;
-    }
-  }catch(e){
-    db=getDB(); let found2=findStudentByPhone(db, phone); st=found2?found2.st:null;
-    if(st && (st.password||'').toString().trim()===pass){
-      currentPhone=actualPhoneKey||phone;
-      document.getElementById('welcome-name').innerText=st.name;
-      document.getElementById('welcome-phone').innerText=st.phone;
-      document.getElementById('welcome-id').innerText=st.id;
-      setExamStudentName();
-      switchScreen('levels-screen');
-      renderLevels();
-      btn.innerText=oldT; btn.disabled=false; suc.style.display='none';
-    } else {
-      err.innerText='❌ الرقم غير موجود'; err.style.display='block'; suc.style.display='none'; btn.innerText=oldT; btn.disabled=false;
+  if(phone){
+    let dbCheck=getDB(); 
+    let foundCheck=findStudentByPhone(dbCheck, phone); 
+    if(foundCheck && foundCheck.st && foundCheck.st.isBlocked){
+      err.innerText='🚫 هذا الحساب محظور نهائياً - تواصل مع الإدارة'; 
+      err.style.display='block'; 
+      return; 
     }
   }
-}
 
+  if(!phone||!pass){ err.innerText='❌ اكمل البيانات'; err.style.display='block'; return; } 
+  let db=getDB(); 
+  let found=findStudentByPhone(db, phone); 
+  let st=found?found.st:null; 
+  let actualPhoneKey=found?found.key:phone; 
+  // تأكيد تاني لو محظور حتى لو الباسورد غلط
+  if(st && st.isBlocked){ 
+    err.innerText='🚫 هذا الحساب محظور نهائياً - تواصل مع الإدارة'; 
+    err.style.display='block'; 
+    return; 
+  }
+  if(st && (st.password||'').toString().trim()===pass){  currentPhone=actualPhoneKey||phone; if(currentIP) st.ip=currentIP; saveDB(db); document.getElementById('welcome-name').innerText=st.name; document.getElementById('welcome-phone').innerText=st.phone; document.getElementById('welcome-id').innerText=st.id; setExamStudentName(); switchScreen('levels-screen'); renderLevels(); setTimeout(verifyPasswordFromSheet, 2000); return; } if(st && (st.password||'').toString().trim()!==pass){ err.innerText='❌ الباسورد غلط'; err.style.display='block'; return; } const oldT=btn.innerText; btn.innerText='⏳ جاري التحميل...'; btn.disabled=true; suc.style.display='none'; try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?phone="+encodeURIComponent(phone)+"&t="+Date.now(), 20000, 2); const students=await res.json(); if(Array.isArray(students) && students.length>0){ const fs=students[0]; let pwd=(fs.password||'').toString().trim(); if(pwd!==pass){ err.innerText='❌ الباسورد غلط'; err.style.display='block'; btn.innerText=oldT; btn.disabled=false; return; } if(!db[phone]){ db[phone]={name:(fs.name||'').toString().trim()||phone,phone:phone,password:pwd,id:(fs.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:currentIP||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } else { db[phone].password=pwd; if(fs.name) db[phone].name=fs.name; if(fs.id) db[phone].id=fs.id; } if(fs.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; fs.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:fs.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(fs.pendingCodes){ try{ let pcs=JSON.parse(fs.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } if(!db[phone].pendingCodes||Object.keys(db[phone].pendingCodes).length===0){ const nc=generateRandomCode(); db[phone].pendingCodes={}; db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; } if(currentIP) db[phone].ip=currentIP; saveDB(db); st=db[phone]; currentPhone=actualPhoneKey||phone; document.getElementById('welcome-name').innerText=st.name; document.getElementById('welcome-phone').innerText=st.phone; document.getElementById('welcome-id').innerText=st.id; setExamStudentName(); switchScreen('levels-screen'); renderLevels(); btn.innerText=oldT; btn.disabled=false; } else { err.innerText='❌ الرقم غير موجود، اعمل تسجيل جديد'; err.style.display='block'; btn.innerText=oldT; btn.disabled=false; } }catch(e){ db=getDB(); let found2=findStudentByPhone(db, phone); st=found2?found2.st:null; if(st && (st.password||'').toString().trim()===pass){ currentPhone=actualPhoneKey||phone; document.getElementById('welcome-name').innerText=st.name; document.getElementById('welcome-phone').innerText=st.phone; document.getElementById('welcome-id').innerText=st.id; setExamStudentName(); switchScreen('levels-screen'); renderLevels(); btn.innerText=oldT; btn.disabled=false; } else { err.innerText='❌ الرقم غير موجود'; err.style.display='block'; btn.innerText=oldT; btn.disabled=false; } } }
+function renderLevels(){ const grid=document.getElementById('levels-grid'); if(!grid) return; grid.innerHTML=''; const db=getDB(); const st=db[currentPhone]; if(!st){ grid.innerHTML='<div style="color:#d93025">سجل دخول أولا</div>'; return; } for(let i=1;i<=23;i++){ const card=document.createElement('div'); const isAvailable=!!levelsData[i]; const isUnlocked=st.unlockedLevels&&st.unlockedLevels[i]; card.className='level-card '+(isAvailable?(isUnlocked?'unlocked':'available'):'locked'); let icon='🔒',status='غير متاح'; if(isAvailable){icon=isUnlocked?'🔓':'🔐'; status=isUnlocked?'مفتوح ✅':'مقفل - بكود';} card.innerHTML=`<span style="font-size:20px">${icon}</span><div class="level-num">Level ${i}</div><div style="font-size:10px;margin-top:4px">${status}</div>`; if(isAvailable){ card.onclick=()=>onLevelClick(i,isUnlocked); } grid.appendChild(card); } }
 
-function renderLevels(){
-  const grid=document.getElementById('levels-grid'); if(!grid) return; grid.innerHTML=''; const db=getDB(); const st=db[currentPhone];
-  if(!st){ grid.innerHTML='<div style="color:#d93025">سجل دخول أولا</div>'; return; }
-  for(let i=1;i<=23;i++){ const card=document.createElement('div'); const isAvailable=!!levelsData[i]; const isUnlocked=st.unlockedLevels&&st.unlockedLevels[i];
-    card.className='level-card '+(isAvailable?(isUnlocked?'unlocked':'available'):'locked');
-    let icon='🔒',status='غير متاح'; if(isAvailable){icon=isUnlocked?'🔓':'🔐'; status=isUnlocked?'مفتوح ✅':'مقفل - بكود';}
-    card.innerHTML=`<span style="font-size:20px">${icon}</span><div class="level-num">Level ${i}</div><div style="font-size:10px;margin-top:4px">${status}</div>`;
-    if(isAvailable){ card.onclick=()=>onLevelClick(i,isUnlocked); } grid.appendChild(card); }
-}
+// ====== التعديل 2: شيل زرار واتساب من مودال الليفل ======
 function onLevelClick(levelNum, alreadyUnlocked){ selectedLevel=String(levelNum); if(alreadyUnlocked){ document.getElementById('opened-level-num').innerText=selectedLevel; switchScreen('skill-screen'); return; } pendingLevel=selectedLevel; document.getElementById('modal-level-num').innerText=selectedLevel; document.getElementById('modal-title-code').innerText=`🔒 Level ${selectedLevel} مقفول`; document.getElementById('modal-code-input').value=''; document.getElementById('modal-error').style.display='none'; document.getElementById('modal-success').style.display='none'; 
   let waBtn = document.getElementById('wa-contact-btn');
   if(!waBtn){
@@ -662,452 +301,420 @@ function onLevelClick(levelNum, alreadyUnlocked){ selectedLevel=String(levelNum)
   }
   waBtn.href='https://wa.me/201273552486?text=عايز%20كود%20Level%20'+selectedLevel;
   waBtn.innerText='💬 تواصل مع الأدمن للحصول على كود Level '+selectedLevel;
-  document.getElementById('code-modal').classList.add('active'); }
+  document.getElementById('code-modal').classList.add('active'); 
+  setTimeout(()=>{ 
+    const inp = document.getElementById('modal-code-input'); 
+    if(inp){ inp.focus(); inp.select(); } 
+  }, 150); }
 function closeCodeModal(){ document.getElementById('code-modal').classList.remove('active'); }
 function unlockLevel(){
   const codeVal=document.getElementById('modal-code-input').value.trim().toUpperCase();
   const err=document.getElementById('modal-error'); const succ=document.getElementById('modal-success'); const btn=document.getElementById('modal-unlock-btn');
   err.style.display='none'; succ.style.display='none';
   if(!codeVal){ err.innerText='❌ ادخل الكود'; err.style.display='block'; return; }
-  const db=getDB(); const st=db[currentPhone]; if(!st){ err.innerText='❌ خطأ'; err.style.display='block'; return; }
-  let found=null, key=null; if(st.pendingCodes){ for(let c in st.pendingCodes){ if(c.toUpperCase()===codeVal){ found=st.pendingCodes[c]; key=c; break; } } }
+  const db=getDB(); const st=db[currentPhone]; if(!st){ err.innerText='❌ سجل دخول أولا'; err.style.display='block'; return; }
+  let found=null, key=null;
+  const cleanInput = codeVal.toUpperCase().trim().replace(/[^A-Z0-9-]/g,'');
+  if(st.pendingCodes){ 
+    for(let c in st.pendingCodes){ 
+      const cleanStored = c.toUpperCase().trim().replace(/[^A-Z0-9-]/g,'');
+      if(cleanStored===cleanInput || c.toUpperCase()===codeVal){ found=st.pendingCodes[c]; key=c; break; } 
+    } 
+  }
+  // Debug - لو مش لاقي الكود، اطبع الأكواد الموجودة
+  if(!found){
+    console.log('Available codes:', Object.keys(st.pendingCodes||{}), 'Input:', cleanInput);
+  }
   if(found){
     btn.disabled=true; btn.innerText='⏳ جاري الفتح...';
     if(!st.unlockedLevels) st.unlockedLevels={};
     st.unlockedLevels[pendingLevel]={code:codeVal,ip:currentIP,at:new Date().toISOString()};
     delete st.pendingCodes[key];
-    const nc=generateRandomCode();
+    const nc=generateRandomCode('ZIAD-');
     st.pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString(),autoGenerated:true};
     saveDB(db);
     const allLevels = Object.keys(st.unlockedLevels).join(',');
     syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:allLevels,code:codeVal,pendingCodes:JSON.stringify(st.pendingCodes),created:new Date().toLocaleString('ar-EG')});
-    succ.innerText='تم فتح المستوى '+pendingLevel; succ.style.display='block';
-    setTimeout(()=>{ closeCodeModal(); renderLevels(); document.getElementById('opened-level-num').innerText=pendingLevel; switchScreen('skill-screen'); btn.disabled=false; btn.innerText='فتح 🔓'; },1200);
+    succ.innerText='✅ تم فتح المستوى '+pendingLevel; succ.style.display='block';
+    setTimeout(()=>{ closeCodeModal(); renderLevels(); document.getElementById('opened-level-num').innerText=pendingLevel; switchScreen('skill-screen'); btn.disabled=false; btn.innerText='فتح 🔓'; },1000);
     return;
   }
-  const cd=accessCodesDB[codeVal]; if(cd&&cd.type==='master'){ btn.disabled=true; btn.innerText='⏳...'; if(!st.unlockedLevels) st.unlockedLevels={}; st.unlockedLevels[pendingLevel]={code:codeVal,ip:currentIP,at:new Date().toISOString()}; saveDB(db); syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:currentIP,levels:pendingLevel,code:codeVal,pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')}); succ.innerText='تم فتح المستوى '+pendingLevel; succ.style.display='block'; setTimeout(()=>{ closeCodeModal(); renderLevels(); document.getElementById('opened-level-num').innerText=pendingLevel; switchScreen('skill-screen'); btn.disabled=false; btn.innerText='فتح 🔓'; },1000); return; }
+  const cd=accessCodesDB[codeVal]; if(cd&&cd.type==='master'){ btn.disabled=true; btn.innerText='⏳...'; if(!st.unlockedLevels) st.unlockedLevels={}; st.unlockedLevels[pendingLevel]={code:codeVal,ip:currentIP,at:new Date().toISOString()}; saveDB(db); syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:currentIP,levels:pendingLevel,code:codeVal,pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')}); succ.innerText='✅ تم فتح المستوى '+pendingLevel; succ.style.display='block'; setTimeout(()=>{ closeCodeModal(); renderLevels(); document.getElementById('opened-level-num').innerText=pendingLevel; switchScreen('skill-screen'); btn.disabled=false; btn.innerText='فتح 🔓'; },800); return; }
   err.innerText='❌ كود غلط - اطلب كودك الخاص من الأدمن'; err.style.display='block';
 }
-let adminInterval=null;
-
-let autoSpeed=2000;
-function toggleAutoSpeed(){
-  autoSpeed = autoSpeed===2000 ? 1000 : 2000;
-  const btn=document.getElementById('auto-toggle');
-  if(btn) btn.innerText= autoSpeed===1000 ? '🐢 بطيء 2ث' : '⏩ سريع جدا 1ث';
-  if(adminInterval) clearInterval(adminInterval);
-  adminInterval=setInterval(()=>{ const s=document.getElementById('admin-screen'); if(s&&s.classList.contains('active-screen')) pullFromSheetSilent(); }, autoSpeed);
-  const statusEl=document.getElementById('auto-status');
-  if(statusEl) statusEl.innerText='● live '+ (autoSpeed/1000) +'s';
-}
-
-function openAdminLogin(){ const modal=document.getElementById('admin-login-modal'); if(modal){ modal.classList.add('active'); const inp=document.getElementById('admin-pass-input'); if(inp){ inp.value=''; setTimeout(()=>inp.focus(),100); } } else { const p=prompt('باسورد الأدمن:'); if(p==='••••'||p==='010'||p==='admin'){ switchScreen('admin-screen'); setTimeout(()=>pullFromSheet(),400); } } }
+let adminInterval=null; let autoSpeed=2000;
+function toggleAutoSpeed(){ autoSpeed = autoSpeed===2000 ? 1000 : 2000; const btn=document.getElementById('auto-toggle'); if(btn) btn.innerText= autoSpeed===1000 ? '🐢 بطيء 2ث' : '⏩ سريع جدا 1ث'; if(adminInterval) clearInterval(adminInterval); adminInterval=setInterval(()=>{ const s=document.getElementById('admin-screen'); if(s&&s.classList.contains('active-screen')) pullFromSheetSilent(); }, autoSpeed); const statusEl=document.getElementById('auto-status'); if(statusEl) statusEl.innerText='● live '+ (autoSpeed/1000) +'s'; }
+function openAdminLogin(){ const modal=document.getElementById('admin-login-modal'); if(modal){ modal.classList.add('active'); const inp=document.getElementById('admin-pass-input'); if(inp){ inp.value=''; setTimeout(()=>inp.focus(),100); } } }
 function closeAdminLogin(){ const m=document.getElementById('admin-login-modal'); if(m) m.classList.remove('active'); }
 function loginAdmin(){ const pass=document.getElementById('admin-pass-input').value.trim(); const err=document.getElementById('admin-login-error'); if(pass==='••••'||pass==='010'||pass==='admin'||pass==='ZIAD-MASTER-2024'){ closeAdminLogin(); switchScreen('admin-screen'); setTimeout(()=>pullFromSheet(),300); if(adminInterval) clearInterval(adminInterval); adminInterval=setInterval(()=>{ const s=document.getElementById('admin-screen'); if(s&&s.classList.contains('active-screen')) pullFromSheetSilent(); },2000); } else { err.innerText='❌ باسورد غلط'; err.style.display='block'; } }
-async function pullFromSheet(){ const statusEl=document.getElementById('auto-status'); if(statusEl){ statusEl.innerText='● جاري السحب...'; statusEl.style.color='#fbbc04'; } try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,2); const students=await res.json(); if(!Array.isArray(students)) throw new Error('invalid'); const db=getDB(); students.forEach(s=>{
-      let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.name||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.name) db[phone].name=s.name; if(s.password) db[phone].password=s.password; if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } if(!db[phone].pendingCodes||Object.keys(db[phone].pendingCodes).length===0){ const nc=generateRandomCode(); db[phone].pendingCodes={}; db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; syncToSheet({name:db[phone].name,phone:db[phone].phone,password:db[phone].password,id:db[phone].id,ip:db[phone].ip,levels:Object.keys(db[phone].unlockedLevels||{}).join(','),code:nc,pendingCodes:JSON.stringify(db[phone].pendingCodes),created:new Date().toLocaleString('ar-EG')}); } }); saveDB(db); renderAdmin(); if(statusEl){ statusEl.innerText='● live - '+new Date().toLocaleTimeString('ar-EG')+' - '+Object.keys(db).length+' طالب'; statusEl.style.color='#34a853'; } }catch(e){ if(statusEl){ statusEl.innerText='● خطأ: '+e.message; statusEl.style.color='#d93025'; } } }
-async function pullFromSheetSilent(){ try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,1); const students=await res.json(); if(!Array.isArray(students)) return; const db=getDB(); students.forEach(s=>{
-      let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.phone||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } }); saveDB(db); renderAdmin(); }catch(e){} }
-function renderAdmin(){
-  const db=getDB();
-  const tbody=document.getElementById('admin-tbody'); if(!tbody) return;
-  const search=(document.getElementById('admin-search')?.value||'').toLowerCase();
-  tbody.innerHTML='';
-  let total=0,today=0,unlocked=0;
-  const todayStr=new Date().toDateString();
-  const entries=Object.entries(db);
-  if(entries.length===0){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">لا يوجد طلاب - دوس سحب </td></tr>'; }
-  entries.forEach(([dbKey, st])=>{
-    if(!st||!st.phone) return;
-    if(search&&!(`${st.name} ${st.phone} ${st.id} ${dbKey}`.toLowerCase().includes(search))) return;
-    total++;
-    try{ if(new Date(st.created).toDateString()===todayStr) today++; }catch(e){}
-    if(st.unlockedLevels&&Object.keys(st.unlockedLevels).length>0) unlocked++;
-    let levelsStr=Object.keys(st.unlockedLevels||{}).map(l=>`L${l}`).join(', ')||'—';
-    let firstCode=st.pendingCodes?Object.keys(st.pendingCodes)[0]:'';
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${st.name}</td><td dir="ltr">${st.phone}</td><td dir="ltr">${st.password}</td><td>${st.id}</td><td dir="ltr">${(st.ip||'').substring(0,16)}</td><td>${levelsStr}</td><td dir="ltr"><div style="font-weight:bold;color:#1a73e8">${firstCode||'—'}</div></td><td><div style="display:flex;flex-direction:column;gap:4px"><button class="btn btn-small" style="background:#1a73e8" onclick="openEditModal('${dbKey}')">✏ تعديل</button><button class="btn btn-small" style="background:#0f9d58" onclick="copyCode('${firstCode}')">نسخ</button></div></td>`;
-    tbody.appendChild(tr);
-  });
-  const el1=document.getElementById('stat-total'); if(el1) el1.innerText=total;
-  const el2=document.getElementById('stat-today'); if(el2) el2.innerText=today;
-  const el3=document.getElementById('stat-unlocked'); if(el3) el3.innerText=unlocked;
-}
-function openEditModal(dbKey){
-  const db=getDB();
-  // ندور على الطالب بالمفتاح أو بالرقم بعد تنظيفه
-  let st=db[dbKey];
-  let actualKey=dbKey;
-  if(!st){
-    const cleaned=searchKey(dbKey);
-    st=db[cleaned];
-    actualKey=cleaned;
-  }
-  if(!st){alert('مش موجود - حاول مرة أخرى'); return;}
-  document.getElementById('edit-phone-old').value=actualKey;
-  document.getElementById('edit-name').value=st.name||'';
-  document.getElementById('edit-phone').value=st.phone||'';
-  document.getElementById('edit-pass').value=st.password||'';
-  document.getElementById('edit-id').value=st.id||'';
-  document.getElementById('edit-ip').value=st.ip||'';
-  document.getElementById('edit-levels').value=Object.keys(st.unlockedLevels||{}).join(',');
-  document.getElementById('edit-msg').style.display='none';
-  document.getElementById('edit-modal').classList.add('active');
-  renderPendingCodesList(actualKey);
-}
+async function pullFromSheet(){ const statusEl=document.getElementById('auto-status'); if(statusEl){ statusEl.innerText='● جاري السحب...'; statusEl.style.color='#fbbc04'; } try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,2); const students=await res.json(); if(!Array.isArray(students)) throw new Error('invalid'); const db=getDB(); students.forEach(s=>{ let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.name||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{},isBlocked:false}; } if(s.name) db[phone].name=s.name; if(s.password) db[phone].password=s.password; if(s.isBlocked!==undefined){ db[phone].isBlocked = (s.isBlocked===true || s.isBlocked==='TRUE' || s.isBlocked==='true'); if(db[phone].isBlocked && s.ip){ let bIPs=JSON.parse(localStorage.getItem('blocked_ips')||'[]'); if(!bIPs.includes(s.ip)) bIPs.push(s.ip); localStorage.setItem('blocked_ips', JSON.stringify(bIPs)); } } if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } if(!db[phone].pendingCodes||Object.keys(db[phone].pendingCodes).length===0){ const nc=generateRandomCode(); db[phone].pendingCodes={}; db[phone].pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; syncToSheet({name:db[phone].name,phone:db[phone].phone,password:db[phone].password,id:db[phone].id,ip:db[phone].ip,levels:Object.keys(db[phone].unlockedLevels||{}).join(','),code:nc,pendingCodes:JSON.stringify(db[phone].pendingCodes),created:new Date().toLocaleString('ar-EG')}); } }); saveDB(db); renderAdmin(); if(statusEl){ statusEl.innerText='● live - '+new Date().toLocaleTimeString('ar-EG')+' - '+Object.keys(db).length+' طالب'; statusEl.style.color='#34a853'; } }catch(e){ if(statusEl){ statusEl.innerText='● خطأ: '+e.message; statusEl.style.color='#d93025'; } } }
+async function pullFromSheetSilent(){ try{ const res=await fetchWithRetry(GOOGLE_SHEET_URL+"?t="+Date.now(),20000,1); const students=await res.json(); if(!Array.isArray(students)) return; const db=getDB(); students.forEach(s=>{ let disp=keepZeroPhone(s.phone||''); let phone=searchKey(s.phone||''); if(!phone) return; if(!db[phone]){ db[phone]={name:(s.phone||'').toString().trim()||phone,phone:phone,password:(s.password||'').toString().trim()||'123',id:(s.id||'').toString().trim()||'Z-'+Math.floor(1000+Math.random()*9000),ip:(s.ip||'').toString().trim()||'',created:new Date().toISOString(),unlockedLevels:{},pendingCodes:{}}; } if(s.levels){ if(!db[phone].unlockedLevels) db[phone].unlockedLevels={}; s.levels.toString().split(',').forEach(l=>{ let n=l.toString().replace(/[^0-9]/g,''); if(n) db[phone].unlockedLevels[n]={code:s.code||'FROM-SHEET',ip:'sheet',at:new Date().toISOString()}; }); } if(s.pendingCodes){ try{ let pcs=JSON.parse(s.pendingCodes); if(typeof pcs==='object'&&Object.keys(pcs).length>0) db[phone].pendingCodes=pcs; }catch(e){} } }); saveDB(db); renderAdmin(); }catch(e){} }
+window.blockStudent = function(dbKey){ 
+  try{ 
+    const db = JSON.parse(localStorage.getItem('students_db_final')||'{}'); 
+    let st = db[dbKey]; 
+    let realKey = dbKey; 
+    if(!st){ for(let k in db){ if(k===dbKey){ st=db[k]; realKey=k; break; } } } 
+    if(!st){ alert('مش لاقي الطالب'); return; } 
+    st.isBlocked = !st.isBlocked; 
+    // IP blocking محلي + عالمي
+    let blockedIPs = JSON.parse(localStorage.getItem('blocked_ips')||'[]');
+    if(st.isBlocked){
+      if(st.ip && !blockedIPs.includes(st.ip)) blockedIPs.push(st.ip);
+    } else {
+      if(st.ip) blockedIPs = blockedIPs.filter(ip=>ip!==st.ip);
+    }
+    localStorage.setItem('blocked_ips', JSON.stringify(blockedIPs));
+    db[realKey]=st; 
+    localStorage.setItem('students_db_final', JSON.stringify(db)); 
+    // سينك للشيت عشان يسمع في كل الأجهزة
+    syncToSheet({
+      name: st.name,
+      phone: st.phone,
+      password: st.password,
+      id: st.id,
+      ip: st.ip,
+      levels: Object.keys(st.unlockedLevels||{}).join(','),
+      code: Object.keys(st.pendingCodes||{})[0]||'',
+      pendingCodes: JSON.stringify(st.pendingCodes||{}),
+      isBlocked: st.isBlocked ? 'TRUE' : 'FALSE',
+      blockedIP: st.isBlocked ? st.ip : '',
+      created: new Date().toLocaleString('ar-EG')
+    });
+    renderAdmin();
+    alert(st.isBlocked ? '🚫 اتبلك '+st.name+' واتسجل في الشيت - هيتحظر من أي جهاز' : '✅ اتفك الحظر عن '+st.name+' من كل الأجهزة'); 
+  }catch(e){ alert('خطأ: '+e.message); } 
+};
+function renderAdmin(){ const db=getDB(); const tbody=document.getElementById('admin-tbody'); if(!tbody) return; const search=(document.getElementById('admin-search')?.value||'').toLowerCase(); tbody.innerHTML=''; let total=0,today=0,unlocked=0; const todayStr=new Date().toDateString(); const entries=Object.entries(db); if(entries.length===0){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">لا يوجد طلاب</td></tr>'; return; } for(let i=0;i<entries.length;i++){ const dbKey=entries[i][0]; const st=entries[i][1]; if(!st||!st.phone) continue; if(search && !( (st.name+' '+st.phone+' '+st.id+' '+dbKey).toLowerCase().includes(search) )) continue; total++; try{ if(new Date(st.created).toDateString()===todayStr) today++; }catch(e){} if(st.unlockedLevels&&Object.keys(st.unlockedLevels).length>0) unlocked++; let levelsStr=Object.keys(st.unlockedLevels||{}).map(function(l){return 'L'+l;}).join(', ')||'—'; let firstCode=st.pendingCodes?Object.keys(st.pendingCodes)[0]:''; const isBlocked=!!st.isBlocked; let displayPhone=st.phone; const clean=displayPhone.toString().replace(/[^0-9]/g,''); if(clean.length===10 && clean.startsWith('1')) displayPhone='0'+clean; const blockLabel=isBlocked?'فك بلوك':'بلوك'; const blockColor=isBlocked?'#0f9d58':'#d93025'; const codeShow=isBlocked?'مبلك 🚫':(firstCode||'—'); const codeColor=isBlocked?'#d93025':'#1a73e8'; const rowBg=isBlocked?' style="background:#fce8e6"' : ''; tbody.innerHTML += '<tr'+rowBg+'><td>'+st.name+(isBlocked?' 🚫':'')+'</td><td dir="ltr">'+displayPhone+'</td><td dir="ltr">'+st.password+'</td><td>'+st.id+'</td><td dir="ltr">'+(st.ip||'').substring(0,16)+'</td><td>'+levelsStr+'</td><td dir="ltr"><div style="font-weight:bold;color:'+codeColor+'">'+codeShow+'</div></td><td><div style="display:flex;flex-direction:column;gap:4px"><button class="btn btn-small" style="background:#1a73e8" onclick="openEditModal(\''+dbKey+'\')">تعديل</button><button class="btn btn-small" style="background:'+blockColor+';color:#fff" onclick="blockStudent(\''+dbKey+'\')"> '+blockLabel+' </button></div></td></tr>'; } const el1=document.getElementById('stat-total'); if(el1) el1.innerText=total; const el2=document.getElementById('stat-today'); if(el2) el2.innerText=today; const el3=document.getElementById('stat-unlocked'); if(el3) el3.innerText=unlocked; }
+function openEditModal(dbKey){ const db=getDB(); let st=db[dbKey]; let actualKey=dbKey; if(!st){ const cleaned=searchKey(dbKey); st=db[cleaned]; actualKey=cleaned; } if(!st){alert('مش موجود'); return;} document.getElementById('edit-phone-old').value=actualKey; document.getElementById('edit-name').value=st.name||''; document.getElementById('edit-phone').value=st.phone||''; document.getElementById('edit-pass').value=st.password||''; document.getElementById('edit-id').value=st.id||''; document.getElementById('edit-ip').value=st.ip||''; document.getElementById('edit-levels').value=Object.keys(st.unlockedLevels||{}).join(','); document.getElementById('edit-msg').style.display='none'; document.getElementById('edit-modal').classList.add('active'); renderPendingCodesList(actualKey); renderLevelsInEdit(actualKey); }
 function closeEditModal(){ document.getElementById('edit-modal').classList.remove('active'); }
-function saveEditStudent(){
-  const oldKey=document.getElementById('edit-phone-old').value.trim();
-  const oldKeyClean=searchKey(oldKey) || oldKey;
-  const newName=document.getElementById('edit-name').value.trim();
-  const newPhoneRaw=document.getElementById('edit-phone').value.trim();
-  const newPhoneDisplay=keepZeroPhone(newPhoneRaw);
-  const newPhoneKey=searchKey(newPhoneRaw);
-  const newPass=document.getElementById('edit-pass').value.trim();
-  const newIP=document.getElementById('edit-ip').value.trim();
-  const newLevels=document.getElementById('edit-levels').value.trim();
-  if(!newName||!newPhoneKey||!newPass){alert('اكمل البيانات'); return;}
+
+function applyLevelsFromInput(){
+  const raw = document.getElementById('edit-levels').value.trim();
+  if(!raw){ return; }
+  const phone = document.getElementById('edit-phone-old').value.trim();
   const db=getDB();
-  const st=db[oldKeyClean] || db[oldKey];
-  if(!st){alert('الطالب مش موجود'); return;}
-  if(newPhoneKey!==oldKeyClean){
-    if(db[newPhoneKey]){alert('الرقم موجود بالفعل'); return;}
-    delete db[oldKeyClean];
-    if(oldKey!==oldKeyClean && db[oldKey]) delete db[oldKey];
+  let st=db[phone];
+  if(!st){ const found=findStudentByPhone(db, phone); if(found){ st=found.st; phone=found.key; } }
+  if(!st) return;
+  // اعتبر اللي في الانبوت هو اللي عايزه بالظبط
+  const levels = raw.split(',').map(s=>s.trim().replace(/[^0-9]/g,'')).filter(s=>s);
+  if(!st.unlockedLevels) st.unlockedLevels={};
+  // لو الانبوت فاضي، امسح كله
+  if(levels.length===0){ st.unlockedLevels={}; }
+  else {
+    const newObj={};
+    levels.forEach(l=>{ newObj[l]= st.unlockedLevels[l] || {code:'MANUAL-INPUT',ip:'admin',at:new Date().toISOString()}; });
+    st.unlockedLevels=newObj;
   }
-  st.name=newName;
-  st.phone=newPhoneDisplay;
-  st.password=newPass;
-  st.ip=newIP;
-  if(!st.pendingCodes||Object.keys(st.pendingCodes).length===0){
-    const nc=generateRandomCode('ZIAD-');
-    st.pendingCodes={};
-    st.pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
-  }
-  if(newLevels){
-    if(!st.unlockedLevels) st.unlockedLevels={};
-    const keep=st.unlockedLevels;
-    st.unlockedLevels={};
-    newLevels.split(',').forEach(l=>{ let num=l.replace(/[^0-9]/g,'').trim(); if(num) st.unlockedLevels[num]=keep[num]||{code:'ADMIN-EDIT',ip:'admin',at:new Date().toISOString()}; });
-  }
-  db[newPhoneKey]=st;
+  const actualKey = searchKey(st.phone)||phone;
+  db[actualKey]=st;
   saveDB(db);
-  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:newLevels,code:'ADMIN-EDIT',pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')});
+  renderLevelsInEdit(actualKey);
   renderAdmin();
-  const msg=document.getElementById('edit-msg');
-  msg.innerText='✅ تم الحفظ - كود: '+(Object.keys(st.pendingCodes)[0]||'');
-  msg.style.display='block';
-  setTimeout(()=>closeEditModal(),1000);
+}
+
+function saveEditStudent(){ 
+  const oldKeyRaw=document.getElementById('edit-phone-old').value.trim(); 
+  const oldKey=searchKey(oldKeyRaw)||oldKeyRaw; 
+  const newName=document.getElementById('edit-name').value.trim(); 
+  const newPhoneRaw=document.getElementById('edit-phone').value.trim(); 
+  const newPhoneDisplay=keepZeroPhone(newPhoneRaw); 
+  const newPhoneKey=searchKey(newPhoneRaw); 
+  const newPass=document.getElementById('edit-pass').value.trim(); 
+  const newIP=document.getElementById('edit-ip').value.trim(); 
+  const newLevels=document.getElementById('edit-levels').value.trim(); 
+  if(!newName||!newPhoneKey||!newPass){alert('اكمل البيانات'); return;} 
+  const db=getDB(); 
+  let st=db[oldKey]; 
+  if(!st){ const found=findStudentByPhone(db, oldKey); if(found){ st=found.st; } } 
+  if(!st){alert('الطالب مش موجود'); return;} 
+  if(newPhoneKey!==oldKey){ if(db[newPhoneKey]){alert('الرقم الجديد موجود بالفعل'); return;} delete db[oldKey]; } 
+  st.name=newName; 
+  st.phone=newPhoneDisplay; 
+  st.password=newPass; 
+  st.ip=newIP; 
+  // لو مفيش كود خالص، اعمل كود واحد بس - مش هستري
+  if(!st.pendingCodes||Object.keys(st.pendingCodes).length===0){ 
+    const nc=generateRandomCode('ZIAD-'); 
+    st.pendingCodes={}; 
+    st.pendingCodes[nc]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()}; 
+  } else {
+    // لو فيه أكتر من كود (جلتش قديم)، خلي واحد بس الأحدث
+    const codes = Object.keys(st.pendingCodes);
+    if(codes.length>1){
+      const latest = codes[codes.length-1];
+      const keep = st.pendingCodes[latest];
+      st.pendingCodes = {};
+      st.pendingCodes[latest]=keep;
+    }
+  }
+  if(newLevels){ 
+    if(!st.unlockedLevels) st.unlockedLevels={}; 
+    const keep=st.unlockedLevels; 
+    st.unlockedLevels={}; 
+    newLevels.split(',').forEach(l=>{ let num=l.replace(/[^0-9]/g,'').trim(); if(num) st.unlockedLevels[num]=keep[num]||{code:'ADMIN-EDIT',ip:'admin',at:new Date().toISOString()}; }); 
+  } 
+  db[newPhoneKey]=st; 
+  saveDB(db); 
+  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:newLevels,code:'ADMIN-EDIT',pendingCodes:JSON.stringify(st.pendingCodes||{}),isBlocked: st.isBlocked ? 'TRUE' : 'FALSE', blockedIP: st.isBlocked ? st.ip : '', created:new Date().toLocaleString('ar-EG')}); 
+  renderAdmin(); 
+  renderPendingCodesList(newPhoneKey);
+  renderLevelsInEdit(newPhoneKey);
+  const msg=document.getElementById('edit-msg'); 
+  msg.innerText='✅ تم الحفظ - الكود: '+(Object.keys(st.pendingCodes)[0]||'')+' | ليفلات: '+(Object.keys(st.unlockedLevels).join(',')||'مفيش'); 
+  msg.style.display='block'; 
+  msg.style.background='#e6f4ea';
+  msg.style.border='1px solid #0f9d58';
+  msg.style.padding='10px';
+  msg.style.borderRadius='8px';
+  // متقفلهوش اوتوماتيك عشان تشوف النتيجة
 }
 function resetStudentIP(){ document.getElementById('edit-ip').value=''; }
-function generateCodeForStudent(phone, prefix){
-  if(!prefix) prefix='ZIAD-';
-  if(!phone) phone=document.getElementById('edit-phone-old')?.value.trim();
-  if(!phone){alert('حدد الطالب'); return;}
-  const db=getDB(); const st=db[phone];
-  if(!st){alert('مش موجود'); return;}
-  const newCode=generateRandomCode(prefix);
-  st.pendingCodes={};
-  st.pendingCodes[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString()};
-  saveDB(db);
-  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:Object.keys(st.unlockedLevels||{}).join(','),code:newCode,pendingCodes:JSON.stringify(st.pendingCodes),created:new Date().toLocaleString('ar-EG')});
-  renderAdmin();
-  renderPendingCodesList(phone);
-  try{navigator.clipboard.writeText(newCode);}catch(e){}
-  return newCode;
+function generateCodeForStudent(phone, prefix){ 
+  if(!prefix) prefix='ZIAD-'; 
+  if(!phone) phone=document.getElementById('edit-phone-old').value.trim(); 
+  if(!phone){alert('حدد الطالب'); return;} 
+  const db=getDB(); 
+  // دور على الطالب بأي طريقة
+  let st=null, actualKey=null;
+  let dbKey=searchKey(phone)||phone;
+  if(db[dbKey]){ st=db[dbKey]; actualKey=dbKey; }
+  else {
+    const found=findStudentByPhone(db, phone);
+    if(found){ st=found.st; actualKey=found.key; }
+  }
+  if(!st){ 
+    // جرب تدور بكل المفاتيح
+    for(let k in db){ if(k.includes(dbKey) || dbKey.includes(k) || db[k].id===phone){ st=db[k]; actualKey=k; break; } }
+  }
+  if(!st){alert('الطالب مش موجود: '+phone); return;} 
+  actualKey = actualKey || searchKey(st.phone) || dbKey;
+  const newCode=generateRandomCode(prefix); 
+  st.pendingCodes={}; 
+  st.pendingCodes[newCode]={level:'*',generic:true,used:false,createdAt:new Date().toISOString(),prefix:prefix}; 
+  db[actualKey]=st; 
+  saveDB(db); 
+  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:Object.keys(st.unlockedLevels||{}).join(','),code:newCode,pendingCodes:JSON.stringify(st.pendingCodes),isBlocked: st.isBlocked ? 'TRUE' : 'FALSE', blockedIP: st.ip||'', created:new Date().toLocaleString('ar-EG')}); 
+  renderAdmin(); 
+  renderPendingCodesList(actualKey); 
+  renderLevelsInEdit(actualKey);
+  try{navigator.clipboard.writeText(newCode);}catch(e){} 
+  const msg=document.getElementById('edit-msg');
+  if(msg){ msg.innerText='✅ كود جديد: '+newCode; msg.style.display='block'; }
+  return newCode; 
 }
-function adminOpenLevelDirect(phone,level){ if(!phone){alert('حدد'); return;} const db=getDB(); const st=db[phone]; if(!st){alert('مش موجود'); return;} if(!level){level=prompt('رقم الليفل:','19'); if(!level) return;} level=level.toString().replace(/[^0-9]/g,'').trim(); if(!level) return; if(!st.unlockedLevels) st.unlockedLevels={}; st.unlockedLevels[level]={code:'ADMIN-DIRECT',ip:'admin',at:new Date().toISOString()}; saveDB(db); syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:level+','+Object.keys(st.unlockedLevels).join(','),code:'ADMIN-DIRECT',pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')}); renderAdmin(); renderPendingCodesList(phone); const inp=document.getElementById('edit-levels'); if(inp){ let arr=inp.value.trim()?inp.value.split(',').map(x=>x.trim()):[]; if(!arr.includes(level)) arr.push(level); inp.value=arr.join(','); } }
-function renderPendingCodesList(phone){
-  const db=getDB(); const st=db[phone]; const c=document.getElementById('pending-codes-list'); if(!c) return;
-  if(!st||!st.pendingCodes||Object.keys(st.pendingCodes).length===0){
-    c.innerHTML='<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;text-align:center"><small>⚠ مفيش كود - دوس كود جديد</small><br><div style="display:flex;gap:8px;margin-top:8px"><button onclick="generateCodeForStudent(\''+phone+'\', \'ZIAD-\')" style="flex:1;background:#1a73e8;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">🎫 ZIAD</button><button onclick="generateCodeForStudent(\''+phone+'\', \'GANGONA-\')" style="flex:1;background:#6f42c1;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">🔥 GANGONA</button></div></div>';
+function adminOpenLevelDirect(phone,level){ 
+  if(!phone){alert('حدد الطالب'); return;} 
+  const dbKey=searchKey(phone)||phone; 
+  const db=getDB(); 
+  let st=db[dbKey]; 
+  if(!st){ const found=findStudentByPhone(db, phone); if(found) st=found.st; } 
+  if(!st){alert('مش موجود'); return;} 
+  if(!level){level=prompt('رقم الليفل اللي عايز تفتحه:','19'); if(!level) return;} 
+  level=level.toString().replace(/[^0-9]/g,'').trim(); if(!level) return; 
+  if(!st.unlockedLevels) st.unlockedLevels={}; 
+  st.unlockedLevels[level]={code:'ADMIN-DIRECT',ip:'admin',at:new Date().toISOString()}; 
+  const actualKey=searchKey(st.phone)||dbKey; 
+  db[actualKey]=st; 
+  saveDB(db); 
+  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:Object.keys(st.unlockedLevels).join(','),code:'ADMIN-DIRECT',pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')}); 
+  renderAdmin(); 
+  renderLevelsInEdit(actualKey);
+  const inp=document.getElementById('edit-levels'); 
+  if(inp){ inp.value=Object.keys(st.unlockedLevels).join(','); } 
+}
+
+function adminRemoveLevelDirect(phone,level){
+  if(!phone){alert('حدد الطالب'); return;}
+  const dbKey=searchKey(phone)||phone;
+  const db=getDB();
+  let st=db[dbKey];
+  if(!st){ const found=findStudentByPhone(db, phone); if(found) st=found.st; }
+  if(!st){alert('مش موجود'); return;}
+  if(!level){level=prompt('رقم الليفل اللي عايز تلغيه:',''); if(!level) return;}
+  level=level.toString().replace(/[^0-9]/g,'').trim(); if(!level) return;
+  if(!st.unlockedLevels || !st.unlockedLevels[level]){ alert('الليفل '+level+' مش مفتوح أصلاً'); return; }
+  if(!confirm('هتلغي الليفل '+level+' للطالب '+st.name+' ؟')) return;
+  delete st.unlockedLevels[level];
+  const actualKey=searchKey(st.phone)||dbKey;
+  db[actualKey]=st;
+  saveDB(db);
+  syncToSheet({name:st.name,phone:st.phone,password:st.password,id:st.id,ip:st.ip,levels:Object.keys(st.unlockedLevels).join(','),code:'ADMIN-REMOVE-'+level,pendingCodes:JSON.stringify(st.pendingCodes||{}),created:new Date().toLocaleString('ar-EG')});
+  renderAdmin();
+  renderLevelsInEdit(actualKey);
+  const inp=document.getElementById('edit-levels');
+  if(inp){ inp.value=Object.keys(st.unlockedLevels).join(','); }
+}
+
+function renderLevelsInEdit(phone){
+  const db=getDB();
+  let st=db[phone];
+  if(!st) st=db[searchKey(phone)];
+  const container = document.getElementById('edit-levels-chips');
+  if(!container) return;
+  if(!st||!st.unlockedLevels||Object.keys(st.unlockedLevels).length===0){
+    container.innerHTML='<div style="color:#5f6368;font-size:13px;padding:8px">مفيش ليفلات مفتوحة</div>';
     return;
   }
-  let html='<div style="border:2px solid #1a73e8;border-radius:10px;padding:8px;background:#e8f0fe">';
-  for(let code in st.pendingCodes){
-    const isGangona = code.startsWith('GANGONA-');
-    const color = isGangona ? '#6f42c1' : '#1a73e8';
-    const label = isGangona ? 'كود GANGONA الحالي:' : 'الكود الحالي (ZIAD):';
-    html+=`<div style="background:#fff;border-radius:8px;padding:12px;text-align:center;margin-bottom:8px"><div style="font-size:10px;color:#5f6368">${label}</div><div dir="ltr" style="direction:ltr;font-weight:bold;font-size:18px;color:${color};background:#f1f3f4;padding:10px;border-radius:8px;border:2px dashed ${color}">${code}</div><div style="display:flex;gap:8px;margin-top:10px"><button onclick="copyCode('${code}')" style="flex:1;background:${color};color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer">نسخ</button><button onclick="generateCodeForStudent('${phone}', '${isGangona ? 'GANGONA-' : 'ZIAD-'}')" style="flex:1;background:#fbbc04;color:#000;border:none;padding:8px;border-radius:6px;cursor:pointer">🔄 غيره</button></div></div>`;
-  }
-  html+='<div style="display:flex;gap:8px;margin-top:10px"><button onclick="generateCodeForStudent(\''+phone+'\', \'ZIAD-\')" style="flex:1;background:#1a73e8;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold">🎫 ولد ZIAD</button><button onclick="generateCodeForStudent(\''+phone+'\', \'GANGONA-\')" style="flex:1;background:#6f42c1;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold">🔥 ولد GANGONA</button></div></div>';
-  c.innerHTML=html;
+  let h='';
+  Object.keys(st.unlockedLevels).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(l=>{
+    h+=`<span style="display:inline-flex;align-items:center;gap:6px;background:#e8f0fe;border:1px solid #1a73e8;color:#1a73e8;padding:6px 10px;border-radius:20px;margin:4px;font-size:13px;font-weight:bold">L${l} <button onclick="adminRemoveLevelDirect('${phone}','${l}')" style="background:#d93025;color:#fff;border:none;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:12px;line-height:1">✕</button></span>`;
+  });
+  container.innerHTML=h;
 }
-function copyCode(code){
-  if(!code){alert('مفيش كود'); return;}
-  const done = ()=>{
-    const m=document.getElementById('edit-msg')||document.getElementById('admin-msg');
-    if(m){ m.innerText='تم النسخ: '+code; m.style.display='block'; setTimeout(()=>m.style.display='none',2000); }
-  };
+function renderPendingCodesList(phone){ 
+  const db=getDB(); 
+  let st=db[phone]; 
+  if(!st) st=db[searchKey(phone)]; 
+  const c=document.getElementById('pending-codes-list'); 
+  if(!c) return; 
+  if(!st||!st.pendingCodes||Object.keys(st.pendingCodes).length===0){ 
+    c.innerHTML='<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;text-align:center"><small>⚠ مفيش كود - اعمل كود جديد</small><br><div style="display:flex;gap:8px;margin-top:8px"><button onclick="generateCodeForStudent(\''+phone+'\', \'ZIAD-\')" style="flex:1;background:#1a73e8;color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer">🎫 ZIAD</button><button onclick="generateCodeForStudent(\''+phone+'\', \'GANGONA-\')" style="flex:1;background:#6f42c1;color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer">🔥 GANGONA</button></div></div>'; 
+    return; 
+  } 
+  // خلي كود واحد بس - الأحدث
+  let codes = Object.keys(st.pendingCodes);
+  let code = codes[codes.length-1];
+  // متعملش تنظيف تلقائي هنا - خلي الكود مستقر
+  const isGangona=code.startsWith('GANGONA-'); 
+  const color=isGangona?'#6f42c1':'#1a73e8'; 
+  const label=isGangona?'كود GANGONA الحالي:':'الكود الحالي (ZIAD):'; 
+  let html='<div style="border:2px solid '+color+';border-radius:10px;padding:8px;background:#e8f0fe">';
+  html+='<div style="background:#fff;border-radius:8px;padding:12px;text-align:center;margin-bottom:8px"><div style="font-size:10px;color:#5f6368">'+label+'</div><div dir="ltr" style="direction:ltr;font-weight:bold;font-size:18px;color:'+color+';background:#f1f3f4;padding:10px;border-radius:8px;border:2px dashed '+color+';word-break:break-all">'+code+'</div><div style="display:flex;gap:8px;margin-top:10px"><button data-old-bg="'+color+'" onclick="copyCode(\''+code+'\', event)" style="flex:1;background:'+color+';color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer">نسخ</button><button onclick="generateCodeForStudent(\''+phone+'\', \''+(isGangona?'GANGONA-':'ZIAD-')+'\')" style="flex:1;background:#fbbc04;color:#000;border:none;padding:8px;border-radius:6px;cursor:pointer">🔄 غيره</button></div></div>';
+  html+='<div style="display:flex;gap:8px;margin-top:10px"><button onclick="generateCodeForStudent(\''+phone+'\', \'ZIAD-\')" style="flex:1;background:#1a73e8;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold">🎫 كود ZIAD جديد</button><button onclick="generateCodeForStudent(\''+phone+'\', \'GANGONA-\')" style="flex:1;background:#6f42c1;color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:bold">🔥 كود GANGONA جديد</button></div></div>';
+  c.innerHTML=html; 
+}
+// ====== التعديل 3: إصلاح زرار النسخ البنفسجي ======
+function copyCode(code, evt){
+  if(!code) return;
+  let copied = false;
+  // طريقة حديثة
   if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(code).then(done).catch(()=>fallbackCopyCode(code, done));
-  } else {
-    fallbackCopyCode(code, done);
+    navigator.clipboard.writeText(code).then(()=>{}).catch(()=>{});
+    copied = true;
   }
-}
-function fallbackCopyCode(text, callback){
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position='fixed';
-  ta.style.opacity='0';
-  document.body.appendChild(ta);
-  ta.select();
+  // طريقة قديمة مضمونة للأدمن
   try{
+    const ta=document.createElement('textarea'); 
+    ta.value=code; 
+    ta.style.position='fixed'; 
+    ta.style.top='0'; 
+    ta.style.left='0';
+    ta.style.opacity='0';
+    document.body.appendChild(ta); 
+    ta.focus();
+    ta.select(); 
     document.execCommand('copy');
-    if(callback) callback();
-  }catch(e){
-    prompt('انسخ الكود:', text);
+    document.body.removeChild(ta);
+    copied = true;
+  }catch(e){}
+
+  const b = (evt && evt.target) ? evt.target : (window.event && window.event.target ? window.event.target : null);
+  if(b){
+    if(!b.dataset.oldBg) b.dataset.oldBg = b.style.background || '';
+    if(!b.dataset.oldText) b.dataset.oldText = b.innerText;
+    const originalText = b.dataset.oldText;
+    const originalBg = b.dataset.oldBg;
+    b.innerText='✅ تم النسخ';
+    b.style.background='#0f9d58';
+    setTimeout(()=>{
+      b.innerText=originalText;
+      b.style.background=originalBg;
+    },1200);
+  } else {
+    // لو مش لاقي الزرار، اعرض رسالة
+    const m=document.getElementById('edit-msg');
+    if(m){ m.innerText='✅ تم النسخ: '+code; m.style.display='block'; setTimeout(()=>m.style.display='none',2000); }
   }
-  document.body.removeChild(ta);
 }
+function fallbackCopyCode(text, callback){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); if(callback) callback(); }catch(e){ prompt('انسخ الكود:', text); } document.body.removeChild(ta); }
 
 function clearAllData(){ if(!confirm('تمسح المحلي؟ الشيت هيفضل')) return; localStorage.removeItem('students_db_final'); renderAdmin(); autoLoadSheet(true); }
 function toggleForm(){ document.getElementById('form-group').style.display=document.getElementById('type-select').value==='listening'?'block':'none'; }
-
-function startExam(){
-  setExamStudentName();
-  currentSkill=document.getElementById('type-select').value;
-  selectedForm=document.getElementById('form-select').value;
-  document.getElementById('info-badge').innerText=`[Level ${selectedLevel}${currentSkill==='listening'?' - نموذج '+selectedForm:''} - ${currentPhone}]`;
-  if(currentSkill==='listening') currentQuestions=levelsData[selectedLevel].listening[selectedForm]; else currentQuestions=levelsData[selectedLevel].reading;
-  userAnswers=new Array(currentQuestions.length).fill(undefined);
-  switchScreen('exam-screen');
-  if(currentSkill==='listening'){ setupListeningUI(); } else { setupReadingUI(); }
-  playQuestion(0);
-}
-function setupListeningUI(){
-  document.getElementById('timer-text').style.display='inline';
-  document.getElementById('gear-btn').style.display='none';
-  document.getElementById('unit-bar').style.display='none';
-}
-function setupReadingUI(){
-  document.getElementById('timer-text').style.display='none';
-  document.getElementById('gear-btn').style.display='inline-block';
-  document.getElementById('unit-bar').style.display='flex';
-  const unitBar=document.getElementById('unit-bar');
-  unitBar.innerHTML='';
-  const tags=[{key:"U6_G",label:"U6 Grammar"},{key:"U6_V",label:"U6 Vocab"},{key:"U7_G",label:"U7 Grammar"},{key:"U7_V",label:"U7 Vocab"},{key:"U8_G",label:"U8 Grammar"},{key:"U8_V",label:"U8 Vocab"}];
-  tags.forEach(t=>{ const btn=document.createElement('button'); btn.className='unit-btn'; btn.innerText=t.label; btn.onclick=()=>filterByUnitTag(t.key); unitBar.appendChild(btn); });
-}
-function playQuestion(index){
-  if(index>=currentQuestions.length){ showResults(); return; }
-  currentIndex=index; const q=currentQuestions[index];
-  document.getElementById('part-title').innerText=q.partName||getTagTitle(q.tag);
-  document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`;
-  document.getElementById('question-text').innerText=q.question;
-  document.getElementById('timer-text').innerText="";
-  const expBox=document.getElementById('explanation-box'); expBox.style.display='none';
-  const box=document.getElementById('options-box'); box.innerHTML='';
-  q.options.forEach((opt,i)=>{
-    const btn=document.createElement('button'); btn.className='opt-btn'; btn.innerText=opt;
-    if(userAnswers[currentIndex]!==undefined){
-      if(currentSkill==='reading'){ if(i===q.correct) btn.classList.add('correct'); if(userAnswers[currentIndex]===i&&i!==q.correct) btn.classList.add('wrong'); btn.disabled=true; } else if(userAnswers[currentIndex]===i) btn.classList.add('selected');
-    }
-    btn.onclick=()=>selectOption(i); box.appendChild(btn);
-  });
-  if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q);
-  if(currentSkill==='listening'){ if(!audio.src.includes(encodeURI(q.audioSrc))){ audio.src=q.audioSrc; } audio.currentTime=q.startTime; audio.play().catch(e=>console.log("autoplay",e)); }
-}
-function selectOption(idx){
-  const q=currentQuestions[currentIndex]; userAnswers[currentIndex]=idx;
-  const btns=document.querySelectorAll('.opt-btn');
-  if(currentSkill==='reading'){ btns.forEach((b,i)=>{ b.disabled=true; if(i===q.correct) b.classList.add('correct'); if(i===idx&&idx!==q.correct) b.classList.add('wrong'); }); showExplanation(q); } else { btns.forEach((b,i)=>b.classList.toggle('selected',i===idx)); }
-}
+function startExam(){ setExamStudentName(); currentSkill=document.getElementById('type-select').value; selectedForm=document.getElementById('form-select').value; document.getElementById('info-badge').innerText=`[Level ${selectedLevel}${currentSkill==='listening'?' - نموذج '+selectedForm:''} - ${currentPhone}]`; if(currentSkill==='listening') currentQuestions=levelsData[selectedLevel].listening[selectedForm]; else currentQuestions=levelsData[selectedLevel].reading; userAnswers=new Array(currentQuestions.length).fill(undefined); switchScreen('exam-screen'); if(currentSkill==='listening'){ setupListeningUI(); } else { setupReadingUI(); } playQuestion(0); }
+function setupListeningUI(){ document.getElementById('timer-text').style.display='inline'; document.getElementById('gear-btn').style.display='none'; document.getElementById('unit-bar').style.display='none'; }
+function setupReadingUI(){ document.getElementById('timer-text').style.display='none'; document.getElementById('gear-btn').style.display='inline-block'; document.getElementById('unit-bar').style.display='flex'; const unitBar=document.getElementById('unit-bar'); unitBar.innerHTML=''; const tags=[{key:"U6_G",label:"U6 Grammar"},{key:"U6_V",label:"U6 Vocab"},{key:"U7_G",label:"U7 Grammar"},{key:"U7_V",label:"U7 Vocab"},{key:"U8_G",label:"U8 Grammar"},{key:"U8_V",label:"U8 Vocab"}]; tags.forEach(t=>{ const btn=document.createElement('button'); btn.className='unit-btn'; btn.innerText=t.label; btn.onclick=()=>filterByUnitTag(t.key); unitBar.appendChild(btn); }); }
+function playQuestion(index){ if(index>=currentQuestions.length){ showResults(); return; } currentIndex=index; const q=currentQuestions[index]; document.getElementById('part-title').innerText=q.partName||getTagTitle(q.tag); document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`; document.getElementById('question-text').innerText=q.question; document.getElementById('timer-text').innerText=""; const expBox=document.getElementById('explanation-box'); expBox.style.display='none'; const box=document.getElementById('options-box'); box.innerHTML=''; q.options.forEach((opt,i)=>{ const btn=document.createElement('button'); btn.className='opt-btn'; btn.innerText=opt; if(userAnswers[currentIndex]!==undefined){ if(currentSkill==='reading'){ if(i===q.correct) btn.classList.add('correct'); if(userAnswers[currentIndex]===i&&i!==q.correct) btn.classList.add('wrong'); btn.disabled=true; } else if(userAnswers[currentIndex]===i) btn.classList.add('selected'); } btn.onclick=()=>selectOption(i); box.appendChild(btn); }); if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q); if(currentSkill==='listening'){ if(!audio.src.includes(encodeURI(q.audioSrc))){ audio.src=q.audioSrc; } audio.currentTime=q.startTime; audio.play().catch(e=>console.log("autoplay",e)); } }
+function selectOption(idx){ const q=currentQuestions[currentIndex]; userAnswers[currentIndex]=idx; const btns=document.querySelectorAll('.opt-btn'); if(currentSkill==='reading'){ btns.forEach((b,i)=>{ b.disabled=true; if(i===q.correct) b.classList.add('correct'); if(i===idx&&idx!==q.correct) b.classList.add('wrong'); }); showExplanation(q); } else { btns.forEach((b,i)=>b.classList.toggle('selected',i===idx)); } }
 function showExplanation(q){ const box=document.getElementById('explanation-box'); const ok=userAnswers[currentIndex]===q.correct; box.className=`explanation-box ${ok?'correct':'wrong'}`; box.style.display='block'; box.innerHTML=`<strong>${ok?'إجابة صحيحة! 🎉 (+1 درجة)':'إجابة خاطئة! ❌'}</strong><br>${ok?'':`الإجابة الصحيحة هي: <strong>${q.options[q.correct]}</strong><br>`}<strong>السبب:</strong> ${q.exp||''}`; }
 function getTagTitle(tag){ const titles={"U6_G":"Unit 6 - Grammar","U6_V":"Unit 6 - Vocabulary","U7_G":"Unit 7 - Grammar","U7_V":"Unit 7 - Vocabulary","U8_G":"Unit 8 - Grammar","U8_V":"Unit 8 - Vocabulary"}; return titles[tag]||tag; }
-audio.ontimeupdate=function(){
-  if(currentSkill!=='listening'||currentIndex>=currentQuestions.length) return;
-  const currentQ=currentQuestions[currentIndex];
-  if(audio.currentTime>=currentQ.endTime&&!isTimerRunning){ audio.pause(); startTimer(); }
-};
-function startTimer(){
-  isTimerRunning=true; timeLeft=17;
-  document.getElementById('timer-text').innerText=`المتبقي: ${timeLeft}ث`;
-  timerInterval=setInterval(()=>{ timeLeft--; document.getElementById('timer-text').innerText=`المتبقي: ${timeLeft}ث`; if(timeLeft<=0){ clearInterval(timerInterval); moveToNextQuestion(); } },1000);
-}
+audio.ontimeupdate=function(){ if(currentSkill!=='listening'||currentIndex>=currentQuestions.length) return; const currentQ=currentQuestions[currentIndex]; if(audio.currentTime>=currentQ.endTime&&!isTimerRunning){ audio.pause(); startTimer(); } };
+function startTimer(){ isTimerRunning=true; timeLeft=17; document.getElementById('timer-text').innerText=`المتبقي: ${timeLeft}ث`; timerInterval=setInterval(()=>{ timeLeft--; document.getElementById('timer-text').innerText=`المتبقي: ${timeLeft}ث`; if(timeLeft<=0){ clearInterval(timerInterval); moveToNextQuestion(); } },1000); }
 function manualNext(){ clearInterval(timerInterval); if(currentSkill==='listening') audio.pause(); moveToNextQuestion(); }
-function moveToNextQuestion(){
-  isTimerRunning=false; clearInterval(timerInterval);
-  if(userAnswers[currentIndex]===undefined){ userAnswers[currentIndex]=-1; }
-  currentIndex++; if(currentIndex<currentQuestions.length){ playQuestion(currentIndex); } else { showResults(); }
-}
-
-
+function moveToNextQuestion(){ isTimerRunning=false; clearInterval(timerInterval); if(userAnswers[currentIndex]===undefined){ userAnswers[currentIndex]=-1; } currentIndex++; if(currentIndex<currentQuestions.length){ playQuestion(currentIndex); } else { showResults(); } }
 
 function copyID(){
   const idEl = document.getElementById('welcome-id');
   if(!idEl) return;
   const id = idEl.innerText.trim();
   if(!id) { alert('مفيش ID'); return; }
-  // طريقة تشتغل على الكمبيوتر والموبايل
+  const btn = document.getElementById('copy-id-btn');
+  const doSuccess = ()=>{
+    if(btn){ 
+      if(!btn.dataset.oldBg) btn.dataset.oldBg = btn.style.background;
+      const old=btn.innerText; 
+      btn.innerText='تم النسخ ✓'; 
+      btn.style.background='#0f9d58';
+      setTimeout(()=>{ btn.innerText=old; btn.style.background=btn.dataset.oldBg || '#1a73e8'; },1500); 
+    }
+  };
   if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(id).then(()=>{
-      const btn = document.querySelector('button[onclick="copyID()"]');
-      if(btn){ const old=btn.innerText; btn.innerText='تم النسخ'; setTimeout(()=>btn.innerText=old, 1500); }
-    }).catch(()=>{
-      fallbackCopy(id);
-    });
+    navigator.clipboard.writeText(id).then(doSuccess).catch(()=>{ fallbackCopy(id); doSuccess(); });
   } else {
-    fallbackCopy(id);
+    fallbackCopy(id); doSuccess();
   }
 }
-function fallbackCopy(text){
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position='fixed';
-  ta.style.opacity='0';
-  document.body.appendChild(ta);
-  ta.select();
-  try{
-    document.execCommand('copy');
-    const btn = document.querySelector('button[onclick="copyID()"]');
-    if(btn){ const old=btn.innerText; btn.innerText='تم النسخ'; setTimeout(()=>btn.innerText=old, 1500); }
-  }catch(e){
-    prompt('انسخ الـ ID:', text);
-  }
-  document.body.removeChild(ta);
-}
-
-
-function goBackFromExam(){
-  clearInterval(timerInterval);
-  if(audio) audio.pause();
-  isTimerRunning=false;
-  switchScreen('levels-screen');
-  renderLevels();
-}
-
+function fallbackCopy(text){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){ prompt('انسخ الـ ID:', text); } document.body.removeChild(ta); }
+function goBackFromExam(){ clearInterval(timerInterval); if(audio) audio.pause(); isTimerRunning=false; switchScreen('levels-screen'); renderLevels(); }
 function filterByUnitTag(tagKey){ const targetIdx=currentQuestions.findIndex(q=>q.tag===tagKey); if(targetIdx!==-1){ playQuestion(targetIdx); } }
 function openNavModal(){ const modal=document.getElementById('nav-modal'); const container=document.getElementById('grid-container'); container.innerHTML=''; const titleEl=document.getElementById('modal-title'); if(titleEl){ titleEl.innerText=`⚙ التنقل السريع (${currentQuestions.length} سؤال)`; } currentQuestions.forEach((q,i)=>{ const item=document.createElement('div'); item.className='grid-item'; if(userAnswers[i]!==undefined&&userAnswers[i]!==-1) item.classList.add('solved'); if(i===currentIndex) item.classList.add('active-q'); item.innerText=i+1; item.onclick=()=>{ closeNavModal(); playQuestion(i); }; container.appendChild(item); }); modal.style.display='block'; }
 function closeNavModal(){ document.getElementById('nav-modal').style.display='none'; }
-function showResults(){
-  if(currentSkill==='listening') audio.pause();
-  switchScreen('result-screen');
-  document.getElementById('result-student-name').innerText=studentName;
-  document.getElementById('result-phone').innerText=currentPhone;
-  document.getElementById('result-exam-info').innerText=`Level ${selectedLevel} ${currentSkill==='listening'?'- نموذج '+selectedForm:'- (121 سؤال)'}`;
-  let score=0; let detailsHTML='';
-  currentQuestions.forEach((q,i)=>{
-    const userSelectedIdx=userAnswers[i];
-    const isCorrect=userSelectedIdx===q.correct;
-    if(isCorrect) score++;
-    const userChoiceText=(userSelectedIdx!==undefined&&userSelectedIdx!==-1&&q.options[userSelectedIdx])?q.options[userSelectedIdx]:"لم يتم الإجابة";
-    const correctChoiceText=q.options[q.correct];
-    detailsHTML+=`<div class="result-item"><strong>سؤال ${i+1}:</strong> ${isCorrect?'<span class="correct-text">إجابة صحيحة ✓</span>':'<span class="wrong-text">إجابة خاطئة ✗</span>'}<div class="answer-detail"><div>• إجابتك: ${userChoiceText}</div>${!isCorrect?`<div style="color:#137333;font-weight:bold;">• الصح: ${correctChoiceText}</div>`:''}</div></div>`;
-  });
-  document.getElementById('score-text').innerText=`${score} / ${currentQuestions.length}`;
-  document.getElementById('result-details').innerHTML=detailsHTML;
-  const feedback=document.getElementById('feedback-text');
-  const percent=(score/currentQuestions.length)*100;
-  if(percent===100) feedback.innerText="ممتاز جدا! اداء رائع - استمر في التفوق!";
-  else if(percent>=75) feedback.innerText="اداء رائع! انت على الطريق الصحيح - واصل التقدم!";
-  else if(percent>=50) feedback.innerText="عمل ممتاز! كل سؤال بيقربك اكتر - استمر!";
-  else feedback.innerText="بداية رائعة! كل محاولة بتخليك اقوى - كمل!";
-}
-
+function showResults(){ if(currentSkill==='listening') audio.pause(); switchScreen('result-screen'); document.getElementById('result-student-name').innerText=studentName; document.getElementById('result-phone').innerText=currentPhone; document.getElementById('result-exam-info').innerText=`Level ${selectedLevel} ${currentSkill==='listening'?'- نموذج '+selectedForm:'- (121 سؤال)'}`; let score=0; let detailsHTML=''; currentQuestions.forEach((q,i)=>{ const userSelectedIdx=userAnswers[i]; const isCorrect=userSelectedIdx===q.correct; if(isCorrect) score++; const userChoiceText=(userSelectedIdx!==undefined&&userSelectedIdx!==-1&&q.options[userSelectedIdx])?q.options[userSelectedIdx]:"لم يتم الإجابة"; const correctChoiceText=q.options[q.correct]; detailsHTML+=`<div class="result-item"><strong>سؤال ${i+1}:</strong> ${isCorrect?'<span class="correct-text">إجابة صحيحة ✓</span>':'<span class="wrong-text">إجابة خاطئة ✗</span>'}<div class="answer-detail"><div>• إجابتك: ${userChoiceText}</div>${!isCorrect?`<div style="color:#137333;font-weight:bold;">• الصح: ${correctChoiceText}</div>`:''}</div></div>`; }); document.getElementById('score-text').innerText=`${score} / ${currentQuestions.length}`; document.getElementById('result-details').innerHTML=detailsHTML; const feedback=document.getElementById('feedback-text'); const percent=(score/currentQuestions.length)*100; if(percent===100) feedback.innerText="ممتاز جدا! اداء رائع - استمر في التفوق!"; else if(percent>=75) feedback.innerText="اداء رائع! انت على الطريق الصحيح - واصل التقدم!"; else if(percent>=50) feedback.innerText="عمل ممتاز! كل سؤال بيقربك اكتر - استمر!"; else feedback.innerText="بداية رائعة! كل محاولة بتخليك اقوى - كمل!"; }
 </script>
-
-
-
 <script>
-// دخول فوري بدون فلاش - الحل رقم 2
 (function(){
   function instantAutoLogin(){
     try{
       const saved = localStorage.getItem('currentSessionPhone');
       const card = document.querySelector('.card');
       if(card) card.classList.add('ready');
-      
       if(saved){
         const db = JSON.parse(localStorage.getItem('students_db_final')||'{}');
         let found=null, key=saved;
         if(db[saved]) found=db[saved];
         else if(db['0'+saved]) { found=db['0'+saved]; key='0'+saved; }
         else if(db[saved.replace(/^0/, '')]) { found=db[saved.replace(/^0/, '')]; key=saved.replace(/^0/, ''); }
-        else {
-          const sk = saved.replace(/[^0-9]/g,'').replace(/^0+/,'');
-          for(let k in db){
-            if(k.replace(/[^0-9]/g,'').replace(/^0+/,'')===sk){ found=db[k]; key=k; break; }
-          }
-        }
+        else { const sk = saved.replace(/[^0-9]/g,'').replace(/^0+/,''); for(let k in db){ if(k.replace(/[^0-9]/g,'').replace(/^0+/,'')===sk){ found=db[k]; key=k; break; } } }
         if(found){
           currentPhone=key;
-          // عبي البيانات فورا
-          const setIfExists = (id,val)=>{
-            const el=document.getElementById(id);
-            if(el) el.innerText=val||'';
-          };
+          const setIfExists = (id,val)=>{ const el=document.getElementById(id); if(el) el.innerText=val||''; };
           setIfExists('welcome-name', found.name);
           setIfExists('welcome-phone', found.phone);
           setIfExists('welcome-id', found.id);
           setIfExists('display-student-name', found.name);
           setIfExists('result-student-name', found.name);
-          
-          // اظهر الليفلات مباشرة - بدون ما تعدي على اللوجين
           document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
           const levelsScreen = document.getElementById('levels-screen');
           if(levelsScreen) levelsScreen.classList.add('active-screen');
-          
-          // رندر الليفلات بعد ما الصفحة تبان
-          // شيك على الباسورد من الشيت بعد الدخول مباشرة
           verifyPasswordFromSheet();
-          setTimeout(()=>{
-            if(typeof renderLevels==='function') renderLevels();
-            if(typeof setExamStudentName==='function') setExamStudentName();
-            // Avatar
-            const nameEl = document.getElementById('welcome-name');
-            const avatarEl = document.getElementById('welcome-avatar');
-            if(nameEl && avatarEl && nameEl.innerText){
-              avatarEl.innerText = nameEl.innerText.trim().charAt(0).toUpperCase();
-            }
-          }, 0);
+          setTimeout(()=>{ if(typeof renderLevels==='function') renderLevels(); if(typeof setExamStudentName==='function') setExamStudentName(); const nameEl = document.getElementById('welcome-name'); const avatarEl = document.getElementById('welcome-avatar'); if(nameEl && avatarEl && nameEl.innerText){ avatarEl.innerText = nameEl.innerText.trim().charAt(0).toUpperCase(); } }, 0);
           return;
         }
       }
-      // مفيش حساب - اظهر اللوجين
       document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
       const loginScreen = document.getElementById('login-screen');
       if(loginScreen) loginScreen.classList.add('active-screen');
-    }catch(e){
-      // في حالة اي خطأ اظهر اللوجين
-      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen'));
-      const loginScreen = document.getElementById('login-screen');
-      if(loginScreen) loginScreen.classList.add('active-screen');
-      const card = document.querySelector('.card');
-      if(card) card.classList.add('ready');
-    }
+    }catch(e){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); const loginScreen = document.getElementById('login-screen'); if(loginScreen) loginScreen.classList.add('active-screen'); const card = document.querySelector('.card'); if(card) card.classList.add('ready'); }
   }
-  
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', instantAutoLogin);
-  } else {
-    instantAutoLogin();
-  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', instantAutoLogin); } else { instantAutoLogin(); }
 })();
-
-// حفظ الجلسة
 const _origLoginPhone = window.loginPhone;
-window.loginPhone = async function(){
-  const result = await _origLoginPhone.apply(this, arguments);
-  if(currentPhone) localStorage.setItem('currentSessionPhone', currentPhone);
-  return result;
-};
+window.loginPhone = async function(){ const result = await _origLoginPhone.apply(this, arguments); if(currentPhone) localStorage.setItem('currentSessionPhone', currentPhone); return result; };
 </script>
-
 <script>
 const _origRenderLevelsAvatar = window.renderLevels;
-window.renderLevels = function(){
-  const result = _origRenderLevelsAvatar.apply(this, arguments);
-  try{
-    const nameEl = document.getElementById('welcome-name');
-    const avatarEl = document.getElementById('welcome-avatar');
-    if(nameEl && avatarEl && nameEl.innerText){
-      avatarEl.innerText = nameEl.innerText.trim().charAt(0).toUpperCase();
-    }
-  }catch(e){}
-  return result;
-};
+window.renderLevels = function(){ const result = _origRenderLevelsAvatar.apply(this, arguments); try{ const nameEl = document.getElementById('welcome-name'); const avatarEl = document.getElementById('welcome-avatar'); if(nameEl && avatarEl && nameEl.innerText){ avatarEl.innerText = nameEl.innerText.trim().charAt(0).toUpperCase(); } }catch(e){} return result; };
 </script>
 </body>
-
 </html>
