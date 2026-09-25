@@ -1,6 +1,7 @@
 
 
 
+
 window.adminInterval=null; 
 window.isEditModalOpen=false;
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
@@ -656,26 +657,7 @@ function startExam(){ setExamStudentName(); currentSkill=document.getElementById
     }
   }catch(e){
     document.getElementById('info-badge').innerText=`[Level ${selectedLevel}${currentSkill==='listening'?' - نموذج '+selectedForm:''} - ${currentPhone}]`;
-  } if(currentSkill==='listening') currentQuestions=levelsData[selectedLevel].listening[selectedForm]; else currentQuestions=levelsData[selectedLevel].reading; userAnswers=new Array(currentQuestions.length).fill(undefined); switchScreen('exam-screen'); 
-    if(currentSkill==='listening'){ 
-      setupListeningUI();
-      // Preload all distinct audio files to avoid delay
-      try{
-        const uniqueAudios = [...new Set(currentQuestions.map(q=>q.audioSrc).filter(Boolean))];
-        uniqueAudios.forEach(src=>{
-          const a = new Audio();
-          a.preload='auto';
-          a.src=src;
-          a.load();
-        });
-      }catch(e){}
-    } else { setupReadingUI(); } 
-    // تأخير بسيط قبل أول سؤال عشان الصوت يلحق يحمل
-    if(currentSkill==='listening'){
-      setTimeout(()=>{ playQuestion(0); }, 300);
-    } else {
-      playQuestion(0);
-    } }
+  } if(currentSkill==='listening') currentQuestions=levelsData[selectedLevel].listening[selectedForm]; else currentQuestions=levelsData[selectedLevel].reading; userAnswers=new Array(currentQuestions.length).fill(undefined); switchScreen('exam-screen'); if(currentSkill==='listening'){ setupListeningUI(); } else { setupReadingUI(); } playQuestion(0); }
 function setupListeningUI(){ document.getElementById('timer-text').style.display='inline'; document.getElementById('gear-btn').style.display='none'; document.getElementById('unit-bar').style.display='none'; }
 function setupReadingUI(){ document.getElementById('timer-text').style.display='none'; document.getElementById('gear-btn').style.display='inline-block'; document.getElementById('unit-bar').style.display='flex'; const unitBar=document.getElementById('unit-bar'); unitBar.innerHTML=''; // DYNAMIC - يقرأ الـ tags من الأسئلة نفسها، مش ثابت
     const uniqueTags = [...new Set(currentQuestions.map(q=>q.tag).filter(t=>t))];
@@ -698,37 +680,7 @@ function playQuestion(index){ if(index>=currentQuestions.length){ showResults();
       }
     }
   }catch(e){}
-  document.getElementById('part-title').innerText=displayPartName; document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`; document.getElementById('question-text').innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${q.question}</bdi>`; document.getElementById('timer-text').innerText=""; const expBox=document.getElementById('explanation-box'); expBox.style.display='none'; const box=document.getElementById('options-box'); box.innerHTML=''; q.options.forEach((opt,i)=>{ const btn=document.createElement('button'); btn.className='opt-btn'; btn.innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${opt}</bdi>`; if(userAnswers[currentIndex]!==undefined){ if(currentSkill==='reading'){ if(i===q.correct) btn.classList.add('correct'); if(userAnswers[currentIndex]===i&&i!==q.correct) btn.classList.add('wrong'); btn.disabled=true; } else if(userAnswers[currentIndex]===i) btn.classList.add('selected'); } btn.onclick=()=>selectOption(i); box.appendChild(btn); }); if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q); if(currentSkill==='listening'){
-      const timerEl = document.getElementById('timer-text');
-      const playAtTime = () => {
-        try{
-          audio.currentTime = q.startTime;
-          const p = audio.play();
-          if(p) p.catch(e=>{ console.log("autoplay",e); if(timerEl) timerEl.innerText="اضغط تشغيل 🔊"; });
-        }catch(e){ console.log(e); }
-      };
-      const isSameSrc = audio.src && q.audioSrc && audio.src.includes(encodeURI(q.audioSrc.split('/').pop())) || audio.src.includes(q.audioSrc);
-      if(!isSameSrc){
-        if(timerEl) timerEl.innerText="⏳ جاري تحميل الصوت...";
-        audio.pause();
-        audio.src = q.audioSrc;
-        audio.load();
-        // لما يحمل الميتاداتا شغل على طول
-        const onMeta = () => {
-          audio.removeEventListener('loadedmetadata', onMeta);
-          audio.removeEventListener('canplay', onMeta);
-          playAtTime();
-        };
-        audio.addEventListener('loadedmetadata', onMeta);
-        audio.addEventListener('canplay', onMeta, {once:true});
-        // fallback لو الميتاداتا طولت
-        setTimeout(()=>{ if(audio.readyState>=1){ playAtTime(); } }, 800);
-      } else {
-        // نفس الملف - اعمل seek فورا
-        try{ audio.pause(); }catch(e){}
-        playAtTime();
-      }
-    } }
+  document.getElementById('part-title').innerText=displayPartName; document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`; document.getElementById('question-text').innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${q.question}</bdi>`; document.getElementById('timer-text').innerText=""; const expBox=document.getElementById('explanation-box'); expBox.style.display='none'; const box=document.getElementById('options-box'); box.innerHTML=''; q.options.forEach((opt,i)=>{ const btn=document.createElement('button'); btn.className='opt-btn'; btn.innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${opt}</bdi>`; if(userAnswers[currentIndex]!==undefined){ if(currentSkill==='reading'){ if(i===q.correct) btn.classList.add('correct'); if(userAnswers[currentIndex]===i&&i!==q.correct) btn.classList.add('wrong'); btn.disabled=true; } else if(userAnswers[currentIndex]===i) btn.classList.add('selected'); } btn.onclick=()=>selectOption(i); box.appendChild(btn); }); if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q); if(currentSkill==='listening'){ if(!audio.src.includes(encodeURI(q.audioSrc))){ audio.src=q.audioSrc; } audio.currentTime=q.startTime; audio.play().catch(e=>console.log("autoplay",e)); } }
 function selectOption(idx){ const q=currentQuestions[currentIndex]; userAnswers[currentIndex]=idx; const btns=document.querySelectorAll('.opt-btn'); if(currentSkill==='reading'){ btns.forEach((b,i)=>{ b.disabled=true; if(i===q.correct) b.classList.add('correct'); if(i===idx&&idx!==q.correct) b.classList.add('wrong'); }); showExplanation(q); } else { btns.forEach((b,i)=>b.classList.toggle('selected',i===idx)); } }
 function showExplanation(q){ const box=document.getElementById('explanation-box'); const ok=userAnswers[currentIndex]===q.correct; box.className=`explanation-box ${ok?'correct':'wrong'}`; box.style.display='block'; box.innerHTML=`<strong>${ok?'إجابة صحيحة! 🎉 (+1 درجة)':'إجابة خاطئة! ❌'}</strong><br>${ok?'':`الإجابة الصحيحة هي: <strong><bdi dir="ltr" style="unicode-bidi:isolate;display:inline-block;text-align:left;">${q.options[q.correct]}</bdi></strong><br>`}<strong>السبب:</strong> <span dir="rtl">${q.exp||''}</span>`; }
 function getTagTitle(tag){ const titles={"U6_G":"Unit 6 - Grammar","U6_V":"Unit 6 - Vocabulary","U7_G":"Unit 7 - Grammar","U7_V":"Unit 7 - Vocabulary","U8_G":"Unit 8 - Grammar","U8_V":"Unit 8 - Vocabulary"}; return titles[tag]||tag; }
@@ -820,4 +772,272 @@ setTimeout(()=>{
   }
 }, 800);
 
+
+
+
+
+// ===== PATCH 23 LEVELS + HOWLER - FINAL COMPLETE =====
+if (typeof levelsData === 'undefined') var levelsData = {};
+window.levelsData = levelsData;
+
+let howlCache = {};
+let currentHowl = null;
+let currentHowlId = null;
+
+function loadLevelData(levelNum){
+  return new Promise((resolve, reject)=>{
+    if(levelsData[levelNum]){
+      resolve(levelsData[levelNum]);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = `level/level${levelNum}.js?v=${Date.now()}`;
+    script.onload = ()=>{
+      if(levelsData[levelNum]){
+        console.log(`✅ Level ${levelNum} اتحمل`);
+        resolve(levelsData[levelNum]);
+      } else {
+        reject(`Level ${levelNum} ملفه فاضي`);
+      }
+    };
+    script.onerror = ()=>{
+      reject(`ملف level/level${levelNum}.js مش موجود`);
+    };
+    document.head.appendChild(script);
+  });
+}
+
+// OVERRIDE renderLevels - يرجع زي الأول
+const originalRenderLevelsFor23 = window.renderLevels;
+window.renderLevels = function(){
+  try{
+    const grid=document.getElementById('levels-grid'); 
+    if(!grid) return; 
+    grid.innerHTML=''; 
+    const db=getDB(); 
+    const st=db[currentPhone]; 
+    if(!st){ grid.innerHTML='<div style="color:#d93025">سجل دخول أولا</div>'; return; }
+    const EXISTING_LEVELS = [16,17,18,19];
+    for(let i=1;i<=23;i++){ 
+      const isExisting = EXISTING_LEVELS.includes(i) || !!levelsData[i];
+      const isUnlocked = st.unlockedLevels && st.unlockedLevels[i];
+      const card=document.createElement('div');
+      if(!isExisting){
+        card.className='level-card locked';
+        card.style.opacity='0.55';
+        card.style.pointerEvents='none';
+        card.style.filter='grayscale(0.8)';
+        card.innerHTML=`<span style="font-size:20px">🔒</span><div class="level-num">Level ${i}</div><div style="font-size:10px;margin-top:4px">قريباً - غير متاح</div>`;
+        grid.appendChild(card);
+        continue;
+      }
+      card.className='level-card '+(isUnlocked?'unlocked':'available');
+      let icon = isUnlocked ? '🔓' : '🔐';
+      let status = isUnlocked ? 'مفتوح ✅' : 'مقفل - بكود';
+      card.innerHTML=`<span style="font-size:20px">${icon}</span><div class="level-num">Level ${i}</div><div style="font-size:10px;margin-top:4px">${status}</div>`;
+      card.onclick=()=>onLevelClick(i,isUnlocked); 
+      grid.appendChild(card); 
+    }
+  }catch(e){
+    console.error("renderLevels error", e);
+  }
+}
+
+window.onLevelClick = async function(levelNum, alreadyUnlocked){
+  const gridError = document.getElementById('levels-error');
+  try{
+    if(gridError){
+      gridError.style.display='block';
+      gridError.style.color='#1a73e8';
+      gridError.innerText=`⏳ جاري تحميل Level ${levelNum}...`;
+    }
+    await loadLevelData(levelNum);
+    if(gridError) gridError.style.display='none';
+    selectedLevel=String(levelNum);
+    if(alreadyUnlocked){
+      document.getElementById('opened-level-num').innerText=selectedLevel;
+      try{
+        const rCount = levelsData[selectedLevel]?.reading?.length || 0;
+        const readingOpt = document.querySelector('#type-select option[value="reading"]');
+        if(readingOpt){
+          readingOpt.innerText = rCount ? `Reading & Grammar (${rCount} سؤال)` : `Reading & Grammar`;
+        }
+        const lA = levelsData[selectedLevel]?.listening?.A?.length || 0;
+        const lB = levelsData[selectedLevel]?.listening?.B?.length || 0;
+        const lCount = lA + lB;
+        const listeningOpt = document.querySelector('#type-select option[value="listening"]');
+        if(listeningOpt){
+          listeningOpt.innerText = lCount ? `Listening Test (${lCount} سؤال)` : `Listening Test`;
+        }
+      }catch(e){}
+      switchScreen('skill-screen');
+      setTimeout(()=>{ try{ toggleForm(); }catch(e){} }, 80);
+      return;
+    }
+    pendingLevel=String(levelNum);
+    document.getElementById('modal-level-num').innerText=selectedLevel;
+    document.getElementById('modal-title-code').innerText=`🔒 Level ${selectedLevel} مقفول`;
+    document.getElementById('modal-code-input').value='';
+    document.getElementById('modal-error').style.display='none';
+    document.getElementById('modal-success').style.display='none';
+    document.getElementById('code-modal').classList.add('active');
+  }catch(err){
+    if(gridError){
+      gridError.style.display='block';
+      gridError.style.color='#d93025';
+      gridError.innerText=`❌ ${err} - تأكد ان ملف level/level${levelNum}.js موجود`;
+    }
+    console.error(err);
+  }
+}
+
+function initHowlerForExam(){
+  Object.values(howlCache).forEach(h=>{ try{h.unload();}catch(e){} });
+  howlCache = {};
+  currentHowl = null;
+  const bySrc = {};
+  currentQuestions.forEach((q, idx)=>{
+    if(!q.audioSrc) return;
+    if(!bySrc[q.audioSrc]) bySrc[q.audioSrc] = [];
+    bySrc[q.audioSrc].push({idx, q});
+  });
+  for(let src in bySrc){
+    const sprite = {};
+    bySrc[src].forEach(({idx, q})=>{
+      const start = (q.startTime || 0) * 1000;
+      const end = (q.endTime || 0) * 1000;
+      const duration = end - start;
+      if(duration > 0){
+        sprite[`q${idx}`] = [start, duration];
+      }
+    });
+    howlCache[src] = new Howl({
+      src: [src],
+      sprite: sprite,
+      preload: true,
+      html5: false,
+      volume: 1.0
+    });
+  }
+  console.log(`🔊 Howler جهز ${Object.keys(howlCache).length} ملفات`);
+}
+
+const originalPlayQuestionFor23 = window.playQuestion;
+window.playQuestion = function(index){
+  if(index>=currentQuestions.length){ showResults(); return; }
+  currentIndex=index;
+  const q=currentQuestions[index];
+  let displayPartName = q.partName||getTagTitle(q.tag);
+  try{
+    const lvlData = levelsData[selectedLevel];
+    if(currentSkill==='listening' && lvlData && lvlData.listening){
+      const hasA = !!(lvlData.listening.A && lvlData.listening.A.length>0);
+      const hasB = !!(lvlData.listening.B && lvlData.listening.B.length>0);
+      const count = (hasA?1:0)+(hasB?1:0);
+      if(count===1){
+        displayPartName = displayPartName.replace(/\(نموذج\s*[AB]\)/g, '').trim();
+      }
+    }
+  }catch(e){}
+  document.getElementById('part-title').innerText=displayPartName;
+  document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`;
+  document.getElementById('question-text').innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${q.question}</bdi>`;
+  document.getElementById('timer-text').innerText="";
+  const expBox=document.getElementById('explanation-box'); expBox.style.display='none';
+  const box=document.getElementById('options-box'); box.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${opt}</bdi>`;
+    if(userAnswers[currentIndex]!==undefined){
+      if(currentSkill==='reading'){
+        if(i===q.correct) btn.classList.add('correct');
+        if(userAnswers[currentIndex]===i&&i!==q.correct) btn.classList.add('wrong');
+        btn.disabled=true;
+      } else if(userAnswers[currentIndex]===i) btn.classList.add('selected');
+    }
+    btn.onclick=()=>selectOption(i);
+    box.appendChild(btn);
+  });
+  if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q);
+  if(currentSkill==='listening'){
+    const timerEl = document.getElementById('timer-text');
+    if(!howlCache[q.audioSrc] || !window.Howl){
+      if(!audio.src.includes(encodeURI(q.audioSrc))){
+        audio.src=q.audioSrc;
+        audio.load();
+      }
+      const playAt = ()=>{
+        try{
+          audio.currentTime=q.startTime;
+          audio.play().catch(()=>{});
+        }catch(e){}
+      };
+      if(audio.readyState>=1) playAt();
+      else audio.onloadedmetadata = playAt;
+      return;
+    }
+    if(currentHowl){ try{ currentHowl.stop(); }catch(e){} }
+    const howl = howlCache[q.audioSrc];
+    const spriteName = `q${index}`;
+    currentHowlId = howl.play(spriteName);
+    currentHowl = howl;
+    timerEl.innerText="🔊 شغال...";
+    howl.once('end', ()=>{
+      timerEl.innerText="";
+      if(!isTimerRunning){
+        startTimer();
+      }
+    }, currentHowlId);
+  }
+}
+
+const originalStartExamFor23 = window.startExam;
+window.startExam = function(){
+  setExamStudentName();
+  currentSkill=document.getElementById('type-select').value;
+  selectedForm=document.getElementById('form-select').value;
+  try{
+    const lvlData = levelsData[selectedLevel];
+    if(currentSkill==='listening' && lvlData && lvlData.listening){
+      const hasA = !!(lvlData.listening.A && lvlData.listening.A.length>0);
+      const hasB = !!(lvlData.listening.B && lvlData.listening.B.length>0);
+      const count = (hasA?1:0)+(hasB?1:0);
+      if(count===1){
+        document.getElementById('info-badge').innerText=`[Level ${selectedLevel} - ${currentPhone}]`;
+      } else {
+        document.getElementById('info-badge').innerText=`[Level ${selectedLevel}${currentSkill==='listening'?' - نموذج '+selectedForm:''} - ${currentPhone}]`;
+      }
+    } else {
+      document.getElementById('info-badge').innerText=`[Level ${selectedLevel}${currentSkill==='listening'?' - نموذج '+selectedForm:''} - ${currentPhone}]`;
+    }
+  }catch(e){
+    document.getElementById('info-badge').innerText=`[Level ${selectedLevel}${currentSkill==='listening'?' - نموذج '+selectedForm:''} - ${currentPhone}]`;
+  }
+  if(currentSkill==='listening') currentQuestions=levelsData[selectedLevel].listening[selectedForm];
+  else currentQuestions=levelsData[selectedLevel].reading;
+  userAnswers=new Array(currentQuestions.length).fill(undefined);
+  switchScreen('exam-screen');
+  if(currentSkill==='listening'){
+    setupListeningUI();
+    if(window.Howl) initHowlerForExam();
+    setTimeout(()=>{ playQuestion(0); }, 200);
+  } else {
+    setupReadingUI();
+    playQuestion(0);
+  }
+}
+
+const originalGoBackFor23 = window.goBackFromExam;
+window.goBackFromExam = function(){
+  if(currentHowl){ try{ currentHowl.stop(); currentHowl.unload(); }catch(e){} }
+  Object.values(howlCache).forEach(h=>{ try{h.unload();}catch(e){} });
+  howlCache = {};
+  if(audio) audio.pause();
+  clearInterval(timerInterval);
+  isTimerRunning=false;
+  switchScreen('levels-screen');
+  renderLevels();
+}
+console.log("✅ 23 Levels + Howler + Same Shape - Fixed");
 
