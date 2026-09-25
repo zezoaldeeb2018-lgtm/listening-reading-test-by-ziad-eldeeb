@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>منصة زياد الديب</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card">
+<div id="login-screen" class="screen">
+<h1>🎧 منصة الامتحانات</h1>
+<p class="subtitle">تم التطوير بواسطة: <strong>زياد الديب</strong></p>
+<div class="whatsapp-box">💬 للحصول على كود التفعيل تواصل واتساب<br><a href="https://wa.me/201273552486" target="_blank" class="wa-btn">💬 واتساب</a></div>
+<div class="tabs"><div class="tab" id="tab-reg" onclick="switchAuth('reg')">تسجيل جديد</div><div class="tab active" id="tab-log" onclick="switchAuth('log')">دخول</div></div>
+<div id="reg-box" style="display:none"><div class="input-group"><label>الاسم:</label><input type="text" id="reg-name" placeholder="ادخل اسمك..."></div><div class="input-group"><label>رقم التليفون:</label><input type="tel" id="reg-phone" placeholder="ادخل رقم تليفونك" dir="ltr" style="text-align:right;direction:rtl"></div><div class="input-group"><label>الباسورد:</label><input type="password" id="reg-pass" placeholder="اختار باسورد"></div><button class="btn" onclick="registerPhone()">تسجيل </button><div class="error-msg" id="reg-error"></div><div class="success-msg" id="reg-success"></div></div>
+<div id="log-box"><div class="input-group"><label>رقم التليفون:</label><input type="tel" id="log-phone" placeholder="ادخل رقم تليفونك" dir="ltr" style="text-align:right;direction:rtl"></div><div class="input-group"><label>الباسورد:</label><input type="password" id="log-pass" placeholder="الباسورد"></div><button class="btn" id="login-btn" onclick="loginPhone()">دخول </button><div class="error-msg" id="log-error"></div><div class="success-msg" id="log-success"></div><div style="margin-top:8px;font-size:11px;color:#70757a;line-height:1.6" id="sheet-status" style="display:none !important" style="display:none">🔄 جاري تحميل الداتا ...</div><div style="margin-top:6px;font-size:10px;color:#9aa0a6" id="debug-info" style="display:none !important" style="display:none"></div></div>
+<div class="footer-credits"><span id="ip-display" style="display:none" class="ip-badge"></span><br><button onclick="openAdminLogin()" style="color:#fff;background:#1a73e8;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;font-size:13px;margin-top:10px;font-weight:bold">🔐 دخول الأدمن</button></div>
+</div>
+<div id="levels-screen" class="screen"><div style="background:linear-gradient(135deg,#e8f0fe 0%,#f8f9fa 100%);border:1px solid #d2e3fc;border-radius:16px;padding:16px;margin-bottom:20px;box-shadow:0 2px 8px rgba(26,115,232,0.08)">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:44px;height:44px;background:#1a73e8;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px" id="welcome-avatar">M</div>
+<div style="text-align:right">
+<div style="font-size:11px;color:#5f6368;letter-spacing:0.5px">مرحبا بعودتك</div>
+<div style="font-size:16px;font-weight:800;color:#202124;line-height:1.2" id="welcome-name"></div>
+<div style="font-size:12px;color:#5f6368;margin-top:2px" id="welcome-phone"></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+<div style="text-align:right">
+<div style="font-size:9px;color:#70757a;font-weight:600;letter-spacing:0.5px">ID</div>
+<div style="font-size:13px;font-weight:800;color:#1a73e8;direction:ltr;letter-spacing:0.5px;font-family:monospace" id="welcome-id"></div>
+</div>
+<div style="width:1px;height:32px;background:#e0e0e0"></div>
+<button id="copy-id-btn" onclick="copyID()" style="background:#1a73e8;color:#fff;border:none;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px">نسخ</button>
+</div>
+</div>
+</div>
+<div style="text-align:center;margin-bottom:18px">
+<h1 style="color:#1a73e8;font-size:26px;font-weight:900;letter-spacing:-0.5px;margin:0">اختر المستوى</h1>
+<div style="width:40px;height:3px;background:#1a73e8;border-radius:2px;margin:8px auto 0"></div>
+</div><div class="levels-grid" id="levels-grid"></div><div class="error-msg" id="levels-error"></div><button class="btn" style="background:#5f6368" onclick="backToLogin()">خروج ↩</button><div class="footer-credits"><span id="ip-display2" style="display:none" class="ip-badge"></span></div></div>
+<div id="skill-screen" class="screen"><h1>✅ تم فتح Level <span id="opened-level-num">18</span> 🔓</h1><p class="subtitle">اختر نوع الاختبار</p><div class="input-group"><label>نوع الاختبار:</label><select id="type-select" onchange="toggleForm()"><option value="reading">Reading & Grammar (121 سؤال)</option><option value="listening">Listening Test</option></select></div><div class="input-group" id="form-group" style="display:none;"><label>النموذج:</label><select id="form-select"><option value="A">نموذج A</option><option value="B">نموذج B</option></select></div><button class="btn" onclick="startExam()">ابدأ الامتحان </button><button class="btn" style="background:#5f6368" onclick="goToLevelsFromSkill()">رجوع لليفلات</button></div>
+<div id="exam-screen" class="screen">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<button class="btn btn-small" style="background:#5f6368;width:auto;padding:8px 16px" onclick="goBackFromExam()">⬅ رجوع للقائمة الرئيسية</button>
+<span style="font-size:11px;color:#70757a">الامتحان</span>
+</div>
+<div class="student-bar"><span id="part-title">Unit 6 Grammar</span><span id="info-badge" style="font-size:11px;opacity:0.85"></span><span>الطالب/ة: <span id="display-student-name"></span></span></div>
+<div class="unit-selector-bar" id="unit-bar"></div>
+<audio id="audio" preload="auto"></audio>
+<div class="header-info"><span class="speaker-title" id="speaker-name">سؤال 1</span><span class="timer" id="timer-text"></span><span class="settings-gear" id="gear-btn" title="التنقل" onclick="openNavModal()">⚙ 🔢</span></div>
+<div class="question" id="question-text">Loading...</div>
+<div class="options" id="options-box"></div>
+<div id="explanation-box" class="explanation-box"></div>
+<button class="btn" id="next-btn" style="margin-top:15px;" onclick="manualNext()">السؤال التالي ⬅</button>
+</div>
+<div id="nav-modal" class="nav-modal"><h3 id="modal-title">⚙ التنقل السريع</h3><p style="font-size:12px;color:#5f6368">اختر رقم السؤال:</p><div class="grid-container" id="grid-container"></div><button class="btn" style="margin-top:16px;background:#5f6368" onclick="closeNavModal()">إغلاق ✖</button></div>
+<div id="result-screen" class="screen"><h2>نتيجة الاختبار 📊</h2><p>الطالب/ة: <strong id="result-student-name"></strong> - <span id="result-phone"></span></p><p id="result-exam-info" style="color:#5f6368;font-size:13px"></p><div class="score-badge" id="score-text">0 / 0</div><p id="feedback-text"></p><div class="result-details" id="result-details"></div><button class="btn" onclick="goToLevelsFromSkill()">رجوع لليفلات 🔄</button><button class="btn" style="background:#5f6368" onclick="location.reload()">إعادة تحميل 🔄</button></div>
+<div id="admin-screen" class="screen"><h1>🔐 لوحة الأدمن</h1><p class="subtitle">⚡ تحديث تلقائي كل 2 ثانية - <span id="auto-status" style="color:#34a853">● live 2s</span> <button id="auto-toggle" onclick="toggleAutoSpeed()" style="background:#e8f0fe;border:1px solid #1a73e8;color:#1a73e8;padding:4px 10px;border-radius:12px;cursor:pointer;font-size:11px;margin-right:8px">⏩ سريع جدا 1ث</button></p><div id="admin-stats" style="margin:10px 0"><div class="admin-stat"><span id="stat-total">0</span> إجمالي</div><div class="admin-stat"><span id="stat-today">0</span> النهاردة</div><div class="admin-stat"><span id="stat-unlocked">0</span> فتحوا ليفل</div></div><div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><input type="text" id="admin-search" placeholder="ابحث..." oninput="renderAdmin()" style="flex:1;min-width:200px;padding:10px;border:2px solid #dadce0;border-radius:8px"><button class="btn btn-small" style="background:#0f9d58" onclick="pullFromSheet()">🔄 سحب</button></div>
+<div style="margin-bottom:10px;background:#e8f0fe;padding:10px;border-radius:8px;text-align:right"><h4 style="font-size:13px;margin-bottom:6px">➕ إضافة طالب يدوي (سريع):</h4><div style="display:flex;gap:6px;flex-wrap:wrap"><input type="text" id="quick-name" placeholder="الاسم" style="flex:1;min-width:100px;padding:8px;border:1px solid #dadce0;border-radius:6px"><input type="text" id="quick-phone" placeholder="010..." dir="ltr" style="flex:1;min-width:100px;padding:8px;border:1px solid #dadce0;border-radius:6px"><input type="text" id="quick-pass" placeholder="باسورد" dir="ltr" style="flex:1;min-width:80px;padding:8px;border:1px solid #dadce0;border-radius:6px"><button class="btn btn-small" style="background:#1a73e8" onclick="quickAddStudent()">➕ إضافة فوري</button></div><div id="quick-msg" style="font-size:11px;margin-top:6px"></div></div>
+<div style="max-height:400px;overflow:auto;border:1px solid #dadce0;border-radius:8px"><table class="admin-table"><thead><tr><th>الاسم</th><th>التليفون</th><th>الباسورد</th><th>ID</th><th>IP</th><th>ليفلات</th><th>الكود الحالي</th><th>العمليات</th></tr></thead><tbody id="admin-tbody"></tbody></table></div><div style="margin-top:10px;display:flex;gap:6px"><button class="btn btn-small" style="background:#5f6368" onclick="adminBackToLogin()">رجوع ↩</button><button class="btn btn-small" style="background:#d93025" onclick="clearAllData()">مسح المحلي</button></div><div class="error-msg" id="admin-msg" style="display:none"></div></div>
+</div>
+
+<div class="code-modal" id="edit-modal" onclick="if(event.target===this) closeEditModal()"><div class="modal-content edit-modal-content" style="max-width:520px;padding:0;overflow:hidden;border-radius:20px">
+  <div style="background:linear-gradient(135deg,#1a73e8,#6f42c1);padding:18px 20px;display:flex;align-items:center;gap:12px;color:#fff;position:relative">
+    <div id="edit-avatar" style="width:48px;height:48px;background:#fff;color:#1a73e8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:20px">Z</div>
+    <div style="flex:1;text-align:right">
+      <div id="edit-header-name" style="font-weight:bold;font-size:16px">تعديل الطالب</div>
+      <div id="edit-header-phone" style="font-size:12px;opacity:0.9" dir="ltr"></div>
+    </div>
+    <button class="close-x" onclick="closeEditModal()" style="position:static;background:rgba(255,255,255,0.2);color:#fff">✖</button>
+  </div>
+
+  <div style="padding:18px;max-height:70vh;overflow-y:auto;text-align:right" dir="rtl">
+    <!-- معلومات اساسية -->
+    <div style="background:#f8f9fa;border-radius:12px;padding:12px;margin-bottom:14px">
+      <div style="font-weight:bold;font-size:13px;margin-bottom:10px;color:#202124">👤 البيانات</div>
+      <div class="input-group" style="margin-bottom:10px"><label style="font-size:12px">الاسم</label><input type="text" id="edit-name" style="padding:10px;font-size:14px"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group" style="margin-bottom:0"><label style="font-size:12px">التليفون</label><input type="text" id="edit-phone-old" style="display:none"><input type="text" id="edit-phone" dir="ltr" style="text-align:left;padding:10px;font-size:14px"></div>
+        <div class="input-group" style="margin-bottom:0"><label style="font-size:12px">الباسورد</label><input type="text" id="edit-pass" dir="ltr" style="text-align:left;padding:10px;font-size:14px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px;align-items:end">
+        <div class="input-group" style="margin-bottom:0"><label style="font-size:12px">IP / الجهاز</label><input type="text" id="edit-ip" dir="ltr" placeholder="فارغ = غير مربوط" style="padding:10px;font-size:13px"></div>
+        <button type="button" onclick="resetStudentIP()" style="height:42px;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:0 14px;cursor:pointer;font-weight:bold;font-size:12px">🔓 فك</button>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;align-items:center">
+        <small style="color:#5f6368;font-size:11px">ID:</small><input type="text" id="edit-id" dir="ltr" disabled style="border:none;background:transparent;font-size:12px;color:#5f6368;font-weight:bold;width:80px">
+      </div>
+    </div>
+
+    <!-- الليفلات -->
+    <div style="background:#e8f0fe;border-radius:12px;padding:12px;margin-bottom:14px;border:1px solid #d2e3fc">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:bold;font-size:13px;color:#1a73e8">📚 الليفلات المفتوحة</div>
+        <div style="display:flex;gap:4px">
+          <button type="button" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'18')" style="background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;font-weight:bold">18</button>
+          <button type="button" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'19')" style="background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer">19</button>
+          <button type="button" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,'20')" style="background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer">20</button>
+          <button type="button" onclick="adminOpenLevelDirect(document.getElementById('edit-phone-old').value,prompt('رقم الليفل:','21'))" style="background:#fff;border:1px solid #1a73e8;color:#1a73e8;border-radius:20px;padding:5px 10px;font-size:12px;cursor:pointer">+ تاني</button>
+        </div>
+      </div>
+      <div id="edit-levels-chips" style="min-height:32px"></div>
+      <div style="margin-top:8px;display:flex;gap:6px">
+        <input type="text" id="edit-levels" placeholder="مثال: 18,19" dir="ltr" style="flex:1;padding:8px 10px;border:1px solid #dadce0;border-radius:8px;font-size:13px">
+        <button type="button" onclick="applyLevelsFromInput()" style="background:#1a73e8;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:bold">تطبيق</button>
+      </div>
+    </div>
+
+    <!-- الكود -->
+    <div style="background:#fff;border:2px solid #e8eaed;border-radius:14px;padding:12px;margin-bottom:14px">
+      <div style="font-weight:bold;font-size:13px;margin-bottom:10px">🎫 كود الطالب الحالي</div>
+      <div id="pending-codes-list"></div>
+    </div>
+
+    <div class="success-msg" id="edit-msg" style="display:none;margin-bottom:10px"></div>
+
+    <div style="display:flex;gap:10px;position:sticky;bottom:-18px;background:#fff;padding:12px 0 0 0;margin-top:10px;border-top:1px solid #eee">
+      <button class="btn" style="flex:1;margin:0;background:#1a73e8;border-radius:12px;padding:13px;font-size:14px" onclick="saveEditStudent()">💾 حفظ وخروج</button>
+      <button class="btn" style="flex:0 0 80px;margin:0;background:#f1f3f4;color:#3c4043;border-radius:12px" onclick="closeEditModal()">إلغاء</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="code-modal" id="code-modal" onclick="if(event.target===this) closeCodeModal()"><div class="modal-content"><button class="close-x" onclick="closeCodeModal()">✖</button><h3 id="modal-title-code">🔒 Level 18 مقفول</h3><p style="font-size:13px;color:#5f6368">Level <span id="modal-level-num">18</span></p><div class="input-group"><input type="text" id="modal-code-input" placeholder="ادخل كودك الخاص" dir="ltr" style="direction:ltr"></div><button class="btn" id="modal-unlock-btn" onclick="unlockLevel()">فتح 🔓</button><button class="btn" style="background:#5f6368" onclick="closeCodeModal()">إلغاء</button><div class="error-msg" id="modal-error"></div><div class="success-msg" id="modal-success"></div><span class="ip-badge" id="modal-ip"></span></div></div>
+<div class="code-modal" id="admin-login-modal" onclick="if(event.target===this) closeAdminLogin()"><div class="modal-content"><button class="close-x" onclick="closeAdminLogin()">✖</button><h3>🔐 دخول الأدمن</h3><div class="input-group"><label>باسورد الأدمن:</label><input type="password" id="admin-pass-input" placeholder="باسورد الأدمن" onkeypress="if(event.key==='Enter') loginAdmin()"></div><button class="btn" onclick="loginAdmin()">دخول 🔓</button><button class="btn" style="background:#5f6368" onclick="closeAdminLogin()">إلغاء ✖</button><div class="error-msg" id="admin-login-error"></div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
