@@ -119,7 +119,8 @@ async function preloadAudiosForLevel(levelNum){
     hideSmartLoading();
     return true;
   }
-showSmartLoading(`جاري تجهيز Level ${levelNum}`, `ثقة في الله نجاح`);  let cache = null;
+  showSmartLoading(`جاري تجهيز Level ${levelNum}`, `تحميل ${srcList.length} ملفات صوت فقط`);
+  let cache = null;
   try{ if('caches' in window){ cache = await caches.open('audio-levels-v2'); } }catch(e){}
   let loaded=0; const total=srcList.length;
   for(let src of srcList){
