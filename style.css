@@ -1,4 +1,5 @@
 
+
 #reg-phone, #log-phone {text-align: right !important; direction: rtl !important;}
 #reg-phone::placeholder, #log-phone::placeholder {text-align: right !important; direction: rtl !important;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
@@ -73,3 +74,4 @@ audio{display:none}
 .card.ready{visibility:visible}
 
 #sheet-status, #debug-info { display:none !important; visibility:visible !important; height:0 !important; overflow:hidden !important; }
+
