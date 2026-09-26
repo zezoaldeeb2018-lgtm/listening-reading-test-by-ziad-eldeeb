@@ -6,6 +6,221 @@ window.isEditModalOpen=false;
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
 const accessCodesDB = {"ZIAD-MASTER-2024":{level:"*",maxUses:9999,type:"master"}};
 
+// === نظام تحميل الليفلات عند الطلب فقط + كاش الصوت ===
+window.levelsData = window.levelsData || {};
+var levelsData = window.levelsData;
+
+// تحميل ملف ليفل واحد بس لما يحتاجه
+function loadLevelScript(levelNum){
+  return new Promise((resolve, reject)=>{
+    if(window.levelsData && window.levelsData[levelNum]){
+      resolve();
+      return;
+    }
+    // شوف لو الاسكريبت متحمل قبل كده
+    const existing = document.querySelector(`script[data-level="${levelNum}"]`);
+    if(existing){
+      // لو موجود بس لسه بيحمل
+      existing.addEventListener('load', ()=>resolve());
+      existing.addEventListener('error', ()=>reject());
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = `level/level${levelNum}.js?v=${Date.now()}`;
+    script.dataset.level = levelNum;
+    script.onload = ()=>{
+      window.levelsData = window.levelsData || {};
+      levelsData = window.levelsData;
+      resolve();
+    };
+    script.onerror = (e)=>{
+      console.error('فشل تحميل ليفل', levelNum, e);
+      reject(e);
+    };
+    document.body.appendChild(script);
+  });
+}
+
+
+function showAudioLoading(text="جاري تجهيز الصوت..."){
+  let overlay = document.getElementById('audio-preload-overlay');
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'audio-preload-overlay';
+    overlay.innerHTML = `
+      <div class="orange-loader-card">
+        <div class="orange-pulse-wrapper">
+          <div class="orange-pulse-ring"></div>
+          <div class="orange-pulse-ring delay-1"></div>
+          <div class="orange-pulse-ring delay-2"></div>
+          <div class="orange-icon">🎧</div>
+        </div>
+        <div id="preload-text" class="orange-title">${text}</div>
+        <div id="preload-sub" class="orange-sub">يتم حفظ الصوت على جهازك للمرة القادمة</div>
+        
+        <div class="orange-progress-wrap">
+          <div class="orange-progress-track">
+            <div id="preload-bar" class="orange-progress-bar"></div>
+          </div>
+          <div class="orange-progress-info">
+            <span id="preload-percent">0%</span>
+            <span id="preload-files" class="orange-files"></span>
+          </div>
+        </div>
+
+        <div class="orange-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  } else {
+    const t = overlay.querySelector('#preload-text');
+    if(t) t.innerText = text;
+  }
+  overlay.style.display='flex';
+  // reset bar
+  const bar = overlay.querySelector('#preload-bar');
+  if(bar) bar.style.width='0%';
+  return overlay;
+}
+function updatePreloadProgress(pct, fileName=""){
+  const bar = document.getElementById('preload-bar');
+  const perc = document.getElementById('preload-percent');
+  const files = document.getElementById('preload-files');
+  const pctInt = Math.round(pct*100);
+  if(bar) bar.style.width = pctInt+'%';
+  if(perc) perc.innerText = pctInt+'%';
+  if(files){
+    if(fileName){
+      // اظهر اسم الملف باختصار
+      const short = fileName.replace('audio/','').replace('✔ ','');
+      files.innerText = fileName.includes('✔') ? '✓ '+short : short;
+    }
+  }
+}
+function hideAudioLoading(){
+  const overlay = document.getElementById('audio-preload-overlay');
+  if(!overlay) return;
+  overlay.classList.add('orange-hide');
+  setTimeout(()=>{
+    overlay.style.display='none';
+    overlay.classList.remove('orange-hide');
+  }, 400);
+}
+
+
+// تحميل وتخزين الصوتيات لليفل المختار فقط
+async function preloadAudiosForLevel(levelNum){
+  const lvl = window.levelsData[levelNum];
+  if(!lvl || !lvl.listening) return true;
+
+  // اجمع كل ملفات الصوت الفريدة لليفل ده بس
+  const uniqueSrc = new Set();
+  if(lvl.listening.A) lvl.listening.A.forEach(q=>{ if(q.audioSrc) uniqueSrc.add(q.audioSrc); });
+  if(lvl.listening.B) lvl.listening.B.forEach(q=>{ if(q.audioSrc) uniqueSrc.add(q.audioSrc); });
+
+  const srcList = Array.from(uniqueSrc);
+  if(srcList.length===0) return true;
+
+  showAudioLoading(`جاري تجهيز Level ${levelNum}...`);
+
+  // حاول تستخدم Cache API لو موجود
+  let cache = null;
+  try{
+    if('caches' in window){
+      cache = await caches.open('audio-levels-v1');
+    }
+  }catch(e){ console.log('Cache API not available', e); }
+
+  let loaded = 0;
+  const total = srcList.length;
+
+  for(let src of srcList){
+    try{
+      updatePreloadProgress(loaded/total, src);
+      
+      // لو متخزن قبل كده في الكاش، تخطى
+      if(cache){
+        const match = await cache.match(src);
+        if(match){
+          loaded++;
+          updatePreloadProgress(loaded/total, '✔ '+src);
+          continue;
+        }
+      } else {
+        // fallback: شوف localStorage flag
+        const flag = localStorage.getItem('audio_cached_'+levelNum+'_'+src);
+        if(flag){
+          loaded++;
+          updatePreloadProgress(loaded/total, '✔ '+src);
+          continue;
+        }
+      }
+
+      // حمل الملف كامل
+      const response = await fetch(src, {cache: 'no-cache'});
+      if(!response.ok) throw new Error('فشل تحميل '+src);
+
+      if(cache){
+        await cache.put(src, response.clone());
+      } else {
+        // لو مفيش Cache API، احفظ علامة بس
+        localStorage.setItem('audio_cached_'+levelNum+'_'+src, '1');
+      }
+
+      // اتأكد انه يشتغل فعلا بتحميله في audio مؤقت
+      await new Promise((res, rej)=>{
+        const tmpAudio = new Audio();
+        tmpAudio.preload = 'auto';
+        tmpAudio.src = src;
+        tmpAudio.oncanplaythrough = ()=>res();
+        tmpAudio.onerror = ()=>res(); // حتى لو فيه مشكلة كمل
+        setTimeout(()=>res(), 5000); // fallback 5 ثواني
+      });
+
+      loaded++;
+      updatePreloadProgress(loaded/total, '✔ '+src);
+
+    }catch(err){
+      console.error('خطأ في تحميل', src, err);
+      // لو ملف واحد فشل، كمل الباقي واظهر رسالة
+      loaded++;
+      updatePreloadProgress(loaded/total, '⚠ '+src);
+    }
+  }
+
+  updatePreloadProgress(1, 'جاهز ✓');
+  localStorage.setItem('audio_cached_level_'+levelNum, '1');
+  localStorage.setItem('audio_cached_level_'+levelNum+'_time', Date.now().toString());
+
+  await new Promise(r=>setTimeout(r, 600));
+  return true;
+}
+
+// تحقق لو الليفل متحمل صوته قبل كده
+async function isLevelAudioCached(levelNum){
+  try{
+    const flag = localStorage.getItem('audio_cached_level_'+levelNum);
+    if(!flag) return false;
+    if('caches' in window){
+      const cache = await caches.open('audio-levels-v1');
+      const lvl = window.levelsData[levelNum];
+      if(!lvl || !lvl.listening) return false;
+      const srcSet = new Set();
+      if(lvl.listening.A) lvl.listening.A.forEach(q=> srcSet.add(q.audioSrc));
+      if(lvl.listening.B) lvl.listening.B.forEach(q=> srcSet.add(q.audioSrc));
+      for(let src of srcSet){
+        const m = await cache.match(src);
+        if(!m) return false;
+      }
+      return true;
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+
 
 window.addEventListener('DOMContentLoaded', ()=>{
   function addEye(inputId){
@@ -135,13 +350,13 @@ function renderLevels(){
     const db=getDB(); 
     const st=db[currentPhone]; 
     if(!st){ grid.innerHTML='<div style="color:#d93025">سجل دخول أولا</div>'; return; } 
-    if(typeof levelsData === 'undefined' || Object.keys(levelsData).length===0){
-      grid.innerHTML='<div style="color:#d93025;padding:20px">❌ ملفات الليفلات متحملتش</div>'; 
-      return;
-    }
+
+    // === رجعنا الشكل الأصلي - قائمة الليفلات المتاحة ===
+    const availableLevels = window.AVAILABLE_LEVELS || [16,17,18,19];
+    
     for(let i=1;i<=23;i++){ 
       const card=document.createElement('div'); 
-      const isAvailable=!!(typeof levelsData !== 'undefined' && levelsData[i]); 
+      const isAvailable = availableLevels.includes(i);
       const isUnlocked=st.unlockedLevels&&st.unlockedLevels[i]; 
       card.className='level-card '+(isAvailable?(isUnlocked?'unlocked':'available'):'locked'); 
       let icon='🔒',status='غير متاح'; 
@@ -156,7 +371,20 @@ function renderLevels(){
     if(grid) grid.innerHTML='<div style="color:#d93025">خطأ: '+e.message+'</div>';
   }
 }
-function onLevelClick(levelNum, alreadyUnlocked){ selectedLevel=String(levelNum); if(alreadyUnlocked){ document.getElementById('opened-level-num').innerText=selectedLevel;
+async function onLevelClick(levelNum, alreadyUnlocked){ 
+  selectedLevel=String(levelNum); 
+  // حمل الليفل ده بس لو مش متحمل
+  try{
+    showAudioLoading('جاري تحميل بيانات Level '+levelNum+'...');
+    await loadLevelScript(levelNum);
+    hideAudioLoading();
+  }catch(e){
+    hideAudioLoading();
+    alert('فشل تحميل بيانات Level '+levelNum+' تأكد من وجود الملف level/level'+levelNum+'.js');
+    return;
+  }
+
+  if(alreadyUnlocked){ document.getElementById('opened-level-num').innerText=selectedLevel;
     // === التعديل الديناميك لعدد الأسئلة ===
     try{
       const rCount = levelsData[selectedLevel]?.reading?.length || 0;
@@ -638,7 +866,44 @@ function toggleForm(){
     }
   }catch(e){ console.log('toggleForm error', e); }
 }
-function startExam(){ setExamStudentName(); currentSkill=document.getElementById('type-select').value; selectedForm=document.getElementById('form-select').value; 
+async function startExam(){ 
+  setExamStudentName(); 
+  currentSkill=document.getElementById('type-select').value; 
+  selectedForm=document.getElementById('form-select').value;
+
+  // لو الليفل مش متحمل، حمله
+  if(!window.levelsData[selectedLevel]){
+    try{
+      showAudioLoading('جاري تحميل Level '+selectedLevel+'...');
+      await loadLevelScript(selectedLevel);
+      hideAudioLoading();
+    }catch(e){
+      hideAudioLoading();
+      alert('فشل تحميل الليفل');
+      return;
+    }
+  }
+
+  // لو listening - حمل الصوت كامل وخزنه
+  if(currentSkill==='listening'){
+    try{
+      const cached = await isLevelAudioCached(selectedLevel);
+      if(!cached){
+        await preloadAudiosForLevel(selectedLevel);
+      } else {
+        // حتى لو متخزن، اعرض لودنج سريع
+        showAudioLoading('جاري فتح الامتحان...');
+        await new Promise(r=>setTimeout(r, 400));
+      }
+      hideAudioLoading();
+    }catch(e){
+      hideAudioLoading();
+      console.error(e);
+      alert('حصل مشكلة في تجهيز الصوت، حاول تاني');
+      return;
+    }
+  }
+ 
   // لو نموذج واحد بس متظهرش كلمة نموذج فوق
   try{
     const lvlData = (typeof levelsData !== 'undefined' && levelsData[selectedLevel]) ? levelsData[selectedLevel] : null;
@@ -679,7 +944,24 @@ function playQuestion(index){ if(index>=currentQuestions.length){ showResults();
       }
     }
   }catch(e){}
-  document.getElementById('part-title').innerText=displayPartName; document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`; document.getElementById('question-text').innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${q.question}</bdi>`; document.getElementById('timer-text').innerText=""; const expBox=document.getElementById('explanation-box'); expBox.style.display='none'; const box=document.getElementById('options-box'); box.innerHTML=''; q.options.forEach((opt,i)=>{ const btn=document.createElement('button'); btn.className='opt-btn'; btn.innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${opt}</bdi>`; if(userAnswers[currentIndex]!==undefined){ if(currentSkill==='reading'){ if(i===q.correct) btn.classList.add('correct'); if(userAnswers[currentIndex]===i&&i!==q.correct) btn.classList.add('wrong'); btn.disabled=true; } else if(userAnswers[currentIndex]===i) btn.classList.add('selected'); } btn.onclick=()=>selectOption(i); box.appendChild(btn); }); if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q); if(currentSkill==='listening'){ if(!audio.src.includes(encodeURI(q.audioSrc))){ audio.src=q.audioSrc; } audio.currentTime=q.startTime; audio.play().catch(e=>console.log("autoplay",e)); } }
+  document.getElementById('part-title').innerText=displayPartName; document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`; document.getElementById('question-text').innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${q.question}</bdi>`; document.getElementById('timer-text').innerText=""; const expBox=document.getElementById('explanation-box'); expBox.style.display='none'; const box=document.getElementById('options-box'); box.innerHTML=''; q.options.forEach((opt,i)=>{ const btn=document.createElement('button'); btn.className='opt-btn'; btn.innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${opt}</bdi>`; if(userAnswers[currentIndex]!==undefined){ if(currentSkill==='reading'){ if(i===q.correct) btn.classList.add('correct'); if(userAnswers[currentIndex]===i&&i!==q.correct) btn.classList.add('wrong'); btn.disabled=true; } else if(userAnswers[currentIndex]===i) btn.classList.add('selected'); } btn.onclick=()=>selectOption(i); box.appendChild(btn); });   if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q); 
+  if(currentSkill==='listening'){ 
+    const newSrc = q.audioSrc;
+    if(audio.dataset.src !== newSrc){
+      audio.dataset.src = newSrc;
+      audio.src = newSrc;
+      audio.load();
+      audio.onloadedmetadata = ()=>{ 
+        audio.currentTime = q.startTime; 
+        audio.play().catch(()=>{}); 
+      };
+    } else {
+      try{
+        audio.currentTime = q.startTime; 
+        audio.play().catch(()=>{});
+      }catch(e){}
+    }
+  } }
 function selectOption(idx){ const q=currentQuestions[currentIndex]; userAnswers[currentIndex]=idx; const btns=document.querySelectorAll('.opt-btn'); if(currentSkill==='reading'){ btns.forEach((b,i)=>{ b.disabled=true; if(i===q.correct) b.classList.add('correct'); if(i===idx&&idx!==q.correct) b.classList.add('wrong'); }); showExplanation(q); } else { btns.forEach((b,i)=>b.classList.toggle('selected',i===idx)); } }
 function showExplanation(q){ const box=document.getElementById('explanation-box'); const ok=userAnswers[currentIndex]===q.correct; box.className=`explanation-box ${ok?'correct':'wrong'}`; box.style.display='block'; box.innerHTML=`<strong>${ok?'إجابة صحيحة! 🎉 (+1 درجة)':'إجابة خاطئة! ❌'}</strong><br>${ok?'':`الإجابة الصحيحة هي: <strong><bdi dir="ltr" style="unicode-bidi:isolate;display:inline-block;text-align:left;">${q.options[q.correct]}</bdi></strong><br>`}<strong>السبب:</strong> <span dir="rtl">${q.exp||''}</span>`; }
 function getTagTitle(tag){ const titles={"U6_G":"Unit 6 - Grammar","U6_V":"Unit 6 - Vocabulary","U7_G":"Unit 7 - Grammar","U7_V":"Unit 7 - Vocabulary","U8_G":"Unit 8 - Grammar","U8_V":"Unit 8 - Vocabulary"}; return titles[tag]||tag; }
