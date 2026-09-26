@@ -6,7 +6,7 @@ window.isEditModalOpen=false;
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
 const accessCodesDB = {"ZIAD-MASTER-2024":{level:"*",maxUses:9999,type:"master"}};
 
-// === نظام التحميل الذكي - ليفل واحد + صوت ليفل واحد بس ===
+// === نظام الصالذكي - ليفل واحد + صوت ليفل واحد بس ===
 window.AVAILABLE_LEVELS = window.AVAILABLE_LEVELS || [16,17,18,19];
 window.levelsData = window.levelsData || {};
 var levelsData = window.levelsData;
@@ -119,8 +119,7 @@ async function preloadAudiosForLevel(levelNum){
     hideSmartLoading();
     return true;
   }
-  showSmartLoading(`جاري تجهيز Level ${levelNum}`, `تحميل ${srcList.length} ملفات صوت فقط`);
-  let cache = null;
+showSmartLoading(`جاري تجهيز Level ${levelNum}`, `ثقة في الله نجاح`);  let cache = null;
   try{ if('caches' in window){ cache = await caches.open('audio-levels-v2'); } }catch(e){}
   let loaded=0; const total=srcList.length;
   for(let src of srcList){
