@@ -1,15 +1,20 @@
 
 
 
+
 window.adminInterval=null; 
 window.isEditModalOpen=false;
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
 const accessCodesDB = {"ZIAD-MASTER-2024":{level:"*",maxUses:9999,type:"master"}};
 
 // === نظام الصالذكي - ليفل واحد + صوت ليفل واحد بس ===
-window.AVAILABLE_LEVELS = window.AVAILABLE_LEVELS || [16,17,18,19];
+window.AVAILABLE_LEVELS = window.AVAILABLE_LEVELS || [16,17,18,19,8,9,10,11];
 window.levelsData = window.levelsData || {};
 var levelsData = window.levelsData;
+
+
+
+
 
 function loadLevelScript(levelNum){
   return new Promise((resolve, reject)=>{
@@ -776,7 +781,14 @@ function toggleForm(){
     const optB = formSelect.querySelector('option[value="B"]');
     if(optA){ optA.hidden = !hasA; optA.disabled = !hasA; optA.style.display = hasA ? '' : 'none'; }
     if(optB){ optB.hidden = !hasB; optB.disabled = !hasB; optB.style.display = hasB ? '' : 'none'; }
-    // لو نموذج B مش موجود اخفيه واختار A تلقائي
+    const count = (hasA?1:0)+(hasB?1:0);
+    // عامة: طالما B فاضي ميجبش سيرته، ولو نموذج واحد الحقل يختفي اصلا
+    if(count === 1){
+      formGroup.style.display = 'none';
+      if(hasA) formSelect.value = 'A';
+      if(hasB) formSelect.value = 'B';
+      return;
+    }
     if(!hasB && hasA){
       formSelect.value = 'A';
     } else if(!hasA && hasB){
@@ -784,7 +796,6 @@ function toggleForm(){
     } else if(!hasA && !hasB){
       formGroup.style.display = 'none';
     } else {
-      // الاتنين موجودين - لو اللي مختار حاليا مخفي بدله
       if(formSelect.value === 'B' && !hasB) formSelect.value = 'A';
       if(formSelect.value === 'A' && !hasA) formSelect.value = 'B';
     }
@@ -957,5 +968,6 @@ setTimeout(()=>{
     console.log('forced ready');
   }
 }, 800);
+
 
 

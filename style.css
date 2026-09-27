@@ -1,11 +1,10 @@
-
-
-#reg-phone, #log-phone {text-align: right !important; direction: rtl !important;}
-#reg-phone::placeholder, #log-phone::placeholder {text-align: right !important; direction: rtl !important;}
+/* منصة الديب - تم اصلاح مشكلة التليفون */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#f0f2f5;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:10px;color:#202124}
-.card{background:#fff;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);width:100%;max-width:700px;text-align:center;position:relative;overflow:hidden}
-h1{color:#1a73e8;font-size:20px;margin-bottom:6px} h2{color:#1a73e8;margin-bottom:6px;font-size:22px}
+.card{background:#fff;padding:20px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);width:100%;max-width:700px;text-align:center;position:relative;overflow:hidden;visibility:visible}
+.card.ready{visibility:visible}
+h1{color:#1a73e8;font-size:20px;margin-bottom:6px} 
+h2{color:#1a73e8;margin-bottom:6px;font-size:22px}
 .subtitle{color:#5f6368;font-size:13px;margin-bottom:16px}
 .whatsapp-box{background:#e6f4ea;color:#137333;padding:12px;border-radius:10px;font-size:13px;margin-bottom:16px;border:1px solid #ceead6;line-height:1.5}
 .wa-btn{display:inline-block;margin-top:8px;padding:8px 14px;background:#25d366;color:#fff;text-decoration:none;font-weight:bold;border-radius:6px;font-size:12.5px}
@@ -13,12 +12,19 @@ h1{color:#1a73e8;font-size:20px;margin-bottom:6px} h2{color:#1a73e8;margin-botto
 .input-group label{display:block;margin-bottom:6px;font-weight:bold;color:#3c4043;font-size:13px}
 .input-group input,.input-group select{width:100%;padding:12px;border:2px solid #dadce0;border-radius:8px;font-size:14px;outline:none;background:#fff;-webkit-appearance:none}
 .input-group input:focus,.input-group select:focus{border-color:#1a73e8}
+
+/* اصلاح التليفون - كان rtl وده غلط */
+#reg-phone, #log-phone {text-align:left !important; direction:ltr !important;}
+#reg-phone::placeholder, #log-phone::placeholder {text-align:right !important;}
+
 .btn{width:100%;padding:14px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;margin-top:8px;touch-action:manipulation}
-.btn:active{background:#1557b0} .btn:disabled{background:#a8c7fa}
+.btn:active{background:#1557b0} 
+.btn:disabled{background:#a8c7fa}
 .btn-small{padding:8px 12px;font-size:12px;width:auto;display:inline-block;margin:4px}
 .error-msg{color:#d93025;background:#fce8e6;padding:10px;border-radius:8px;font-size:13px;margin-top:10px;display:none;font-weight:bold}
 .success-msg{color:#137333;background:#e6f4ea;padding:10px;border-radius:8px;font-size:13px;margin-top:10px;display:none;font-weight:bold}
-.screen{display:none} .active-screen{display:block}
+.screen{display:none} 
+.active-screen{display:block}
 .tabs{display:flex;gap:6px;margin-bottom:12px}
 .tab{flex:1;padding:10px;background:#f1f3f4;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;border:2px solid #dadce0}
 .tab.active{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
@@ -37,11 +43,13 @@ h1{color:#1a73e8;font-size:20px;margin-bottom:6px} h2{color:#1a73e8;margin-botto
 .ip-badge{font-size:10px;color:#70757a;margin-top:8px;display:block}
 .student-bar{background:#e8f0fe;color:#1967d2;padding:10px;border-radius:8px;font-weight:bold;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-size:12.5px}
 .unit-selector-bar{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;white-space:nowrap}
-.unit-selector-bar::-webkit-scrollbar{height:3px} .unit-selector-bar::-webkit-scrollbar-thumb{background:#dadce0;border-radius:10px}
+.unit-selector-bar::-webkit-scrollbar{height:3px} 
+.unit-selector-bar::-webkit-scrollbar-thumb{background:#dadce0;border-radius:10px}
 .unit-btn{background:#f1f3f4;border:1px solid #dadce0;padding:6px 12px;border-radius:20px;font-size:11.5px;cursor:pointer;font-weight:bold;color:#3c4043;flex-shrink:0}
 .unit-btn.active{background:#1a73e8;color:#fff;border-color:#1a73e8}
 .header-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:2px solid #eee;padding-bottom:8px}
-.speaker-title{font-size:14.5px;font-weight:bold;color:#1a73e8} .timer{font-size:14px;font-weight:bold;color:#d93025}
+.speaker-title{font-size:14.5px;font-weight:bold;color:#1a73e8} 
+.timer{font-size:14px;font-weight:bold;color:#d93025}
 .settings-gear{font-size:18px;cursor:pointer;background:#e8f0fe;padding:4px 8px;border-radius:50%;user-select:none}
 .question{font-size:15.5px;color:#202124;margin:12px 0;font-weight:bold;direction:ltr;text-align:left;line-height:1.4;background:#f8f9fa;padding:12px;border-radius:8px}
 .options{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;direction:ltr}
@@ -62,16 +70,16 @@ audio{display:none}
 .score-badge{font-size:36px;font-weight:bold;color:#1a73e8;margin:10px 0}
 .result-details{text-align:right;margin:14px 0;background:#f8f9fa;padding:12px;border-radius:8px;max-height:280px;overflow-y:auto}
 .result-item{margin-bottom:10px;font-size:12.5px;border-bottom:1px solid #e0e0e0;padding-bottom:8px;line-height:1.4}
-.correct-text{color:#1e8e3e;font-weight:bold} .wrong-text{color:#d93025;font-weight:bold}
+.correct-text{color:#1e8e3e;font-weight:bold} 
+.wrong-text{color:#d93025;font-weight:bold}
 .answer-detail{font-size:11.5px;color:#3c4043;margin-top:3px;direction:ltr;text-align:left}
 .admin-table{width:100%;border-collapse:collapse;font-size:11px;text-align:right;direction:rtl}
-.admin-table th,.admin-table td{border:1px solid #dadce0;padding:6px} .admin-table th{background:#e8f0fe;color:#1a73e8}
+.admin-table th,.admin-table td{border:1px solid #dadce0;padding:6px} 
+.admin-table th{background:#e8f0fe;color:#1a73e8}
 .admin-stat{display:inline-block;background:#f1f3f4;padding:10px 14px;border-radius:10px;margin:6px;font-size:13px;font-weight:bold}
 .admin-stat span{color:#1a73e8;font-size:18px;display:block}
 .footer-credits{margin-top:14px;font-size:11px;color:#70757a;border-top:1px solid #eee;padding-top:8px}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.card{visibility:visible}
-.card.ready{visibility:visible}
 
-#sheet-status, #debug-info { display:none !important; visibility:visible !important; height:0 !important; overflow:hidden !important; }
-
+/* اخفاء عناصر الديبج نهائيا */
+#sheet-status, #debug-info { display:none !important; }
