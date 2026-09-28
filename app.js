@@ -8,7 +8,7 @@ const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNY
 const accessCodesDB = {"ZIAD-MASTER-2024":{level:"*",maxUses:9999,type:"master"}};
 
 // === نظام الصالذكي - ليفل واحد + صوت ليفل واحد بس ===
-window.AVAILABLE_LEVELS = window.AVAILABLE_LEVELS || [16,17,18,19,8,9,10,11];
+window.AVAILABLE_LEVELS = window.AVAILABLE_LEVELS || [16,17,18,19,8,9,10,11,4,5,6,7];
 window.levelsData = window.levelsData || {};
 var levelsData = window.levelsData;
 
