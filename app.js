@@ -2,6 +2,7 @@
 
 
 
+
 window.adminInterval=null; 
 window.isEditModalOpen=false;
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
@@ -29,7 +30,7 @@ function loadLevelScript(levelNum){
       return;
     }
     const script = document.createElement('script');
-    script.src = `level/level${levelNum}.js?v=${Date.now()}`;
+    script.src = `level/level${levelNum}.js`;
     script.dataset.level = levelNum;
     script.onload = ()=>{
       window.levelsData = window.levelsData || {};
@@ -968,6 +969,7 @@ setTimeout(()=>{
     console.log('forced ready');
   }
 }, 800);
+
 
 
 
