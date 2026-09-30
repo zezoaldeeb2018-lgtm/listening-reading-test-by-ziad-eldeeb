@@ -1,0 +1,11 @@
+{
+  "packageId": "com.eldeeb.listeningreading",
+  "host": "zezoaldeeb2018-lgtm.github.io",
+  "path": "/listening-reading-test-by-ziad-eldeeb/",
+  "name": "منصة الديب",
+  "display": "standalone",
+  "themeColor": "#1a73e8",
+  "backgroundColor": "#ffffff",
+  "startUrl": "/listening-reading-test-by-ziad-eldeeb/",
+  "iconUrl": "https://zezoaldeeb2018-lgtm.github.io/listening-reading-test-by-ziad-eldeeb/icon-512.png"
+}

@@ -1,0 +1,27 @@
+{
+  "name": "منصة زياد الديب - Listening & Reading Test",
+  "short_name": "منصة الديب",
+  "description": "منصة امتحانات الاستماع والقراءة - تم التطوير بواسطة زياد الديب",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a73e8",
+  "orientation": "any",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
