@@ -1,4 +1,5 @@
-const CACHE_NAME = 'eldeeb-offline-v4';
+
+const CACHE_NAME = 'eldeeb-offline-v5'; // <--- اهم حاجة غيرت v4 لـ v5 عشان يجبر المتصفح يحدث
 const APP_SHELL = [
   './',
   './index.html',
@@ -9,7 +10,6 @@ const APP_SHELL = [
   './icon-512.png'
 ];
 
-// حاول تجيب كل ملفات الليفلات لو موجودة - شيلت level19 من هنا
 const LEVEL_FILES = [
   './level/level4.js','./level/level5.js','./level/level6.js','./level/level7.js',
   './level/level8.js','./level/level9.js','./level/level10.js','./level/level11.js',
@@ -18,6 +18,7 @@ const LEVEL_FILES = [
 ];
 
 self.addEventListener('install', e => {
+  console.log('[SW] Installing new version:', CACHE_NAME);
   e.waitUntil(
     caches.open(CACHE_NAME).then(c => {
       return c.addAll([...APP_SHELL,...LEVEL_FILES]).catch(err => {
@@ -32,48 +33,50 @@ self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => Promise.all(
       keys.map(k => {
-        if(k!== CACHE_NAME && k!== 'audio-levels-v2') {
+        if(k !== CACHE_NAME && k !== 'audio-levels-v2') {
+          console.log('[SW] Deleting old cache:', k);
           return caches.delete(k);
         }
       })
     )).then(async () => {
-      // ==== التعديل الوحيد هنا ====
-      // امسح اي ملف محذوف من الكاش
+      // امسح اي ليفل محذوف
       const cache = await caches.open(CACHE_NAME);
       const requests = await cache.keys();
       for (let req of requests) {
         const url = req.url;
-        // لو ده ليفل 19 او اي ليفل مش موجود في LEVEL_FILES امسحه
         if (url.includes('/level/')) {
-          const fileName = './level/' + url.split('/level/').pop().split('?')[0];
           const isStillExist = LEVEL_FILES.some(f => url.includes(f.replace('./','')));
           if (!isStillExist || url.includes('level19')) {
-            console.log('بمسح ملف محذوف من الكاش:', fileName);
+            console.log('بمسح ملف محذوف من الكاش:', url);
             await cache.delete(req);
-            await cache.delete(req.url, {ignoreSearch: true});
           }
         }
       }
-      // ============================
       return self.clients.claim();
     })
   );
 });
 
 self.addEventListener('fetch', e => {
-  let url = new URL(e.request.url);
-  let request = e.request;
+  const url = new URL(e.request.url);
+  
+  // لو طلب خارجي (google sheets مثلا) سيبه يعدي
+  if (url.origin !== location.origin) return;
 
+  const isAppShell = url.pathname.endsWith('app.js') || 
+                     url.pathname.endsWith('index.html') || 
+                     url.pathname.endsWith('style.css') ||
+                     url.pathname === '/' ||
+                     url.pathname.endsWith('/');
+
+  // 1- ملفات الليفلات والاوديو: جرب النت الاول عشان تعرف لو اتمسح
   if(url.pathname.includes('/level/') || url.pathname.includes('/audio/')){
     let cleanUrl = url.origin + url.pathname;
     e.respondWith(
-      // الاول جرب النت عشان تعرف لو الملف اتمسح
       fetch(e.request, {cache: 'no-store'}).then(res => {
-        if (!res.ok) { // لو 404 يعني اتمسح من جيت هاب
-          console.log('ملف محذوف من السيرفر، بمسحه من الكاش:', cleanUrl);
+        if (!res.ok) {
+          console.log('ملف محذوف من السيرفر:', cleanUrl);
           caches.open(CACHE_NAME).then(c => c.delete(cleanUrl));
-          caches.open(CACHE_NAME).then(c => c.delete(e.request));
-          caches.open(CACHE_NAME).then(c => c.delete(cleanUrl, {ignoreSearch: true}));
           return new Response('deleted', {status: 404});
         }
         if(res.ok){
@@ -85,7 +88,6 @@ self.addEventListener('fetch', e => {
         }
         return res;
       }).catch(()=>{
-        // مفيش نت، هاته من الكاش
         return caches.match(cleanUrl, {ignoreSearch: true}).then(cached => {
           if(cached) return cached;
           return caches.match(e.request, {ignoreSearch: true});
@@ -95,20 +97,50 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  e.respondWith(
-    caches.match(request, {ignoreSearch: true}).then(cached => {
-      if(cached) return cached;
-      return fetch(request).then(res => {
-        if(res.ok && (url.pathname.endsWith('.js') || url.pathname.endsWith('.css') || url.pathname.endsWith('.html') || url.pathname.endsWith('.png'))){
+  // 2- ملفات التطبيق الاساسية app.js و index.html: لازم Network First
+  if(isAppShell){
+    e.respondWith(
+      fetch(e.request, {cache: 'no-store'}).then(res => {
+        if(res.ok){
           let clone = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
         }
         return res;
       }).catch(()=> {
-        if(request.destination === 'document'){
+        return caches.match(e.request, {ignoreSearch: true}).then(cached => {
+          if(cached) return cached;
+          if(e.request.destination === 'document'){
+            return caches.match('./index.html');
+          }
+        });
+      })
+    );
+    return;
+  }
+
+  // 3- باقي الملفات (صور، ايقونات): Cache First عادي
+  e.respondWith(
+    caches.match(e.request, {ignoreSearch: true}).then(cached => {
+      if(cached) return cached;
+      return fetch(e.request).then(res => {
+        if(res.ok && (url.pathname.endsWith('.js') || url.pathname.endsWith('.css') || url.pathname.endsWith('.html') || url.pathname.endsWith('.png'))){
+          let clone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        }
+        return res;
+      }).catch(()=> {
+        if(e.request.destination === 'document'){
           return caches.match('./index.html');
         }
       });
     })
   );
 });
+
+// اسمع لرسالة تحديث اجباري من الصفحة
+self.addEventListener('message', e => {
+  if (e.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
