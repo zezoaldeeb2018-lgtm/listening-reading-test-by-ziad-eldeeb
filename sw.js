@@ -28,6 +28,8 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+    if (e.request.headers.has('Range')) return; // سطر الايفون بس
+
   if (e.request.method !== 'GET') return;
   const url = e.request.url;
   if (!url.startsWith(self.location.origin)) return;
