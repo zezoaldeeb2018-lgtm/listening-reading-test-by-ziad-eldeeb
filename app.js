@@ -1,3 +1,4 @@
+
 window.adminInterval=null; 
 window.isEditModalOpen=false;
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
@@ -25,8 +26,9 @@ function loadLevelScript(levelNum){
       return;
     }
     const script = document.createElement('script');
-script.src = `level/level${id}.js`
-        script.onload = ()=>{
+    script.src = `level/level${levelNum}.js?v=15`;
+    script.dataset.level = levelNum;
+    script.onload = ()=>{
       window.levelsData = window.levelsData || {};
       levelsData = window.levelsData;
       resolve();
@@ -704,7 +706,7 @@ function renderLevelsInEdit(phone){
   }
   let h='';
   Object.keys(st.unlockedLevels).sort((a,b)=>parseInt(a)-parseInt(b)).forEach(l=>{
-    h+=`<span style="display:inline-flex;align-items:center;gap:6px;background:#e8f0fe;border:1px solid #1a73e8;color:#1a73e8;padding:6px 10px;border-radius:20px;margin:4px;font-size:13px;font-weight:bold">L${l} <button onclick="adminRemoveLevelDirect('${phone}','${l}')" style="background:#d93025;color:#fff;border:none;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:12px;line-height:1">✕</button></span>`;
+    h+=`<span style="display:inline-flex;align-items:center;gap:6px;background:#e8f0fe;border:1px solid #1a73e8;color:#1a73e8;padding:6px 10px;border-radius:20px;margin:4px;font-size:13px;font-weight:bold">L${l} <button onclick="adminRemoveLevelDirect(\'${phone}\',\'${l}\')" style="background:#d93025;color:#fff;border:none;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:12px;line-height:1">✕</button></span>`;
   });
   container.innerHTML=h;
 }
@@ -968,7 +970,5 @@ setTimeout(()=>{
     console.log('forced ready');
   }
 }, 800);
-
-
 
 
