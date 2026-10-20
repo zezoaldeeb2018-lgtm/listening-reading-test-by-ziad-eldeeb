@@ -30,8 +30,7 @@ function loadLevelScript(levelNum){
       return;
     }
     const script = document.createElement('script');
-    script.src = `level/level${id}.js?v=15`;
-    script.dataset.level = levelNum;
+script.src = `level/level${id}.js?v=15`; // صح    script.dataset.level = levelNum;
     script.onload = ()=>{
       window.levelsData = window.levelsData || {};
       levelsData = window.levelsData;
