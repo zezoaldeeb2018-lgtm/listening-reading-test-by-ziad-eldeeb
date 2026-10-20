@@ -10,7 +10,7 @@ const audioPart2_19 = "audio/19/2.mp3";
 const audioPart3_19 = "audio/19/3.mp3";
 
 levelsData["19"] = {
- reading: [{ tag: "U8_G", qNum: 1, question: "01000 Jack encouraged me ________ a new hairdresser's.", options: ["A to try", "B try", "C trying", "D that I try"], correct: 0, exp: "الفعل encourage بيجي بعده مفعول وبعدين to + المصدر." },
+ reading: [{ tag: "U8_G", qNum: 1, question: "01 Jack encouraged me ________ a new hairdresser's.", options: ["A to try", "B try", "C trying", "D that I try"], correct: 0, exp: "الفعل encourage بيجي بعده مفعول وبعدين to + المصدر." },
 { tag: "U8_G", qNum: 2, question: "02 John regretted ________ how much the hotel was before he booked it.", options: ["A not to ask", "B didn't ask", "C not asking", "D to not ask"], correct: 2, exp: "الفعل regret لما نعبر بيه عن الندم على حاجة حصلت بيجي بعده V-ing، وفي حالة النفي بنحط not قبل الـ V-ing." },
 { tag: "U8_G", qNum: 3, question: "03 Sheila insisted ________ for all our drinks.", options: ["A paying", "B at paying", "C on paying", "D to pay"], correct: 2, exp: "الفعل insist بياخد حرف الجر on وبعده V-ing." },
 { tag: "U8_G", qNum: 4, question: "04 Peter convinced me ________ playing soccer.", options: ["A don't give up", "B not giving up", "C didn't give up", "D not to give up"], correct: 3, exp: "الفعل convince بيجي بعده مفعول وبعدين to + المصدر، وفي النفي بنحط not to + المصدر." },
