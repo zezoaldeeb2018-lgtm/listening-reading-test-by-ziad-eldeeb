@@ -1,4 +1,3 @@
-
 window.adminInterval=null; 
 window.isEditModalOpen=false;
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzzkX0F9MSPYNYbq-3QPkWmoJ5hP1kgfZtFdBITloPbRI8UOXqK9eiiGG3J7CucxpDT/exec";
@@ -26,9 +25,8 @@ function loadLevelScript(levelNum){
       return;
     }
     const script = document.createElement('script');
-    script.src = `level/level${levelNum}.js?v=15`;
-    script.dataset.level = levelNum;
-    script.onload = ()=>{
+script.src = `level/level${id}.js`
+        script.onload = ()=>{
       window.levelsData = window.levelsData || {};
       levelsData = window.levelsData;
       resolve();
@@ -480,7 +478,7 @@ function getLatestCodeInfo(st){
   });
   return {code: entries[0][0], info: entries[0][1], all: entries};
 }
-function renderAdmin(){ const db=getDB(); const tbody=document.getElementById('admin-tbody'); if(!tbody) return; const search=(document.getElementById('admin-search')?.value||'').toLowerCase(); tbody.innerHTML=''; let total=0,today=0,unlocked=0; const todayStr=new Date().toDateString(); const entries=Object.entries(db); if(entries.length===0){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">لا يوجد طلاب</td></tr>'; return; } for(let i=0;i<entries.length;i++){ const dbKey=entries[i][0]; const st=entries[i][1]; if(!st||!st.phone) continue; if(search && !( (st.name+' '+st.phone+' '+st.id+' '+dbKey).toLowerCase().includes(search) )) continue; total++; try{ if(new Date(st.created).toDateString()===todayStr) today++; }catch(e){} if(st.unlockedLevels&&Object.keys(st.unlockedLevels).length>0) unlocked++; let levelsStr=Object.keys(st.unlockedLevels||{}).map(function(l){return 'L'+l;}).join(', ')||'—'; let latestInfo=getLatestCodeInfo(st); let firstCode=latestInfo.code||''; const isBlocked=!!st.isBlocked; let displayPhone=st.phone; const clean=displayPhone.toString().replace(/[^0-9]/g,''); if(clean.length===10 && clean.startsWith('1')) displayPhone='0'+clean; const blockLabel=isBlocked?'فك بلوك':'بلوك'; const blockColor=isBlocked?'#0f9d58':'#d93025'; const codeShow=isBlocked?'مبلك 🚫':(firstCode||'—'); const codeColor=isBlocked?'#d93025':'#1a73e8'; const rowBg=isBlocked?' style="background:#fce8e6"' : ''; tbody.innerHTML += '<tr'+rowBg+'><td>'+st.name+(isBlocked?' 🚫':'')+'</td><td dir="ltr">'+displayPhone+'</td><td dir="ltr">'+st.password+'</td><td>'+st.id+'</td><td dir="ltr">'+(st.ip||'').substring(0,16)+'</td><td>'+levelsStr+'</td><td dir="ltr"><div style="font-weight:bold;color:'+codeColor+'">'+codeShow+'</div></td><td><div style="display:flex;flex-direction:column;gap:4px"><button class="btn btn-small" style="background:#1a73e8" onclick="openEditModal(''+dbKey+'')">تعديل</button><button class="btn btn-small" style="background:'+blockColor+';color:#fff" onclick="blockStudent(''+dbKey+'')"> '+blockLabel+' </button></div></td></tr>'; } const el1=document.getElementById('stat-total'); if(el1) el1.innerText=total; const el2=document.getElementById('stat-today'); if(el2) el2.innerText=today; const el3=document.getElementById('stat-unlocked'); if(el3) el3.innerText=unlocked; }
+function renderAdmin(){ const db=getDB(); const tbody=document.getElementById('admin-tbody'); if(!tbody) return; const search=(document.getElementById('admin-search')?.value||'').toLowerCase(); tbody.innerHTML=''; let total=0,today=0,unlocked=0; const todayStr=new Date().toDateString(); const entries=Object.entries(db); if(entries.length===0){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center">لا يوجد طلاب</td></tr>'; return; } for(let i=0;i<entries.length;i++){ const dbKey=entries[i][0]; const st=entries[i][1]; if(!st||!st.phone) continue; if(search && !( (st.name+' '+st.phone+' '+st.id+' '+dbKey).toLowerCase().includes(search) )) continue; total++; try{ if(new Date(st.created).toDateString()===todayStr) today++; }catch(e){} if(st.unlockedLevels&&Object.keys(st.unlockedLevels).length>0) unlocked++; let levelsStr=Object.keys(st.unlockedLevels||{}).map(function(l){return 'L'+l;}).join(', ')||'—'; let latestInfo=getLatestCodeInfo(st); let firstCode=latestInfo.code||''; const isBlocked=!!st.isBlocked; let displayPhone=st.phone; const clean=displayPhone.toString().replace(/[^0-9]/g,''); if(clean.length===10 && clean.startsWith('1')) displayPhone='0'+clean; const blockLabel=isBlocked?'فك بلوك':'بلوك'; const blockColor=isBlocked?'#0f9d58':'#d93025'; const codeShow=isBlocked?'مبلك 🚫':(firstCode||'—'); const codeColor=isBlocked?'#d93025':'#1a73e8'; const rowBg=isBlocked?' style="background:#fce8e6"' : ''; tbody.innerHTML += '<tr'+rowBg+'><td>'+st.name+(isBlocked?' 🚫':'')+'</td><td dir="ltr">'+displayPhone+'</td><td dir="ltr">'+st.password+'</td><td>'+st.id+'</td><td dir="ltr">'+(st.ip||'').substring(0,16)+'</td><td>'+levelsStr+'</td><td dir="ltr"><div style="font-weight:bold;color:'+codeColor+'">'+codeShow+'</div></td><td><div style="display:flex;flex-direction:column;gap:4px"><button class="btn btn-small" style="background:#1a73e8" onclick="openEditModal(\''+dbKey+'\')">تعديل</button><button class="btn btn-small" style="background:'+blockColor+';color:#fff" onclick="blockStudent(\''+dbKey+'\')"> '+blockLabel+' </button></div></td></tr>'; } const el1=document.getElementById('stat-total'); if(el1) el1.innerText=total; const el2=document.getElementById('stat-today'); if(el2) el2.innerText=today; const el3=document.getElementById('stat-unlocked'); if(el3) el3.innerText=unlocked; }
 function openEditModal(dbKey){ 
   if(window.adminInterval){ clearInterval(window.adminInterval); window.adminInterval=null; }
   window.isEditModalOpen=true;
@@ -970,5 +968,7 @@ setTimeout(()=>{
     console.log('forced ready');
   }
 }, 800);
+
+
 
 
