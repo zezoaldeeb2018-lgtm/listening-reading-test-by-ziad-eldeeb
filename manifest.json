@@ -1,25 +1,20 @@
-
 {
-  "name": "منصة زياد الديب",
-  "short_name": "الديب",
-  "description": "منصة امتحانات زياد الديب - تشتغل اوفلاين",
-  "start_url": "./",
+  "name": "Eldeeb Platform",
+  "short_name": "Eldeeb",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a73e8",
-  "orientation": "any",
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
-      "src": "./icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
