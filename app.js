@@ -86,21 +86,53 @@ function hideSmartLoading(){
   overlay.classList.add('hide');
   setTimeout(()=>{ overlay.classList.remove('show','hide'); }, 350);
 }
+const AUDIO_CACHE_NAME = 'eldeeb-audio-v3';
+
+// AUTO-CLEAN: امسح الكاشات والـ flags البايظة القديمة من جهاز اليوزر تلقائيا (بدون ما يمسح هو)
+(function autoCleanOldCaches(){
+  try{
+    // امسح flags قديمة كانت بتقول ان الصوت متخزن وهو مش متخزن
+    // هنخلي isLevelAudioCached هو اللي يقرر من الكاش نفسه
+    if('caches' in window){
+      caches.keys().then(keys=>{
+        keys.forEach(k=>{
+          if(k.startsWith('audio-levels-') || (k.startsWith('eldeeb-audio-') && k!=='eldeeb-audio-v3')){
+            console.log('Deleting old buggy cache:', k);
+            caches.delete(k);
+          }
+        });
+      });
+    }
+    // لو كان فيه flag قديم والكاش فعليا فاضي، امسح الفلاج عشان يحمل من جديد
+    // ده بيحصل تلقائيا لان isLevelAudioCached الجديد بيشيك على الكاش مش على الفلاج
+  }catch(e){}
+})();
+
+ // موحد مع sw.js v19
+
 async function isLevelAudioCached(levelNum){
   try{
-    if(!localStorage.getItem('audio_cached_level_'+levelNum)) return false;
-    if('caches' in window){
-      const cache = await caches.open('audio-levels-v2');
-      const lvl = window.levelsData[levelNum];
-      if(!lvl || !lvl.listening) return true;
-      const srcs = new Set();
-      if(lvl.listening.A) lvl.listening.A.forEach(q=> q.audioSrc && srcs.add(q.audioSrc));
-      if(lvl.listening.B) lvl.listening.B.forEach(q=> q.audioSrc && srcs.add(q.audioSrc));
-      for(let src of srcs){
-        const m = await cache.match(src);
-        if(!m) return false;
+    if(!('caches' in window)) return false;
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const lvl = window.levelsData[levelNum];
+    if(!lvl || !lvl.listening) return true;
+    const srcs = new Set();
+    if(lvl.listening.A) lvl.listening.A.forEach(q=> q.audioSrc && srcs.add(q.audioSrc));
+    if(lvl.listening.B) lvl.listening.B.forEach(q=> q.audioSrc && srcs.add(q.audioSrc));
+    if(srcs.size===0) return true;
+    for(let src of srcs){
+      const m = await cache.match(src, {ignoreSearch:true});
+      if(!m) {
+        // دور على الاسم فقط لو فيه ?v=
+        const keys = await cache.keys();
+        let found = false;
+        for(let k of keys){
+          if(k.url.includes(src.split('/').pop().split('?')[0])){
+            found = true; break;
+          }
+        }
+        if(!found) return false;
       }
-      return true;
     }
     return true;
   }catch(e){ return false; }
@@ -113,43 +145,63 @@ async function preloadAudiosForLevel(levelNum){
   if(lvl.listening.B) lvl.listening.B.forEach(q=>{ if(q.audioSrc) uniqueSrc.add(q.audioSrc); });
   const srcList = Array.from(uniqueSrc);
   if(srcList.length===0) return true;
-  const alreadyCached = await isLevelAudioCached(levelNum);
-  if(alreadyCached){
-    showSmartLoading(`Level ${levelNum} جاهز`, 'تم تحميله مسبقا');
+
+  if(await isLevelAudioCached(levelNum)){
+    showSmartLoading(`Level ${levelNum} جاهز`, 'من الكاش ✓');
     updateSmartProgress(1, 'جاهز ✓');
     await new Promise(r=>setTimeout(r, 400));
     hideSmartLoading();
     return true;
   }
-  showSmartLoading(`جاري تجهيز Level ${levelNum}`, `ثقة في الله نجاح `);
+
+  showSmartLoading(`جاري تجهيز Level ${levelNum}`, `تحميل ${srcList.length} ملفات صوت`);
   let cache = null;
-  try{ if('caches' in window){ cache = await caches.open('audio-levels-v2'); } }catch(e){}
-  let loaded=0; const total=srcList.length;
+  try{ if('caches' in window){ cache = await caches.open(AUDIO_CACHE_NAME); } }catch(e){}
+  
+  let loaded=0; 
+  let failed=0;
+  const total=srcList.length;
+  
   for(let src of srcList){
     try{
       updateSmartProgress(loaded/total, src);
       if(cache){
-        const match = await cache.match(src);
+        const match = await cache.match(src, {ignoreSearch:true});
         if(match){ loaded++; updateSmartProgress(loaded/total, '✔ '+src); continue; }
       }
-      const res = await fetch(src);
-      if(!res.ok) throw new Error('fail');
+      const res = await fetch(src, {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
       if(cache) await cache.put(src, res.clone());
+      
       await new Promise((resolve)=>{
-        const tmp = new Audio(); tmp.preload='auto'; tmp.src=src;
-        tmp.oncanplaythrough=()=>resolve(); tmp.onerror=()=>resolve();
-        setTimeout(()=>resolve(), 3500);
+        const tmp = new Audio(); 
+        tmp.preload='auto'; 
+        tmp.src=src;
+        tmp.oncanplaythrough=()=>resolve(); 
+        tmp.onerror=()=>resolve();
+        setTimeout(()=>resolve(), 4000);
       });
-      loaded++; updateSmartProgress(loaded/total, '✔ '+src);
+      loaded++; 
+      updateSmartProgress(loaded/total, '✔ '+src);
     }catch(err){
-      loaded++; updateSmartProgress(loaded/total, '⚠ '+src);
+      console.log('audio fail', src, err);
+      failed++;
+      loaded++; 
+      updateSmartProgress(loaded/total, '⚠ '+src);
     }
   }
-  localStorage.setItem('audio_cached_level_'+levelNum, '1');
-  updateSmartProgress(1, 'جاهز ✓');
-  await new Promise(r=>setTimeout(r, 500));
+  
+  if(failed===0){
+    localStorage.setItem('audio_cached_level_'+levelNum, '1');
+    updateSmartProgress(1, 'جاهز ✓');
+  } else {
+    updateSmartProgress(1, `اكتمل مع ${failed} مشاكل`);
+    localStorage.removeItem('audio_cached_level_'+levelNum);
+  }
+  
+  await new Promise(r=>setTimeout(r, 600));
   hideSmartLoading();
-  return true;
+  return failed===0;
 }
 
 
@@ -871,13 +923,22 @@ function playQuestion(index){ if(index>=currentQuestions.length){ showResults();
   document.getElementById('part-title').innerText=displayPartName; document.getElementById('speaker-name').innerText=`${q.speaker||'سؤال '+(index+1)} من ${currentQuestions.length}`; document.getElementById('question-text').innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${q.question}</bdi>`; document.getElementById('timer-text').innerText=""; const expBox=document.getElementById('explanation-box'); expBox.style.display='none'; const box=document.getElementById('options-box'); box.innerHTML=''; q.options.forEach((opt,i)=>{ const btn=document.createElement('button'); btn.className='opt-btn'; btn.innerHTML=`<bdi dir="ltr" style="unicode-bidi:isolate;text-align:left;display:inline-block;width:100%;">${opt}</bdi>`; if(userAnswers[currentIndex]!==undefined){ if(currentSkill==='reading'){ if(isAnswerCorrect(q,i)) btn.classList.add('correct'); if(userAnswers[currentIndex]===i&&!isAnswerCorrect(q,userAnswers[currentIndex])) btn.classList.add('wrong'); btn.disabled=true; } else if(userAnswers[currentIndex]===i) btn.classList.add('selected'); } btn.onclick=()=>selectOption(i); box.appendChild(btn); }); if(currentSkill==='reading'&&userAnswers[currentIndex]!==undefined) showExplanation(q); 
   if(currentSkill==='listening'){ 
     const newSrc = q.audioSrc;
+    const setTimeAndPlay = ()=>{
+      try{ 
+        audio.currentTime = q.startTime || 0; 
+        const p = audio.play();
+        if(p && p.catch) p.catch(()=>{});
+      }catch(e){}
+    };
     if(audio.dataset.src !== newSrc){
       audio.dataset.src = newSrc;
       audio.src = newSrc;
       audio.load();
-      audio.onloadedmetadata = ()=>{ try{ audio.currentTime = q.startTime; audio.play().catch(()=>{}); }catch(e){} };
+      audio.onloadedmetadata = setTimeAndPlay;
+      // fallback للاندرويد اوفلاين لو metadata اتأخر
+      setTimeout(setTimeAndPlay, 500);
     } else {
-      try{ audio.currentTime = q.startTime; audio.play().catch(()=>{}); }catch(e){}
+      setTimeAndPlay();
     }
   } }
 function selectOption(idx){ const q=currentQuestions[currentIndex]; userAnswers[currentIndex]=idx; const btns=document.querySelectorAll('.opt-btn'); if(currentSkill==='reading'){ const correctArr=getCorrectArray(q); btns.forEach((b,i)=>{ b.disabled=true; if(correctArr.includes(i)) b.classList.add('correct'); if(i===idx&&!correctArr.includes(idx)) b.classList.add('wrong'); }); showExplanation(q); } else { btns.forEach((b,i)=>b.classList.toggle('selected',i===idx)); } }
