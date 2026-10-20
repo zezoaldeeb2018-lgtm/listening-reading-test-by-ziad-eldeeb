@@ -133,12 +133,11 @@ levelsData["19"] = {
 { tag: "U10_V", qNum: 13, question: "13 Choose the correct sentence order.", options: ["A thunder and lightning", "B lightning or thunder", "C lightning and thunder", "D thunder or lightning"], correct: 0, exp: "التعبير المتلازم للظواهر الجوية هو Thunder and lightning." },
 { tag: "U10_V", qNum: 14, question: "14 Choose the correct sentence order.", options: ["A law and order", "B order and law", "C order or law", "D law or order"], correct: 0, exp: "مصطلح سيادة القانون والنظام هو Law and order." },
 { tag: "U10_V", qNum: 15, question: "15 Choose the correct sentence order.", options: ["A nothing or all", "B all or nothing", "C all and nothing", "D nothing and all"], correct: 1, exp: "مصطلح يا كل حاجة يا بلاش هو All or nothing." },
-{ tag: "U10_V", qNum: 16, question: "16 I didn't know the answers so I ........ guessed them.", options: ["A less and more", "B more or less", "C more and less", "D less or more"], correct: 1, exp: "More or less قبل الفعل" },
-{ tag: "U10_V", qNum: 17, question: "17 You'll have to admit that you're wrong ........", options: ["A sooner or later", "B later or sooner", "C sooner and later", "D later and sooner"], correct: 0, exp: "Sooner or later في نهاية الجملة" },
-{ tag: "U10_V", qNum: 18, question: "18 The result is uncertain so we'll have to ........", options: ["A wait or see", "B see or wait", "C see and wait", "D wait and see"], correct: 3, exp: "Wait and see" },
-{ tag: "U10_V", qNum: 19, question: "19 Fortunately both of the missing children were discovered ........", options: ["A safe or sound", "B sound or safe", "C safe and sound", "D sound and safe"], correct: 2, exp: "Safe and sound في النهاية" },
-{ tag: "U10_V", qNum: 20, question: "20 All successful relationships are a question of ........", options: ["A take and give", "B give and take", "C give or take", "D take or give"], correct: 1, exp: "Give and take" }
-  
+{ tag: "U10_V", qNum: 16, question: "16 I didn't know the answers so I ........ guessed them.", options: ["A less and more", "B more or less", "C more and less", "D less or more"], correct: 1, exp: "Idiom ثابت معناه 'تقريباً' وترتيبه محفوظ more قبل less ولا يمكن عكسه" },
+{ tag: "U10_V", qNum: 17, question: "17 You'll have to admit that you're wrong ........", options: ["A sooner or later", "B later or sooner", "C sooner and later", "D later and sooner"], correct: 0, exp: "Idiom ثابت معناه 'عاجلاً أم آجلاً' وترتيبه محفوظ sooner قبل later" },
+{ tag: "U10_V", qNum: 18, question: "18 The result is uncertain so we'll have to ........", options: ["A wait or see", "B see or wait", "C see and wait", "D wait and see"], correct: 3, exp: "Idiom ثابت معناه 'ننتظر ونرى' والمنطق wait الأول ثم see وترتيبه ثابت" },
+{ tag: "U10_V", qNum: 19, question: "19 Fortunately both of the missing children were discovered ........", options: ["A safe or sound", "B sound or safe", "C safe and sound", "D sound and safe"], correct: 2, exp: "Idiom ثابت معناه 'سالماً معافى' ودائماً safe قبل sound كـ binomial ثابت" },
+{ tag: "U10_V", qNum: 20, question: "20 All successful relationships are a question of ........", options: ["A take and give", "B give and take", "C give or take", "D take or give"], correct: 1, exp: "Idiom ثابت معناه 'أخذ وعطاء' وفكرته تعطي أولاً give ثم تأخذ take" },  
       ],
   listening: {
   A: [
