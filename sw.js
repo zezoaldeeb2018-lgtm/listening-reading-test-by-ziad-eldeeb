@@ -1,5 +1,5 @@
-const CACHE_APP = 'eldeeb-app-v15';
-const CACHE_LEVELS = 'eldeeb-levels-v15';
+const CACHE_APP = 'eldeeb-app-v16';
+const CACHE_LEVELS = 'eldeeb-levels-v16';
 const CACHE_AUDIO = 'eldeeb-audio-v2';
 
 const APP_SHELL = [
